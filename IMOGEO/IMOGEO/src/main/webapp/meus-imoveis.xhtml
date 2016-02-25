@@ -1,0 +1,121 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Meus Imoveis</title>
+        <link href="css/estilo.css" type="text/css" rel="stylesheet"/>
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+        <script type="text/javascript" src="js/maps.js"></script>
+        <script type="text/javascript" src="js/marker.js"></script>
+    </h:head>
+    <h:body>
+        <div id="topo">
+            <div id ="topoconteudo">
+                <ui:include src="/template-topo.xhtml"/>
+            </div>
+        </div>
+        <div id="principal" style="height: 1180px;">
+            <h:form id="menulateral" style="height: 1180px;">
+                <h:commandLink action="meus-imoveis.jsf" value="Meus imoveis" styleClass="link"/>
+                <h:commandLink action="add-casa.jsf" value="Cadastrar Casa" styleClass="link"/>
+                <h:commandLink action="add-apto.jsf" value="Cadastrar Apartamento" styleClass="link"/>
+                <h:commandLink action="minha-conta.jsf" value="Perfil" styleClass="link"/>
+            </h:form>
+
+            <!--listar imoveis-->         
+            <h:form id="formlistarimoveis" rendered="#{meusImoveisMB.listarImoveis}">
+                <ui:include src="/template-listar-imoveis.xhtml"/>
+            </h:form>       
+
+            <!--Editar casa-->
+            <p:panel header="Editar Casa" rendered="#{meusImoveisMB.editarCasa}" style="width: 745px; float: right">
+                <ui:include src="/template-editar-casa.xhtml"/>
+            </p:panel>
+
+            <!--Editar endereço-->
+            <p:panel header="Alterar Endereço" rendered="#{meusImoveisMB.editarEndereco}" style="width: 745px; float: right">
+                <h:form prependId="false">
+                    <h:panelGrid columns="3">
+                        <p:outputLabel value="Rua"/>
+                        <p:inputText  id="rua" value="#{meusImoveisMB.endereco.rua}" required="true" requiredMessage="Campo Obrigatorio"  />
+                        <p:message for="rua"/>
+
+                        <p:outputLabel value="Número"/>
+                        <p:inputText  id="numero" value="#{meusImoveisMB.endereco.numero}" required="true" requiredMessage="Campo Obrigatorio"  />
+                        <p:message for="numero"/>
+
+                        <p:outputLabel value="Bairro"/>
+                        <p:inputText  id="bairro" value="#{meusImoveisMB.endereco.bairro}" required="true" requiredMessage="Campo Obrigatorio" />
+                        <p:message for="bairro"/>
+
+                        <p:outputLabel value="Cidade"/>
+                        <p:inputText  id="cidade" value="#{meusImoveisMB.endereco.cidade}" required="true" requiredMessage="Campo Obrigatorio"/>
+                        <p:message for="cidade"/>
+
+                        <p:outputLabel value="Estado"/>
+                        <p:inputText  id="estado" value="#{meusImoveisMB.endereco.estado}" required="true" requiredMessage="Campo Obrigatorio" />
+                        <p:message for="estado"/>
+
+                        <p:outputLabel value="Complemento"/>
+                        <p:inputText  id="complemento" value="#{meusImoveisMB.endereco.complemento}"/>
+                        <p:message for="complemento"/>
+
+                        <p:outputLabel value="CEP"/>
+                        <p:inputMask  id="cep" mask="99999-999" value="#{meusImoveisMB.endereco.cep}" required="true" requiredMessage="Campo Obrigatorio"  />
+                        <p:message for="cep"/>
+
+                        <p:outputLabel value="Localização"/>
+                        <p:inputText  id="loc" value="#{meusImoveisMB.loc}" required="true" requiredMessage="Botão buscar localização"/>
+                        <p:message for="loc"/>
+
+                        <input type="button" value="Buscar Localização" onclick="codeAddress()"/>
+
+                        <h:commandButton  value="Alterar" action="#{meusImoveisMB.atualizarEndereco()}"/>
+
+                    </h:panelGrid>
+                    <div onload="initialize()"/>
+                    <div id="map_canvas" style="width: 710px; height: 450px;"/>
+                </h:form>
+            </p:panel>
+            <h:form rendered="#{meusImoveisMB.excluirImovelPermission}">
+                <h:outputText value="Deseja realmente excluir este imóvel?"/><br/>
+                <h:commandButton action="#{meusImoveisMB.removerImovel()}" value="Sim" />
+                <h:commandButton action="#{meusImoveisMB.telaExcluirImovelPemissaoFalse()}" value="Não" /><br/><br/>
+            </h:form>
+            <!--Editar Apartamento-->
+            <p:panel header="Editar Apartamento" rendered="#{meusImoveisMB.editarApartamento}" style="width: 745px; float: right">
+                <ui:include src="/template-editar-apto.xhtml"/>
+            </p:panel>
+
+            <!--Informações Casa-->
+            <h:form id="forminfocasa"  prependId="false" rendered="#{meusImoveisMB.informacoesCasa}"> 
+                <ui:include src="/template-informacoes-casa.xhtml"/>
+            </h:form>
+
+
+            <!--Informações Apto-->
+            <h:form id="forminfoapto"  rendered="#{meusImoveisMB.informacoesApto}"> 
+                <ui:include src="/template-informacoes-apto.xhtml"/>
+            </h:form>
+
+            <!--Informações Localização-->
+            <p:panel header="Localização" rendered="#{meusImoveisMB.informacoesCasa || meusImoveisMB.informacoesApto}" style="float:right; width: 745px;">
+                <h:form prependId="false">
+                    <h:inputText disabled="true" id="lat" value="#{meusImoveisMB.lat}"/>
+                    <h:inputText disabled="true" id="log" value="#{meusImoveisMB.log}"/>
+                </h:form>
+                <div id="map-canvas-loc" style="width: 710px; height: 270px"></div>
+            </p:panel>
+
+        </div><!--fim principal-->
+
+        <div id="rodape">
+            <ui:include src="/template-rodape.xhtml"/>
+        </div>
+    </h:body>
+</html>
+

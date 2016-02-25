@@ -1,0 +1,75 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets" 
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core">
+    <h:form prependId="false">
+    <h:messages globalOnly="true" />
+    <h:panelGrid columns="3">
+        <p:outputLabel value="Finalidade :" for="finalidade" />
+        <p:selectOneMenu id="finalidade" value="#{meusImoveisMB.casa.finalidade}">
+            <f:selectItem itemValue="ALUGAR" itemLabel="ALUGAR" />
+            <f:selectItem itemValue="VENDER" itemLabel="VENDER" />
+            <f:selectItem itemValue="TEMPORADA" itemLabel="TEMPORADA" />
+        </p:selectOneMenu>
+        <p:message for="finalidade"/>
+
+        <p:outputLabel value="Descrição: " for="descricao" />
+        <p:inputTextarea  id="descricao" value="#{meusImoveisMB.casa.descricao}" maxlength="700" rows="2" cols="25" required="true" requiredMessage="Campo Obrigatório !"/>
+        <p:message for="descricao" />
+
+        <p:outputLabel value="Valor R$:" for="valor" />
+        <p:inputText id="valor" value="#{meusImoveisMB.casa.valor}"  maxlength="9" required="true" requiredMessage="Campo Obrigatório !"/>
+        <p:message for="valor"/>
+
+        <p:outputLabel value="Área Total m²:" for="areatotal" />
+        <p:inputText id="areatotal" value="#{meusImoveisMB.casa.areaTotal}" maxlength="5" required="true" requiredMessage="Campo Obrigatório !"/>
+        <p:message for="areatotal"/>
+
+        <p:outputLabel value="Área Construida m²:" for="areaconstruida" />
+        <p:inputText id="areaconstruida" maxlength="5" value="#{meusImoveisMB.casa.areaConstruida}" required="true" requiredMessage="Campo Obrigatório !"/>
+        <p:message for="areaconstruida"/>
+
+        <p:outputLabel value="Quartos :" for="quartos" />
+        <p:inputText id="quartos" maxlength="2" value="#{meusImoveisMB.casa.quarto}" required="true"  requiredMessage="Campo Obrigatório !"/>
+        <p:message for="quartos"/>
+
+        <p:outputLabel value="Suites :" for="suites" />
+        <p:inputText id="suites" maxlength="2" value="#{meusImoveisMB.casa.suite}" required="true"  requiredMessage="Campo Obrigatório !"/>
+        <p:message for="suites"/>
+
+        <p:outputLabel value="Vagas Garagem :" for="garagem" />
+        <p:inputText id="garagem" maxlength="2" value="#{meusImoveisMB.casa.vagaGaragem}" required="true"  requiredMessage="Campo Obrigatório !"/>
+        <p:message for="garagem"/>
+
+        <p:outputLabel value="Banheiros Sociais:" for="banheiro" />
+        <p:inputMask id="banheiro" mask="9" value="#{meusImoveisMB.casa.banheiroSocial}" required="true"  requiredMessage="Campo Obrigatório !"/>
+        <p:message for="banheiro"/>
+
+        <p:outputLabel value="Possui Piscina? " for="piscina" />  
+        <p:selectBooleanCheckbox id="piscina" value="#{meusImoveisMB.casa.piscina}" />  
+        <p:message for="piscina"/>
+
+        <p:outputLabel value="Possui Despensa? " for="despensa" />  
+        <p:selectBooleanCheckbox id="despensa" value="#{meusImoveisMB.casa.despensa}" />  
+        <p:message for="despensa"/>
+
+        <p:outputLabel value="Possui Área de Serviço? " for="areaservico" />  
+        <p:selectBooleanCheckbox id="areaservico" value="#{meusImoveisMB.casa.areaServico}" />  
+        <p:message for="areaservico"/>
+
+        <p:outputLabel value="Possui Churraqueira? " for="churrasqueira" />  
+        <p:selectBooleanCheckbox id="churrasqueira" value="#{meusImoveisMB.casa.churrasqueira}" />  
+        <p:message for="churrasqueira"/>
+
+        <p:outputLabel value="Possui Jardim? " for="jardim" />  
+        <p:selectBooleanCheckbox id="jardim" value="#{meusImoveisMB.casa.jardim}" />  
+        <p:message for="jardim"/>
+
+        <h:commandButton value="Avançar" action="#{meusImoveisMB.telaEditarEnderecoCasa()}" />
+    </h:panelGrid>
+    </h:form>
+</ui:composition>

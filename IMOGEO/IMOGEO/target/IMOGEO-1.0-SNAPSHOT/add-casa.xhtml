@@ -1,0 +1,143 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Cadastrar Casa</title>
+        <link href="css/estilo.css" type="text/css" rel="stylesheet"/>
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+        <script type="text/javascript" src="js/maps.js"></script>
+    </h:head>
+    <h:body>
+        <div id="topo">
+            <div id ="topoconteudo">
+                <ui:include src="/template-topo.xhtml"/>
+            </div>
+        </div>
+        <div id="principal" style="height: 870px;">
+            <h:form id="menulateral" style="height: 870px;">
+                <h:commandLink action="meus-imoveis.jsf" value="Meus imoveis" styleClass="link"/>
+                <h:commandLink action="add-casa.jsf" value="Cadastrar Casa" styleClass="link"/>
+                <h:commandLink action="add-apto.jsf" value="Cadastrar Apartamento" styleClass="link"/>
+                <h:commandLink action="minha-conta.jsf" value="Perfil" styleClass="link"/>
+            </h:form>
+            <p:panel header="Cadastrar Casa"  rendered="#{casaMB.cadastrarCasa}" style="width: 745px; float: right"> 
+                <h:form>
+                    <p:messages globalOnly="true" />
+                    <h:panelGrid columns="3">
+                        <p:outputLabel value="Finalidade :" for="finalidade" />
+                        <p:selectOneMenu id="finalidade" value="#{casaMB.casa.finalidade}">
+                            <f:selectItem itemValue="ALUGAR" itemLabel="ALUGAR" />
+                            <f:selectItem itemValue="VENDER" itemLabel="VENDER" />
+                            <f:selectItem itemValue="TEMPORADA" itemLabel="TEMPORADA" />
+                        </p:selectOneMenu>
+                        <p:message for="finalidade"/>
+
+                        <p:outputLabel value="Descrição: " for="descricao" />
+                        <p:inputTextarea  id="descricao" value="#{casaMB.casa.descricao}" maxlength="700" rows="2" cols="25" required="true" requiredMessage="Campo Obrigatório !"/>
+                        <p:message for="descricao" />
+
+                        <p:outputLabel value="Valor R$:" for="valor" />
+                        <p:inputText id="valor" value="#{casaMB.casa.valor}"  maxlength="9" required="true" requiredMessage="Campo Obrigatório !"/>
+                        <p:message for="valor"/>
+
+                        <p:outputLabel value="Área Total m²:" for="areatotal" />
+                        <p:inputText id="areatotal" value="#{casaMB.casa.areaTotal}" maxlength="5" required="true" requiredMessage="Campo Obrigatório !"/>
+                        <p:message for="areatotal"/>
+
+                        <p:outputLabel value="Área Construida m²:" for="areaconstruida" />
+                        <p:inputText id="areaconstruida" maxlength="5" value="#{casaMB.casa.areaConstruida}" required="true" requiredMessage="Campo Obrigatório !"/>
+                        <p:message for="areaconstruida"/>
+
+                        <p:outputLabel value="Quartos :" for="quartos" />
+                        <p:inputText id="quartos" maxlength="2" value="#{casaMB.casa.quarto}" required="true"  requiredMessage="Campo Obrigatório !"/>
+                        <p:message for="quartos"/>
+
+                        <p:outputLabel value="Suites :" for="suites" />
+                        <p:inputText id="suites" maxlength="2" value="#{casaMB.casa.suite}" required="true"  requiredMessage="Campo Obrigatório !"/>
+                        <p:message for="suites"/>
+
+                        <p:outputLabel value="Vagas Garagem :" for="garagem" />
+                        <p:inputText id="garagem" maxlength="2" value="#{casaMB.casa.vagaGaragem}" required="true"  requiredMessage="Campo Obrigatório !"/>
+                        <p:message for="garagem"/>
+
+                        <p:outputLabel value="Banheiros Sociais:" for="banheiro" />
+                        <p:inputMask id="banheiro" mask="9" value="#{casaMB.casa.banheiroSocial}" required="true"  requiredMessage="Campo Obrigatório !"/>
+                        <p:message for="banheiro"/>
+
+                        <p:outputLabel value="Possui Piscina? " for="piscina" />  
+                        <p:selectBooleanCheckbox id="piscina" value="#{casaMB.casa.piscina}" />  
+                        <p:message for="piscina"/>
+
+                        <p:outputLabel value="Possui Despensa? " for="despensa" />  
+                        <p:selectBooleanCheckbox id="despensa" value="#{casaMB.casa.despensa}" />  
+                        <p:message for="despensa"/>
+
+                        <p:outputLabel value="Possui Área de Serviço? " for="areaservico" />  
+                        <p:selectBooleanCheckbox id="areaservico" value="#{casaMB.casa.areaServico}" />  
+                        <p:message for="areaservico"/>
+
+                        <p:outputLabel value="Possui Churraqueira? " for="churrasqueira" />  
+                        <p:selectBooleanCheckbox id="churrasqueira" value="#{casaMB.casa.churrasqueira}" />  
+                        <p:message for="churrasqueira"/>
+
+                        <p:outputLabel value="Possui Jardim? " for="jardim" />  
+                        <p:selectBooleanCheckbox id="jardim" value="#{casaMB.casa.jardim}" />  
+                        <p:message for="jardim"/>
+
+                        <h:commandButton value="Avançar" action="#{casaMB.telaCadastrarEnderecoCasa()}" />
+                    </h:panelGrid>
+                </h:form>
+            </p:panel>
+            <p:panel header="Cadastrar Endereço"  rendered="#{casaMB.cadastrarEnderecoCasa}" style="width: 745px; float: right">
+                <h:form prependId="false">
+                    <h:panelGrid columns="3">
+                        <p:outputLabel value="Rua"/>
+                        <p:inputText  id="rua" value="#{casaMB.endereco.rua}" required="true" requiredMessage="Campo Obrigatorio"  />
+                        <p:message id="mrua" for="rua"/>
+
+                        <p:outputLabel value="Numero"/>
+                        <p:inputText  id="numero" value="#{casaMB.endereco.numero}" required="true" requiredMessage="Campo Obrigatorio"  />
+                        <p:message id="mnumero" for="numero"/>
+
+                        <p:outputLabel value="Bairro"/>
+                        <p:inputText  id="bairro" value="#{casaMB.endereco.bairro}" required="true" requiredMessage="Campo Obrigatorio" />
+                        <p:message id="mbairro" for="bairro"/>
+
+                        <p:outputLabel value="Cidade"/>
+                        <p:inputText  id="cidade" value="#{casaMB.endereco.cidade}" required="true" requiredMessage="Campo Obrigatorio"/>
+                        <p:message id="mcidade" for="cidade"/>
+
+                        <p:outputLabel value="Estado"/>
+                        <p:inputText  id="estado" value="#{casaMB.endereco.estado}" required="true" requiredMessage="Campo Obrigatorio" />
+                        <p:message id="mestado" for="estado"/>
+
+                        <p:outputLabel value="Complemento"/>
+                        <p:inputText  id="complemento" value="#{casaMB.endereco.complemento}"/>
+                        <p:message id="mcomplemento" for="complemento"/>
+
+                        <p:outputLabel value="CEP"/>
+                        <p:inputMask  id="cep" mask="99999-999" value="#{casaMB.endereco.cep}" required="true" requiredMessage="Campo Obrigatorio"  />
+                        <p:message id="mcep" for="cep"/>
+
+                        <p:outputLabel value="Localização"/>
+                        <p:inputText  id="loc" value="#{casaMB.loc}" required="true" requiredMessage="Botão buscar localização"/>
+                        <p:message id="mloc" for="loc"/>
+
+                        <input type="button" value="Buscar Localização" onclick="codeAddress()"/>
+                        <h:commandButton value="Cadastrar" action="#{casaMB.addCasa()}"/>
+                    </h:panelGrid>
+                    <div onload="initialize()"/>
+                    <div id="map_canvas" style="width: 710px; height: 450px;"/>
+                </h:form>
+            </p:panel>
+        </div><!--principal-->
+        <div id="rodape">
+            <ui:include src="/template-rodape.xhtml"/>
+        </div>
+    </h:body>
+</html>
+

@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets" 
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core">
+
+    <h:form >
+        <h:commandButton action="#{meusImoveisMB.telaEditarApartamento()}" value="Editar" />
+        <h:commandButton action="#{meusImoveisMB.desanunciarApto()}" rendered="#{meusImoveisMB.imovel.anuncio.anunciado}"
+                         value="Desanunciar" styleClass="bt2">
+            <f:setPropertyActionListener value="#{imovel}" target="#{meusImoveisMB.imovel}"/>
+        </h:commandButton>
+
+        <h:commandButton action="#{meusImoveisMB.anunciarApto()}" rendered="#{!meusImoveisMB.imovel.anuncio.anunciado}" 
+                         value="Anunciar" styleClass="bt2">
+            <f:setPropertyActionListener value="#{imovel}" target="#{meusImoveisMB.imovel}"/>
+        </h:commandButton>
+        <h:commandButton action="#{meusImoveisMB.telaExcluirImovelPemissaoTrue()}" value="Excluir" /><br/>
+    </h:form>
+    
+    <p:panel header="Imagens" style="float:right; width: 745px;">
+        <p:lightBox styleClass="imagebox">  
+            <h:outputLink value="../img/semimagem.png" title="imagem">  
+                <h:graphicImage value="/img/semimagem.png"/>  
+            </h:outputLink>  
+        </p:lightBox>
+    </p:panel>
+    <p:panel header="Apartamento" style="float:right; width: 745px;"> 
+        <div>
+            Descrição: #{meusImoveisMB.apto.descricao}<br/>
+            Finalidade: #{meusImoveisMB.apto.finalidade}<br/>
+            Valor Imovél: R$#{meusImoveisMB.apto.valor}<br/>
+            Valor Condominio: R$#{meusImoveisMB.apto.valor}<br/>
+            Área Total m²: #{meusImoveisMB.apto.areaTotal}
+            Área Construida m²: #{meusImoveisMB.apto.areaConstruida} <br/>
+            Quartos: value= #{meusImoveisMB.apto.quarto} <br/>
+            Suites: value= #{meusImoveisMB.apto.suite} <br/>
+            Andar: value= #{meusImoveisMB.apto.andar} <br/>
+            Vagas Garagem: #{meusImoveisMB.apto.vagaGaragem} <br/>
+            Banheiros Sociais: #{meusImoveisMB.apto.banheiroSocial} <br/>
+            <h:outputLabel value="Possui Piscina " rendered="#{meusImoveisMB.apto.piscina}"/>
+            <h:outputLabel value=",Possui Despenda " rendered="#{meusImoveisMB.apto.despensa}"/>
+            <h:outputLabel value=",Possui Área de Serviço " rendered="#{meusImoveisMB.apto.areaServico}"/>
+            <h:outputLabel value=",Possui Churrasqueira " rendered="#{meusImoveisMB.apto.churrasqueira}"/>
+            <h:outputLabel value=",Possui Porteiro " rendered="#{meusImoveisMB.apto.porteiro}"/>
+            <h:outputLabel value="Imovél Anunciado" rendered="#{meusImoveisMB.apto.anuncio.anunciado}"/>
+            <h:outputLabel value="Imovél Não Anunciado" rendered="#{!meusImoveisMB.apto.anuncio.anunciado}"/><br/>
+        </div>
+    </p:panel>
+    <p:panel header="Endereço" style="float:right; width: 745px;">
+        <div>
+            Rua: #{meusImoveisMB.apto.endereco.rua} <br/>
+            Número: #{meusImoveisMB.apto.endereco.numero} <br/>
+            Bairro: #{meusImoveisMB.apto.endereco.bairro} <br/>
+            Cidade: #{meusImoveisMB.apto.endereco.cidade} <br/>
+            Estado: #{meusImoveisMB.apto.endereco.estado} <br/>
+            CEP: #{meusImoveisMB.apto.endereco.cep} <br/>
+            Complemento: #{meusImoveisMB.apto.endereco.complemento} <br/>
+        </div>
+    </p:panel>
+</ui:composition>

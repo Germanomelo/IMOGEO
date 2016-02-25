@@ -1,0 +1,40 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+
+    <div>
+        <div id="imgtopo">
+            <a href="index.jsf"><img src="img/imogeologop.png" alt="IMOGEO"/></a>
+        </div>
+        <div class="right">
+            <h:form>
+               
+                <ul>
+                    <li >
+                        <h:commandLink value="Sair" rendered="#{usuarioMB.ativo}" action="#{usuarioMB.logout()}" />
+                    </li>
+                    <li>
+                        <h:commandLink value="Entrar" rendered="#{!usuarioMB.ativo}"  action="/cadastro-login.jsf"/>
+                    </li>
+                    <li >
+                        <h:commandLink value="Minha Conta"  action="#{usuarioMB.minhaConta()}"/>
+                    </li>
+                    <li >
+                        <h:commandLink value="Página Inicial"  action="/index.jsf"/>
+                    </li>
+                </ul>
+            </h:form>
+            <h:form id="buscaform">
+                <h:panelGrid columns="3">
+                    <p:inputText id="busca" value="#{indexMB.busca}" required="true" requiredMessage="Nada foi Digitado"/>
+                    <h:commandButton action="#{indexMB.telaExibebuscaSimples()}" value="Buscar"/>
+                    <p:message for="busca"/>
+                </h:panelGrid>
+            </h:form>
+        </div>
+    </div>
+</ui:composition>
+

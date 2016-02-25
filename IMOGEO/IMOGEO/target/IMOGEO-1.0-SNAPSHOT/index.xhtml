@@ -1,0 +1,136 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>IMOGEO</title>
+        <link href="css/estilo.css" type="text/css" rel="stylesheet"/>
+
+    </h:head>
+    <h:body>
+        <div id="topo">
+            <div id ="topoconteudo">
+                <ui:include src="/template-topo.xhtml"/>
+            </div>
+        </div>
+        <div id="principal">
+            <h:form id="menulateral">
+                <!--<p>Imóvel</p>-->
+                <h:commandLink action="#{indexMB.telaExibeTodosImoveis()}" value="Todos Imóveis" styleClass="link"/>
+                <h:commandLink action="#{indexMB.telaExibeImovelAlugar()}" value="Alugar Imóvel" styleClass="link"/>
+                <h:commandLink action="#{indexMB.telaExibeImovelComprar()}" value="Comprar Imóvel " styleClass="link"/>
+                <h:commandLink action="#{indexMB.telaExibeImovelTemporada()}" value="Temporada Imóvel " styleClass="link"/>
+                <h:commandLink action="#{indexMB.telaExibeCasa()}" value="Casas" styleClass="link"/>
+                <h:commandLink action="#{indexMB.telaExibeApto()}" value="Apartamentos" styleClass="link"/>
+                <h:commandLink action="busca-localizacao.jsf" value="Busca por localização" styleClass="link"/>
+            </h:form>
+
+            <!--busca simples-->
+            <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibebuscaSimples}" rows="6" value="#{indexMB.buscaSimplesDescricao()}" var="imovel">
+                <p:column width="150">
+                    <img width="150" height="150" src="img/semimagem.png"></img>
+                </p:column>
+
+                <p:column width="350" >
+                    <h:outputLabel value="Casa" rendered="#{imovel.class.simpleName == 'Casa'}"/>
+                    <h:outputLabel value="Apartamento" rendered="#{imovel.class.simpleName == 'Apartamento'}"/>
+                    para #{imovel.finalidade}<br/>
+                    #{imovel.endereco.cidade} , #{imovel.endereco.bairro}<br/>
+                    Valor: R$#{imovel.valor}<br/>
+                    Área total m²: #{imovel.areaTotal}<br/> 
+                    Área construida m²: #{imovel.areaConstruida} <br/>
+
+                </p:column>
+            </p:dataTable>
+
+            <!--todos imoveis-->
+            <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibeTodosImoveis}" rows="6" value="#{indexMB.listarImoveis()}" var="imovel">
+                <p:column width="150">
+                    <img width="150" height="150" src="img/semimagem.png"></img>
+                </p:column>
+
+                <p:column width="350" >
+                    <h:outputLabel value="Casa" rendered="#{imovel.class.simpleName == 'Casa'}"/>
+                    <h:outputLabel value="Apartamento" rendered="#{imovel.class.simpleName == 'Apartamento'}"/>
+                    para #{imovel.finalidade}<br/>
+                    #{imovel.endereco.cidade} , #{imovel.endereco.bairro}<br/>
+                    Valor: R$#{imovel.valor}<br/>
+                    Área total m²: #{imovel.areaTotal}<br/> 
+                    Área construida m²: #{imovel.areaConstruida} <br/>
+                   
+
+                </p:column>
+                    
+                <p:column >
+                    <p:commandButton action="#{indexMB.detalhesImovel()}" value="Detalhes" >
+                        <f:setPropertyActionListener value="#{imovel}" target="#{indexMB.imovel}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+
+            <!--imoveis finalidade-->
+            <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibeImovelFinalidade}" rows="6" value="#{indexMB.listarImovelFinalidade()}" var="imovel">
+                <p:column width="150">
+                    <img width="150" height="150" src="img/semimagem.png"></img>
+                </p:column>
+
+                <p:column width="350" >
+                    <h:outputLabel value="Casa" rendered="#{imovel.class.simpleName == 'Casa'}"/>
+                    <h:outputLabel value="Apartamento" rendered="#{imovel.class.simpleName == 'Apartamento'}"/>
+                    para #{imovel.finalidade}<br/>
+                    #{imovel.endereco.cidade} , #{imovel.endereco.bairro}<br/>
+                    Valor: R$#{imovel.valor}<br/>
+                    Área total m²: #{imovel.areaTotal}<br/> 
+                    Área construida m²: #{imovel.areaConstruida} <br/>
+
+                </p:column>
+            </p:dataTable>
+
+
+            <!--casas-->
+            <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibeCasa}" rows="6" value="#{indexMB.listarCasa()}" var="casa">
+                <p:column width="150">
+                    <img width="150" height="150" src="img/semimagem.png"></img>
+                </p:column>
+
+                <p:column width="350" >
+                    Casa para #{casa.finalidade}<br/>
+                    #{casa.endereco.cidade} , #{casa.endereco.bairro}<br/>
+                    Valor: R$#{casa.valor}<br/>
+                    Área total m²: #{casa.areaTotal}<br/> 
+                    Área construida m²: #{casa.areaConstruida} <br/>
+
+                </p:column>
+            </p:dataTable>
+
+            <!--aptos-->
+            <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibeApto}" rows="6" value="#{indexMB.listarApartamento()}" var="apto">
+                <p:column width="150">
+                    <img width="150" height="150" src="img/semimagem.png"></img>
+                </p:column>
+
+                <p:column width="350" >
+                    Apartamento para #{apto.finalidade}<br/>
+                    #{apto.endereco.cidade} , #{apto.endereco.bairro}<br/>
+                    Valor: R$#{apto.valor}<br/>
+                    Área total m²: #{apto.areaTotal}<br/> 
+                    Área construida m²: #{apto.areaConstruida} <br/>
+
+                </p:column>
+            </p:dataTable>
+        </div><!--fim principal-->    
+
+        <h:form rendered="#{indexMB.exibeDetalhesCasa}">
+            nada
+<!--            <ui:include src="/template-detalhes-casa.xhtml"/>-->
+        </h:form>
+
+        <div id="rodape">
+            <ui:include src="/template-rodape.xhtml"/>
+        </div>
+    </h:body>
+</html>
+

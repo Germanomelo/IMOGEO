@@ -1,0 +1,230 @@
+/* 
+    Document   : estilo
+    Created on : 11/06/2013, 22:09:49
+    Author     : Germano
+    Description:
+        Purpose of the stylesheet follows.
+*/
+
+root { 
+    display: block;
+
+}
+
+/*.ui-widget {  
+    font-size: 15px !important;  
+}  */
+
+body{
+    margin: 0px;
+    font-family: Arial;
+    font-size: medium;
+    background: url("../img/b1.gif")
+}
+#topo{
+
+    background: #00008B;
+    height: 70px;
+    /*border: 1px solid black;*/
+}
+
+#topoconteudo{
+    /*border: 1px solid black;*/
+    margin: auto;
+    width: 960px;
+    overflow: hidden;
+    zoom: 1;
+}
+#topoconteudo form {
+    /*border: 1px solid black;*/
+    display: table;
+    width: 320px;
+}
+#imgtopo{
+    /*border: 1px solid black;*/
+    float: left;
+    margin-top: 5px;
+    width: 310px;
+    height: 60px;
+    /*background: url("../img/imogeologop.png") no-repeat;*/
+
+}
+.right {
+    display: table;
+    /*border: 1px solid black;*/
+    float: left;
+}
+.right form {
+    float: right;
+    /*border: 1px solid black;*/
+}
+#topoconteudo ul {
+    /*float: right;*/
+    /*border: 1px solid black;*/
+    margin-top: 0px;
+    margin-right: 0px;
+
+}
+
+/* texto dos botões*/
+#topoconteudo ul li {
+    display: inline;
+    text-align: center;
+    line-height: 25px;
+    margin-right: 2px;
+}
+
+#topoconteudo ul li a {
+    margin-left:2px;
+    float: right;
+    padding-left: 3px;
+    padding-right: 3px;
+    width: auto;
+    height: 27px;
+    /*background: #dcdcdc;*/ 
+    background: orange; 
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ececec', endColorstr='orange'); 
+    background: -webkit-gradient(linear, left top, left bottom, from(#ececec), to(orange));   
+    background: -moz-linear-gradient(top, #ececec, orange);
+    /*background: -moz-linear-gradient(top, #ececec, orange);*/
+    /*background: #00BFFF;*/
+    /*border-right: 5px solid #00BFFF;*/
+    /*font-weight:bold;*/
+    color: black;
+    text-decoration: none;
+    border-radius: 0px 0px 10px 10px;
+    /*-moz-border-radius: 0px 00px 10px 10px;*/
+    font-size: 13px;
+}
+
+
+#topoconteudo ul li a:hover {
+    background: orange;
+}
+#buscaform{
+    float:left;
+    margin-top: 15px;
+}
+#principal{
+    background: white;    
+}
+
+#principal h3{
+    padding: 1px;
+    line-height: 35px;
+    /*height: 40px;*/
+    /*margin-top: 10px;*/
+    /*float: left;*/
+    margin: auto;
+    text-align: center;
+    background-color: #dcdcdc;
+}
+
+#principal{
+    padding: 1px;
+    margin: auto;
+    width: 965px;
+    height: 600px;
+    border-left: 1px solid gray;
+    border-right: 1px solid gray;
+    /*height: 300px; remover*/
+    box-shadow: 0px 10px 25px #ccc;
+    /* implementação para o firefox */
+    /*-moz-box-shadow: 0px 10px 15px #ccc;*/
+    /* implementação para safari */
+    /*-webkit-box-shadow: 5px 5px 5px, #ccc;*/
+}
+#logar{
+    float: left;
+    width: 450px;
+}
+
+#formcadastrouser{
+    float: left;
+}
+
+#editarperfilusuario{
+    margin-left: 10px;
+}
+#editarperfilusuariosenha{
+    margin-left: 10px;
+    margin-top: 20px;
+
+}
+#menulateral {
+    /*border: 1px solid black;*/
+    float: left;
+    width: 210px;
+    height: 600px;
+    background-color: white;
+}
+
+#menulateral p {
+    font-size: 18px;
+    text-align: center;
+    color: #00008B;
+}
+
+.link{
+    margin-top:2px;
+    margin-left:2px;
+    text-align: center;
+    float: left;
+    font-weight:bold;
+    width: 200px;
+    height: 35px;
+    line-height: 35px;
+    background-color: #00008B;
+    color: whitesmoke;
+    font-size: 17px;
+    border-left: 5px solid #00BFFF;
+    text-decoration: none;
+    /*    border-radius: 10px 10px 10px 10px;
+        -moz-border-radius: 10px 10px 10px 10px;*/
+}
+.link:hover{
+    border-left: 5px solid orange;
+}
+
+.tabela{
+    float: right;
+    margin: auto;
+    margin-top: 2px;
+    width: 750px;
+}
+
+#rodape{
+    /*margin: auto;*/
+    height: 70px;
+    background: #00008B;
+}
+
+#rodape div{
+    padding-top: 15px;
+    margin: auto;
+    text-align: center;
+    /*margin-top: 20px;*/
+    margin: 0px;
+}
+
+#rodape div ul{
+    margin-top: 20px;
+    margin: 0px;
+}
+
+#rodape div ul li {
+    /*margin: auto;*/
+    /*margin-top: 40px;*/
+    display: inline;
+    text-align: center;
+    /*    margin-right: 20px;*/
+}
+
+#rodape div ul li a {
+    float: none;
+    color: white;
+    text-decoration: none;
+    font-size: 16px;
+    margin-left: 30px;
+    margin-right: 30px;
+}

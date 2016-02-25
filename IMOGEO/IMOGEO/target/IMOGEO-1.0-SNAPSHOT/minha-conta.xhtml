@@ -1,0 +1,149 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Minha Conta</title>
+        <link href="css/estilo.css" type="text/css" rel="stylesheet"/>
+    </h:head>
+    <h:body>
+        <div id="topo">
+            <div id ="topoconteudo">
+                <ui:include src="/template-topo.xhtml"/>
+            </div>
+        </div>
+        <div id="principal">
+            <h:form id="menulateral" style="height: 500px;">
+                <!--<p>Minha Conta</p>-->
+                <h:commandLink action="#{usuarioMB.telaPerfilUsuario()}" value="Perfil" styleClass="link"/>
+                <h:commandLink action="#{usuarioMB.telaEditarPerfilUsuario()}" value="Editar Perfil" styleClass="link"/>
+                <h:commandLink action="#{usuarioMB.telaEditarSenhaUsuario()}" value="Editar Senha" styleClass="link"/>
+                <h:commandLink action="meus-imoveis.jsf" value="Meus imoveis" styleClass="link"/>
+                <h:commandLink action="#" value="Receber Notificações" styleClass="link"/>
+                <h:commandLink action="#{usuarioMB.telaExcluirPerfilUsuario()}" value="Excluir Conta" styleClass="link"/>
+
+            </h:form>
+
+            <p:panel header="Perfil" rendered="#{usuarioMB.perfilUsuario}" style="width: 745px; float: right">
+                <h:form >
+                    <p:messages globalOnly="true"/>
+                    <h:panelGrid columns="2">
+                        <p:outputLabel value="Nome:" for="nome"/>
+                        <p:outputLabel id="nome" value="#{usuarioMB.usuario.nome}" />
+
+                        <p:outputLabel value="Email:" for="email"/>
+                        <p:outputLabel id="email" value="#{usuarioMB.usuario.email}" />
+
+                        <p:outputLabel value="Data Nascimento:" for="datanasc"/>
+                        <p:outputLabel id="datanasc" value="#{usuarioMB.usuario.dataNascimento}" /> 
+
+                        <p:outputLabel value="CPF:" for="cpf"/>
+                        <p:outputLabel id="cpf" value="#{usuarioMB.usuario.cpf}" />
+
+                        <p:outputLabel value="Tel Residencial:" for="telresid"/>
+                        <p:outputLabel id="telresid" value="#{usuarioMB.usuario.telefoneResidencial}" />
+
+                        <p:outputLabel value="Tel Comercial:" for="telcom"/>
+                        <p:outputLabel id="telcom" value="#{usuarioMB.usuario.telefoneComercial}" />
+
+                        <p:outputLabel value="Tel Celular:" for="telcel"/>
+                        <p:outputLabel id="telcel" value="#{usuarioMB.usuario.telefoneCelular}" />
+
+                        <p:outputLabel value="Data Criação" for="dtc"/>
+                        <p:outputLabel id="dtc" value="#{usuarioMB.usuario.dataCriacao}" />
+
+                        <h:commandButton action="#{usuarioMB.telaEditarPerfilUsuario()}" value="Editar Perfil"/>
+
+                    </h:panelGrid>
+
+                </h:form>
+            </p:panel>
+            <p:panel header="Editar Perfil" rendered="#{usuarioMB.editarPerfilUsuario}" style="width: 745px; float: right">
+
+                <h:form >
+                    <p:messages globalOnly="true"/>
+                    <h:panelGrid columns="3">
+                        <p:outputLabel value="Nome:" for="nome"/>
+                        <p:inputText id="nome" maxlength="50" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.nome}" />
+                        <p:message for="nome"/>
+
+                        <p:outputLabel value="Email:" for="email"/>
+                        <p:inputText id="email" maxlength="50" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.email}" />
+                        <p:message for="email"/>
+
+                        <p:outputLabel value="Data Nascimento:" for="datanasc"/>
+                        <p:calendar id="datanasc" value="#{usuarioMB.usuario.dataNascimento}" locale="pt_BR" pattern="dd/MM/yyyy" />  
+                        <p:message for="datanasc"/>
+
+                        <p:outputLabel value="CPF:" for="cpf"/>
+                        <p:inputMask id="cpf"  mask="999.999.999-99" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.cpf}" />
+                        <p:message for="cpf"/>
+
+                        <p:outputLabel value="Tel Residencial:" for="telresid"/>
+                        <p:inputMask id="telresid" mask="(999) 9999-9999" value="#{usuarioMB.usuario.telefoneResidencial}" />
+                        <p:message for="telresid"/>
+
+                        <p:outputLabel value="Tel Comercial:" for="telcom"/>
+                        <p:inputMask id="telcom" mask="(999) 9999-9999"  value="#{usuarioMB.usuario.telefoneComercial}" />
+                        <p:message for="telcom"/>
+
+                        <p:outputLabel value="Tel Celular:" for="telcel"/>
+                        <p:inputMask id="telcel" mask="(999) 9999-9999" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.telefoneCelular}" />
+                        <p:message for="telcel"/>
+
+                        <p:outputLabel value="Data Criação" for="dtc"/>
+                        <p:outputLabel id="dtc" value="#{usuarioMB.usuario.dataCriacao}" />
+                        <p:message for="dtc"/>
+
+                        <h:commandButton action="#{usuarioMB.atualizarUsuario()}" value="Atualizar"/>
+                    </h:panelGrid>
+
+                </h:form>
+            </p:panel>
+            
+            <p:panel header="Editar Senha" rendered="#{usuarioMB.editarSenhaUsuario}" style="width: 745px; float: right">
+            <h:form >
+                <p:messages globalOnly="true"/>
+                <h:panelGrid columns="3">
+                    <p:outputLabel value="Senha Atual:" for="senhaatual"/>
+                    <p:password id="senhaatual" maxlength="20" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.senhaAtual}"/>
+                    <p:message for="senhaatual"/>
+
+                    <p:outputLabel value="Nova Senha:" for="senha"/>
+                    <p:password id="senha" maxlength="20" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.novaSenha}"/>
+                    <p:message for="senha"/>
+
+                    <p:outputLabel value="Confirme Nova Senha:" for="senha"/>
+                    <p:password id="novasenha" maxlength="20" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.confirmeSenha}"/>
+                    <p:message for="novasenha"/>
+
+                    <h:commandButton action="#{usuarioMB.atualizarSenhaUsuario()}" value="Atualizar"/>
+                </h:panelGrid>
+
+            </h:form>
+            </p:panel>
+            
+            <p:panel header="Excluir Conta" rendered="#{usuarioMB.excluirPerfilUsuario}" style="width: 745px; float: right">
+
+            <h:form >
+                <p>Se excluir sua conta todos seu dados serão apagados permanentemente da memória.</p>
+                <p>Ainda deseja excluir o seu Perfil?</p>
+                <p:messages globalOnly="true"/>
+                <h:panelGrid columns="2">
+                    <h:commandButton action="#{usuarioMB.removerUsuario()}" value="Sim"/>
+                    <h:commandButton action="#{usuarioMB.telaPerfilUsuario()}" value="Não"/>
+                </h:panelGrid>
+
+            </h:form>
+            </p:panel>
+        </div><!--fim principal-->
+
+        <div id="rodape">
+            <ui:include src="template-rodape.xhtml"/>
+        </div>
+    </h:body>
+</html>
+
