@@ -32,20 +32,20 @@
                 <f:setPropertyActionListener value="#{imovel}" target="#{meusImoveisMB.imovel}"/>
             </h:commandButton>
             <br/>
-            <h:commandButton action="#{meusImoveisMB.desanunciarImovel()}" rendered="#{meusImoveisMB.imovel.anuncio.anunciado}"
+<!--            <h:commandButton action="{meusImoveisMB.desanunciarImovel()}" rendered="{meusImoveisMB.imovel.anuncio.anunciado}"
                              value="Desanunciar" styleClass="bt2">
-                <f:setPropertyActionListener value="#{imovel}" target="#{meusImoveisMB.imovel}"/>
+                <f:setPropertyActionListener value="{imovel}" target="{meusImoveisMB.imovel}"/>
             </h:commandButton>
 
-            <h:commandButton action="#{meusImoveisMB.anunciarImovel()}" rendered="#{!meusImoveisMB.imovel.anuncio.anunciado}" 
+            <h:commandButton action="{meusImoveisMB.anunciarImovel()}" rendered="{!meusImoveisMB.imovel.anuncio.anunciado}" 
                              value="Anunciar" styleClass="bt2">
-                <f:setPropertyActionListener value="#{imovel}" target="#{meusImoveisMB.imovel}"/>
+                <f:setPropertyActionListener value="{imovel}" target="{meusImoveisMB.imovel}"/>
             </h:commandButton>
             <br/>
-            <h:commandButton action="#{meusImoveisMB.editarImovel()}" value="Editar" >
-                <f:setPropertyActionListener value="#{imovel}" target="#{meusImoveisMB.imovel}"/>
+            <h:commandButton action="{meusImoveisMB.editarImovel()}" value="Editar" >
+                <f:setPropertyActionListener value="{imovel}" target="{meusImoveisMB.imovel}"/>
             </h:commandButton>
-            <br/>
+            <br/>-->
 
         </p:column>
     </p:dataTable>

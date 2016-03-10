@@ -80,7 +80,9 @@ public class ImovelDao {
     }
 
     public List<Imovel> listarImoveisIdUser(Usuario usuario) {
+//        Query query = manager.createQuery("Select i from Imovel i");
         Query query = manager.createQuery("Select i from Usuario u join u.imoveis i where u.id = :id");
+//        Query query = manager.createQuery("Select i from Usuario.imoveis i");
         query.setParameter("id", usuario.getId());
         List<Imovel> imoveis = query.getResultList();
         return imoveis;

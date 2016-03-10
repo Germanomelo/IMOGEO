@@ -29,8 +29,8 @@ public class IndexMB implements Serializable {
 
     private String finalidade = null;
     private boolean exibeTodosImoveis = true;
-    private boolean exibeCasa = false;
-    private boolean exibeApto = false;
+    private boolean exibeCasas = false;
+    private boolean exibeAptos = false;
     private boolean exibeImovelFinalidade = false;
     private boolean exibebuscaSimples = false;
     private boolean exibeDetalhesCasa = false;
@@ -88,7 +88,7 @@ public class IndexMB implements Serializable {
 
     public void detalhesImovel() {
         if (this.imovel instanceof Casa) {
-            System.out.println("Entrou em casa");
+            System.out.println("\nEntrou em casa!!!!!!!!!!!!!!!!!");
             this.casa = casaDao.retornarCasa(this.imovel.getId());
             this.telaDetalhesCasa();
         } else if (this.imovel instanceof Apartamento) {
@@ -105,19 +105,19 @@ public class IndexMB implements Serializable {
         this.exibeDetalhesApto = true;
         this.exibeDetalhesCasa = false;
         this.exibeTodosImoveis = false;
-        this.exibeApto = false;
-        this.exibeCasa = false;
+        this.exibeAptos = false;
+        this.exibeCasas = false;
         this.exibeImovelFinalidade = false;
         this.exibebuscaSimples = false;
     }
 
     public void telaDetalhesCasa() {
-        System.out.println("Entrou tela detalhes casa");
+        System.out.println("\nEntrou tela detalhes casa!!!!!!!!!!!!!!!!!");
         this.exibeDetalhesApto = false;
         this.exibeDetalhesCasa = true;
         this.exibeTodosImoveis = false;
-        this.exibeApto = false;
-        this.exibeCasa = false;
+        this.exibeAptos = false;
+        this.exibeCasas = false;
         this.exibeImovelFinalidade = false;
         this.exibebuscaSimples = false;
     }
@@ -126,19 +126,18 @@ public class IndexMB implements Serializable {
         this.exibeDetalhesApto = false;
         this.exibeDetalhesCasa = false;
         this.exibeTodosImoveis = false;
-        this.exibeApto = false;
-        this.exibeCasa = false;
+        this.exibeAptos = false;
+        this.exibeCasas = false;
         this.exibeImovelFinalidade = false;
         this.exibebuscaSimples = true;
-//        return "index.jsf";
     }
 
     public void telaExibeTodosImoveis() {
         this.exibeDetalhesApto = false;
         this.exibeDetalhesCasa = false;
         this.exibeTodosImoveis = true;
-        this.exibeApto = false;
-        this.exibeCasa = false;
+        this.exibeAptos = false;
+        this.exibeCasas = false;
         this.exibeImovelFinalidade = false;
         this.exibebuscaSimples = false;
     }
@@ -147,8 +146,8 @@ public class IndexMB implements Serializable {
         this.exibeDetalhesApto = false;
         this.exibeDetalhesCasa = false;
         this.exibeTodosImoveis = false;
-        this.exibeApto = false;
-        this.exibeCasa = true;
+        this.exibeAptos = false;
+        this.exibeCasas = true;
         this.exibeImovelFinalidade = false;
         this.exibebuscaSimples = false;
     }
@@ -157,8 +156,8 @@ public class IndexMB implements Serializable {
         this.exibeDetalhesApto = false;
         this.exibeDetalhesCasa = false;
         this.exibeTodosImoveis = false;
-        this.exibeApto = true;
-        this.exibeCasa = false;
+        this.exibeAptos = true;
+        this.exibeCasas = false;
         this.exibeImovelFinalidade = false;
         this.exibebuscaSimples = false;
     }
@@ -167,8 +166,8 @@ public class IndexMB implements Serializable {
         this.exibeDetalhesApto = false;
         this.exibeDetalhesCasa = false;
         this.exibeTodosImoveis = false;
-        this.exibeApto = false;
-        this.exibeCasa = false;
+        this.exibeAptos = false;
+        this.exibeCasas = false;
         this.exibeImovelFinalidade = true;
         this.exibebuscaSimples = false;
         this.finalidade = "TEMPORADA";
@@ -178,8 +177,8 @@ public class IndexMB implements Serializable {
         this.exibeDetalhesApto = false;
         this.exibeDetalhesCasa = false;
         this.exibeTodosImoveis = false;
-        this.exibeApto = false;
-        this.exibeCasa = false;
+        this.exibeAptos = false;
+        this.exibeCasas = false;
         this.exibeImovelFinalidade = true;
         this.exibebuscaSimples = false;
         this.finalidade = "COMPRAR";
@@ -189,8 +188,8 @@ public class IndexMB implements Serializable {
         this.exibeDetalhesApto = false;
         this.exibeDetalhesCasa = false;
         this.exibeTodosImoveis = false;
-        this.exibeApto = false;
-        this.exibeCasa = false;
+        this.exibeAptos = false;
+        this.exibeCasas = false;
         this.exibeImovelFinalidade = true;
         this.exibebuscaSimples = false;
         this.finalidade = "ALUGAR";
@@ -229,11 +228,11 @@ public class IndexMB implements Serializable {
     }
 
     public boolean isExibeCasa() {
-        return exibeCasa;
+        return exibeCasas;
     }
 
     public boolean isExibeApto() {
-        return exibeApto;
+        return exibeAptos;
     }
 
     public String getBusca() {

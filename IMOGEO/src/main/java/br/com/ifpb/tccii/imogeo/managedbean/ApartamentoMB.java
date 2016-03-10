@@ -10,6 +10,7 @@ import br.com.ifpb.tccii.imogeo.entidades.Endereco;
 import br.com.ifpb.tccii.imogeo.entidades.Usuario;
 import br.com.ifpb.tccii.imogeo.entidades.especializacao.Apartamento;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ApartamentoDao;
+import br.com.ifpb.tccii.imogeo.sessionbeans.EnderecoDao;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.io.ParseException;
@@ -42,6 +43,9 @@ public class ApartamentoMB implements Serializable{
     @EJB
     private ApartamentoDao aptoDao;
     
+    @EJB
+    private EnderecoDao enderecoDao;
+    
     public boolean isCadastrarApto() {
         return cadastrarApto;
     }
@@ -58,11 +62,13 @@ public class ApartamentoMB implements Serializable{
     }
    
     public String addApto() throws ParseException{
-        this.apto.setUsuario(this.getUsuarioSession());
-        this.apto.setAnuncio(new Anuncio());
         Geometry g1 = new WKTReader().read(this.loc.toString());
         this.endereco.setLocalizacao((Point) g1);
-        this.apto.setEndereco(this.endereco);
+//        this.enderecoDao.inserirEndereco(this.endereco);
+        this.endereco.setImovel(this.apto);
+        this.apto.setUsuario(this.getUsuarioSession());
+        this.apto.setAnuncio(new Anuncio());
+        this.apto.setEndereco(this.endereco);   
         this.aptoDao.inserirApartamento(this.apto);
         return "meus-imoveis.jsf";
     }

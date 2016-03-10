@@ -83,9 +83,10 @@
             </p:panel>
             <h:form rendered="#{meusImoveisMB.excluirImovelPermission}">
                 <h:outputText value="Deseja realmente excluir este imóvel?"/><br/>
-                <h:commandButton action="#{meusImoveisMB.removerImovel()}" value="Sim" />
+                <h:commandButton  action="#{meusImoveisMB.removerImovel()}" value="Sim" />
                 <h:commandButton action="#{meusImoveisMB.telaExcluirImovelPemissaoFalse()}" value="Não" /><br/><br/>
             </h:form>
+            
             <!--Editar Apartamento-->
             <p:panel header="Editar Apartamento" rendered="#{meusImoveisMB.editarApartamento}" style="width: 745px; float: right">
                 <ui:include src="/template-editar-apto.xhtml"/>
@@ -95,7 +96,6 @@
             <h:form id="forminfocasa"  prependId="false" rendered="#{meusImoveisMB.informacoesCasa}"> 
                 <ui:include src="/template-informacoes-casa.xhtml"/>
             </h:form>
-
 
             <!--Informações Apto-->
             <h:form id="forminfoapto"  rendered="#{meusImoveisMB.informacoesApto}"> 

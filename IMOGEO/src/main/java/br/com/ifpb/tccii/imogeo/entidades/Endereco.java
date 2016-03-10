@@ -7,40 +7,61 @@ package br.com.ifpb.tccii.imogeo.entidades;
 import com.vividsolutions.jts.geom.Point;
 import java.io.Serializable;
 import javax.persistence.Column;
-import javax.persistence.Embeddable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToOne;
 import org.hibernate.annotations.Type;
 
 /**
  *
  * @author germano
  */
-@Embeddable
+@Entity
 public class Endereco implements Serializable {
-    
+
+    private static final long serialVersionUID = 1L;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private Long id;
+
     @Column(length = 9)
     private String cep;
-    
+
     @Column(length = 25)
     private String estado;
-    
+
     @Column(length = 50)
     private String complemento;
-    
+
     @Column(length = 7)
     private String numero;
-    
+
     @Column(length = 60)
     private String rua;
-    
+
     @Column(length = 50)
     private String bairro;
-    
+
     @Column(length = 50)
     private String cidade;
-    
+
+    @OneToOne
+    private Imovel imovel;
+
     @Column(columnDefinition = "Geometry")
     @Type(type = "org.hibernate.spatial.GeometryType")
     private Point localizacao;
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getCep() {
         return cep;
@@ -104,6 +125,14 @@ public class Endereco implements Serializable {
 
     public void setLocalizacao(Point localizacao) {
         this.localizacao = localizacao;
+    }
+
+    public Imovel getImovel() {
+        return imovel;
+    }
+
+    public void setImovel(Imovel imovel) {
+        this.imovel = imovel;
     }
 
 }

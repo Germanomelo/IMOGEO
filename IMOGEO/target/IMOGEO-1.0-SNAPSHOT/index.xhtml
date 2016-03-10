@@ -60,14 +60,12 @@
                     Valor: R$#{imovel.valor}<br/>
                     Área total m²: #{imovel.areaTotal}<br/> 
                     Área construida m²: #{imovel.areaConstruida} <br/>
-                   
-
                 </p:column>
                     
                 <p:column >
-                    <p:commandButton action="#{indexMB.detalhesImovel()}" value="Detalhes" >
+                    <h:commandButton action="#{indexMB.detalhesImovel()}" value="Detalhes" >
                         <f:setPropertyActionListener value="#{imovel}" target="#{indexMB.imovel}"/>
-                    </p:commandButton>
+                    </h:commandButton>
                 </p:column>
             </p:dataTable>
 
@@ -88,7 +86,6 @@
 
                 </p:column>
             </p:dataTable>
-
 
             <!--casas-->
             <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibeCasa}" rows="6" value="#{indexMB.listarCasa()}" var="casa">
@@ -121,12 +118,19 @@
 
                 </p:column>
             </p:dataTable>
+           
+            <!--Detalhes casa-->
+            <h:form id="formdetalhescasa" rendered="#{indexMB.exibeDetalhesCasa}">
+                <ui:include src="/template-detalhes-casa.xhtml"/>
+            </h:form>
+            
+            <!--Detalhes apto-->
+<!--            <h:form rendered="{indexMB.exibeDetalhesApto}">
+                <ui:include src="/template-detalhes-apto.xhtml"/>
+            </h:form>-->
         </div><!--fim principal-->    
 
-        <h:form rendered="#{indexMB.exibeDetalhesCasa}">
-            nada
-<!--            <ui:include src="/template-detalhes-casa.xhtml"/>-->
-        </h:form>
+        
 
         <div id="rodape">
             <ui:include src="/template-rodape.xhtml"/>

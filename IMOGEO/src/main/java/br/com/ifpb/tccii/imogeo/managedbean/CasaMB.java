@@ -42,6 +42,9 @@ public class CasaMB implements Serializable{
     @EJB
     private CasaDao casaDao;
     
+//    @EJB
+//    private EnderecoDao enderecoDao;
+    
     public boolean isCadastrarCasa() {
         return cadastrarCasa;
     }
@@ -58,10 +61,11 @@ public class CasaMB implements Serializable{
     }
    
     public String addCasa() throws ParseException{
-        this.casa.setUsuario(this.getUsuarioSession());
-        this.casa.setAnuncio(new Anuncio());
         Geometry g1 = new WKTReader().read(this.loc.toString());
         this.endereco.setLocalizacao((Point) g1);
+        this.endereco.setImovel(this.casa);
+        this.casa.setUsuario(this.getUsuarioSession());
+        this.casa.setAnuncio(new Anuncio());
         this.casa.setEndereco(this.endereco);
         this.casaDao.inserirCasa(this.casa);
         return "meus-imoveis.jsf";

@@ -246,7 +246,7 @@ public class MeusImoveisMB implements Serializable {
     public void maisInformacoes() {
         if (this.imovel instanceof Casa) {
             this.casa = casaDao.retornarCasa(this.imovel.getId());
-            System.out.println(this.casa);
+//            System.out.println(this.casa);
             this.telaInformacoesCasa();
         } else if (this.imovel instanceof Apartamento) {
             this.apto = aptoDao.retornarApartamento(this.imovel.getId());
