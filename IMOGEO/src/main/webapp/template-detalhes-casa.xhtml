@@ -7,42 +7,43 @@
     xmlns:p="http://primefaces.org/ui"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:c="http://java.sun.com/jsp/jstl/core">
-        
-        <p:panel header="Imagens" style="float:right; width: 745px;">
-            <p:lightBox styleClass="imagebox">  
-                <h:outputLink value="../img/semimagem.png" title="imagem">  
-                    <h:graphicImage value="/img/semimagem.png"/>  
-                </h:outputLink>  
-            </p:lightBox>
-        </p:panel>
-        <p:panel header="Casa" style="float:right; width: 745px;"> 
-            <div>
-                Descrição: #{indexMB.casa.descricao}<br/>
-                Finalidade: #{indexMB.casa.finalidade}<br/>
-                Valor: R$#{indexMB.casa.valor}<br/>
-                Área Total m²: #{indexMB.casa.areaTotal}<br/>
-                Área Construida m²: #{indexMB.casa.areaConstruida} <br/>
-                Quartos: #{indexMB.casa.quarto} <br/>
-                Suites: #{indexMB.casa.suite} <br/>
-                Vagas Garagem: #{indexMB.casa.vagaGaragem} <br/>
-                Banheiros Sociais: #{indexMB.casa.banheiroSocial} <br/>
-                <h:outputLabel value="Possui Piscina " rendered="#{indexMB.casa.piscina}"/>
-                <h:outputLabel value=",Possui Despenda " rendered="#{indexMB.casa.despensa}"/>
-                <h:outputLabel value=",Possui Área de Serviço " rendered="#{indexMB.casa.areaServico}"/>
-                <h:outputLabel value=",Possui Churrasqueira " rendered="#{indexMB.casa.churrasqueira}"/>
-                <h:outputLabel value=",Possui Jardim " rendered="#{indexMB.casa.jardim}"/><br/>
-            </div>
-        </p:panel>
-        <p:panel header="Endereço" style="float:right; width: 745px;">
-            <div>
-                Rua: #{indexMB.casa.endereco.rua} <br/>
-                Número: #{indexMB.casa.endereco.numero} <br/>
-                Bairro: #{indexMB.casa.endereco.bairro} <br/>
-                Cidade: #{indexMB.casa.endereco.cidade} <br/>
-                Estado: #{indexMB.casa.endereco.estado} <br/>
-                CEP: #{indexMB.casa.endereco.cep} <br/>
-                Complemento: #{indexMB.casa.endereco.complemento} <br/>
-            </div>
-        </p:panel>
+
+    <p:panel header="Imagens" style="float:right; width: 745px;">
+        <p:lightBox styleClass="imagebox">  
+            <h:outputLink value="../img/semimagem.png" title="imagem">  
+                <h:graphicImage value="/img/semimagem.png"/>  
+            </h:outputLink>  
+        </p:lightBox>
+    </p:panel>
+    <p:panel header="Endereço" style="float:right; width: 368px; height: 350px">
+        <div>
+            Rua: #{indexMB.casa.endereco.rua} <br/>
+            Número: #{indexMB.casa.endereco.numero} <br/>
+            Bairro: #{indexMB.casa.endereco.bairro} <br/>
+            Cidade: #{indexMB.casa.endereco.cidade} <br/>
+            Estado: #{indexMB.casa.endereco.estado} <br/>
+            CEP: #{indexMB.casa.endereco.cep} <br/>
+            Complemento: #{indexMB.casa.endereco.complemento} <br/>
+        </div>
+    </p:panel>
+    <p:panel header="Casa" style="float:right; width: 368px; height: 350px"> 
+        <div>
+            Finalidade: #{indexMB.casa.finalidade}<br/>
+            Valor: <strong style="color: orange">R$#{indexMB.casa.valor}</strong><br/>
+            Área Total m²: #{indexMB.casa.areaTotal}<br/>
+            Área Construida m²: #{indexMB.casa.areaConstruida} <br/>
+            Quartos: #{indexMB.casa.quarto} <br/>
+            Suites: #{indexMB.casa.suite} <br/>
+            Vagas Garagem: #{indexMB.casa.vagaGaragem} <br/>
+            Banheiros Sociais: #{indexMB.casa.banheiroSocial} <br/>
+            Passui:
+            <h:outputLabel value=" Piscina," rendered="#{indexMB.casa.piscina}"/>
+            <h:outputLabel value=" Despenda," rendered="#{indexMB.casa.despensa}"/>
+            <h:outputLabel value=" Área de Serviço," rendered="#{indexMB.casa.areaServico}"/>
+            <h:outputLabel value=" Churrasqueira," rendered="#{indexMB.casa.churrasqueira}"/>
+            <h:outputLabel value=" Jardim" rendered="#{indexMB.casa.jardim}"/><br/>
+            Observação: #{indexMB.casa.descricao}<br/>
+        </div>
+    </p:panel>
 </ui:composition>
 

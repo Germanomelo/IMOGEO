@@ -124,7 +124,7 @@ body{
     padding: 1px;
     margin: auto;
     width: 965px;
-    height: 600px;
+    height: 1000px;
     border-left: 1px solid gray;
     border-right: 1px solid gray;
     /*height: 300px; remover*/
@@ -155,7 +155,7 @@ body{
     /*border: 1px solid black;*/
     float: left;
     width: 210px;
-    height: 600px;
+    /*height: 600px;*/
     background-color: white;
 }
 

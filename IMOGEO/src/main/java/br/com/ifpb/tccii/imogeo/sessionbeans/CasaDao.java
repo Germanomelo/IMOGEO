@@ -6,6 +6,7 @@ package br.com.ifpb.tccii.imogeo.sessionbeans;
 
 import br.com.ifpb.tccii.imogeo.entidades.Imovel;
 import br.com.ifpb.tccii.imogeo.entidades.especializacao.Casa;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -26,6 +27,18 @@ public class CasaDao {
         return manager.find(Casa.class, id);
     }
 
+    public List<Casa> listarCasasAnunciadas() {
+        Query query = manager.createQuery("Select c from Casa c");
+        List<Casa> casas = query.getResultList();
+        List<Casa> result = new ArrayList<Casa>();
+        for(int i = 0; i < casas.size();i++){
+            if(casas.get(i).getAnuncio().getAnunciado()== true){
+                result.add(casas.get(i)); 
+            }
+        }
+        return result;
+    }
+    
     public List<Casa> listarCasas() {
         Query query = manager.createQuery("Select c from Casa c");
         return query.getResultList();

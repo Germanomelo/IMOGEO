@@ -4,7 +4,9 @@
  */
 package br.com.ifpb.tccii.imogeo.sessionbeans;
 
+import br.com.ifpb.tccii.imogeo.entidades.Imovel;
 import br.com.ifpb.tccii.imogeo.entidades.especializacao.Apartamento;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -25,6 +27,18 @@ public class ApartamentoDao {
         return manager.find(Apartamento.class, id);
     }
 
+    public List<Apartamento> listarApartamentosAnunciados() {
+        Query query = manager.createQuery("Select a from Apartamento a");
+        List<Apartamento> aptos = query.getResultList();
+        List<Apartamento> result = new ArrayList<Apartamento>();
+        for(int i = 0; i < aptos.size();i++){
+            if(aptos.get(i).getAnuncio().getAnunciado()== true){
+                result.add(aptos.get(i)); 
+            }
+        }
+        return result;
+    }
+    
     public List<Apartamento> listarApartamentos() {
         Query query = manager.createQuery("Select a from Apartamento a");
         return query.getResultList();

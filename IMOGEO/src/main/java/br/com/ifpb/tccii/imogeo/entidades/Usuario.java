@@ -47,20 +47,28 @@ public class Usuario implements Serializable {
 //    private List<Imovel> procuras = new ArrayList<Imovel>();
     @Column(nullable = false, length = 50)
     private String nome;
+    
     @Column(nullable = false, unique = true, length = 50)
     private String email;
+    
     @Column(nullable = false, length = 90)
     private String senha;
+   
     @Column(nullable = false, unique = true, length = 14)
     private String cpf;
+   
     @Temporal(TemporalType.DATE)
     private Date dataNascimento;
+   
     @Column(length = 15)
     private String telefoneResidencial;
+   
     @Column(length = 15)
     private String telefoneComercial;
+   
     @Column(length = 15)
     private String telefoneCelular;
+   
     @Temporal(TemporalType.DATE)
     private Date dataCriacao = new Date();
 

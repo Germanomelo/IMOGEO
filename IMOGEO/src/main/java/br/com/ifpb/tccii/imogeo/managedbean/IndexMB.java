@@ -12,8 +12,10 @@ import br.com.ifpb.tccii.imogeo.sessionbeans.UsuarioDao;
 import java.io.Serializable;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ViewScoped;
+import javax.faces.context.FacesContext;
 
 /*
  * To change this template, choose Tools | Templates
@@ -26,7 +28,10 @@ import javax.faces.bean.ViewScoped;
 @ManagedBean(name = "indexMB")
 @ViewScoped
 public class IndexMB implements Serializable {
-
+    private String loc;
+    private double lat;
+    private double log;
+    
     private String finalidade = null;
     private boolean exibeTodosImoveis = true;
     private boolean exibeCasas = false;
@@ -70,38 +75,47 @@ public class IndexMB implements Serializable {
         return imovelDao.listarSimplesDescricao(busca);
     }
 
-    public List<Apartamento> listarApartamento() {
-        return aptoDao.listarApartamentos();
+    public List<Apartamento> listarApartamentosAnunciados() {
+        return aptoDao.listarApartamentosAnunciados();
     }
 
-    public List<Casa> listarCasa() {
-        return casaDao.listarCasas();
+    public List<Casa> listarCasasAnunciadas() {
+        return casaDao.listarCasasAnunciadas();
     }
 
-    public List<Imovel> listarImoveis() {
-        return imovelDao.listarImoveis();
+    public List<Imovel> listarImoveisAnunciados() {
+        return imovelDao.listarImoveisAnunciados();
     }
 
-    public List listarImovelFinalidade() {
-        return imovelDao.listarImoveisFinalidade(finalidade);
+    public List listarImoveisFinalidadeAnunciados() {
+        return imovelDao.listarImoveisFinalidadeAnunciados(finalidade);
     }
 
     public void detalhesImovel() {
+        System.out.println("\n Entrou detalhes imovel!!!!!!!!!!!!!!!!");
         if (this.imovel instanceof Casa) {
-            System.out.println("\nEntrou em casa!!!!!!!!!!!!!!!!!");
-            this.casa = casaDao.retornarCasa(this.imovel.getId());
-            this.telaDetalhesCasa();
+            this.detalhesCasa();
         } else if (this.imovel instanceof Apartamento) {
-            System.out.println("Entrou em apartamento");
-            this.apto = aptoDao.retornarApartamento(this.imovel.getId());
-            this.telaDetalhesApto();
+            this.detalhesApto();
+        } else {
+            this.mensagemErro(null, "Erro ao ver informações de Imovél, tente novamente");
         }
-//        buscarUsuario();
+    }
 
+    public void detalhesCasa() {
+        System.out.println("\n Entrou Detalhes casa!!!!!!!!!!!!!!!!!");
+        this.casa = casaDao.retornarCasa(this.imovel.getId());
+        this.telaDetalhesCasa();
+    }
+
+    public void detalhesApto() {
+        System.out.println("\n Entrou detalhes apto!!!!!!!!!!!!!!!");
+        this.apto = aptoDao.retornarApartamento(this.imovel.getId());
+        this.telaDetalhesApto();
     }
 
     public void telaDetalhesApto() {
-        System.out.println("Entrou tela detalhes apto");
+        System.out.println("\n Entrou tela detalhes apto");
         this.exibeDetalhesApto = true;
         this.exibeDetalhesCasa = false;
         this.exibeTodosImoveis = false;
@@ -109,6 +123,8 @@ public class IndexMB implements Serializable {
         this.exibeCasas = false;
         this.exibeImovelFinalidade = false;
         this.exibebuscaSimples = false;
+        this.lat = this.apto.getEndereco().getLocalizacao().getCoordinate().x;
+        this.log = this.apto.getEndereco().getLocalizacao().getCoordinate().y;
     }
 
     public void telaDetalhesCasa() {
@@ -120,6 +136,8 @@ public class IndexMB implements Serializable {
         this.exibeCasas = false;
         this.exibeImovelFinalidade = false;
         this.exibebuscaSimples = false;
+        this.lat = this.casa.getEndereco().getLocalizacao().getCoordinate().x;
+        this.log = this.casa.getEndereco().getLocalizacao().getCoordinate().y;
     }
 
     public void telaExibebuscaSimples() {
@@ -142,7 +160,7 @@ public class IndexMB implements Serializable {
         this.exibebuscaSimples = false;
     }
 
-    public void telaExibeCasa() {
+    public void telaExibeCasas() {
         this.exibeDetalhesApto = false;
         this.exibeDetalhesCasa = false;
         this.exibeTodosImoveis = false;
@@ -152,7 +170,7 @@ public class IndexMB implements Serializable {
         this.exibebuscaSimples = false;
     }
 
-    public void telaExibeApto() {
+    public void telaExibeAptos() {
         this.exibeDetalhesApto = false;
         this.exibeDetalhesCasa = false;
         this.exibeTodosImoveis = false;
@@ -181,7 +199,7 @@ public class IndexMB implements Serializable {
         this.exibeCasas = false;
         this.exibeImovelFinalidade = true;
         this.exibebuscaSimples = false;
-        this.finalidade = "COMPRAR";
+        this.finalidade = "VENDER";
     }
 
     public void telaExibeImovelAlugar() {
@@ -193,6 +211,30 @@ public class IndexMB implements Serializable {
         this.exibeImovelFinalidade = true;
         this.exibebuscaSimples = false;
         this.finalidade = "ALUGAR";
+    }
+
+    public String getLoc() {
+        return loc;
+    }
+
+    public void setLoc(String loc) {
+        this.loc = loc;
+    }
+
+    public double getLat() {
+        return lat;
+    }
+
+    public void setLat(double lat) {
+        this.lat = lat;
+    }
+
+    public double getLog() {
+        return log;
+    }
+
+    public void setLog(double log) {
+        this.log = log;
     }
 
     public Casa getCasa() {
@@ -227,11 +269,11 @@ public class IndexMB implements Serializable {
         this.exibeTodosImoveis = exibeTodosImoveis;
     }
 
-    public boolean isExibeCasa() {
+    public boolean isExibeCasas() {
         return exibeCasas;
     }
 
-    public boolean isExibeApto() {
+    public boolean isExibeAptos() {
         return exibeAptos;
     }
 
@@ -297,6 +339,20 @@ public class IndexMB implements Serializable {
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
+    }
+    
+     public void mensagemInformativa(String destino, String msg) {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        FacesMessage fm = new FacesMessage(msg);
+        fm.setSeverity(FacesMessage.SEVERITY_INFO);
+        fc.addMessage(destino, fm);
+    }
+
+    public void mensagemErro(String destino, String msg) {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        FacesMessage fm = new FacesMessage(msg);
+        fm.setSeverity(FacesMessage.SEVERITY_ERROR);
+        fc.addMessage(destino, fm);
     }
 
 }

@@ -10,6 +10,7 @@ import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -29,6 +30,19 @@ public class ImovelDao {
     public Imovel retornarImovel(Long id) {
         return manager.find(Imovel.class, id);
     }
+    
+    public List<Imovel> listarImoveisAnunciados() {
+        Query query = manager.createQuery("Select i from Imovel i");
+        List<Imovel> imoveis = query.getResultList();
+//        query.setParameter("anunciado", true);
+        List<Imovel> result = new ArrayList<Imovel>();
+        for(int i = 0; i < imoveis.size();i++){
+            if(imoveis.get(i).getAnuncio().getAnunciado()== true){
+                result.add(imoveis.get(i)); 
+            }
+        }
+        return result;
+    }
 
     public List<Imovel> listarImoveis() {
         Query query = manager.createQuery("Select i from Imovel i");
@@ -43,6 +57,19 @@ public class ImovelDao {
         return imoveis;
     }
 
+    public List<Imovel> listarImoveisFinalidadeAnunciados(String finalidade) {
+        Query query = manager.createQuery("Select i from Imovel i where i.finalidade like :finalidade");
+        query.setParameter("finalidade", finalidade);
+        List<Imovel> imoveis = query.getResultList();
+        List<Imovel> result = new ArrayList<Imovel>();
+        for(int i = 0; i < imoveis.size();i++){
+            if(imoveis.get(i).getAnuncio().getAnunciado()== true){
+                result.add(imoveis.get(i)); 
+            }
+        }
+        return result;
+    }
+    
     public List<Imovel> listarImoveisFinalidade(String finalidade) {
         Query query = manager.createQuery("Select i from Imovel i where i.finalidade like :finalidade");
         query.setParameter("finalidade", finalidade);

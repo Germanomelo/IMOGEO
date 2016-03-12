@@ -8,6 +8,8 @@
     <h:head>
         <title>IMOGEO</title>
         <link href="css/estilo.css" type="text/css" rel="stylesheet"/>
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+        <script type="text/javascript" src="js/marker.js"></script>
 
     </h:head>
     <h:body>
@@ -18,19 +20,18 @@
         </div>
         <div id="principal">
             <h:form id="menulateral">
-                <!--<p>Imóvel</p>-->
                 <h:commandLink action="#{indexMB.telaExibeTodosImoveis()}" value="Todos Imóveis" styleClass="link"/>
                 <h:commandLink action="#{indexMB.telaExibeImovelAlugar()}" value="Alugar Imóvel" styleClass="link"/>
                 <h:commandLink action="#{indexMB.telaExibeImovelComprar()}" value="Comprar Imóvel " styleClass="link"/>
                 <h:commandLink action="#{indexMB.telaExibeImovelTemporada()}" value="Temporada Imóvel " styleClass="link"/>
-                <h:commandLink action="#{indexMB.telaExibeCasa()}" value="Casas" styleClass="link"/>
-                <h:commandLink action="#{indexMB.telaExibeApto()}" value="Apartamentos" styleClass="link"/>
+                <h:commandLink action="#{indexMB.telaExibeCasas()}" value="Casas" styleClass="link"/>
+                <h:commandLink action="#{indexMB.telaExibeAptos()}" value="Apartamentos" styleClass="link"/>
                 <h:commandLink action="busca-localizacao.jsf" value="Busca por localização" styleClass="link"/>
             </h:form>
 
             <!--busca simples-->
             <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibebuscaSimples}" rows="6" value="#{indexMB.buscaSimplesDescricao()}" var="imovel">
-                <p:column width="150">
+                <p:column width="20%">
                     <img width="150" height="150" src="img/semimagem.png"></img>
                 </p:column>
 
@@ -38,17 +39,22 @@
                     <h:outputLabel value="Casa" rendered="#{imovel.class.simpleName == 'Casa'}"/>
                     <h:outputLabel value="Apartamento" rendered="#{imovel.class.simpleName == 'Apartamento'}"/>
                     para #{imovel.finalidade}<br/>
-                    #{imovel.endereco.cidade} , #{imovel.endereco.bairro}<br/>
-                    Valor: R$#{imovel.valor}<br/>
-                    Área total m²: #{imovel.areaTotal}<br/> 
-                    Área construida m²: #{imovel.areaConstruida} <br/>
+                    #{imovel.endereco.bairro}, #{imovel.endereco.cidade}, #{imovel.endereco.estado}<br/>
+                    Valor: <strong style="color:orange ">R$ #{imovel.valor}</strong><br/>
+                    Área total m²: #{imovel.areaTotal}, Área construida m²: #{imovel.areaConstruida} <br/>
 
+                    <h:form>
+                        <p:growl id="messages" showDetail="true" />  
+                        <h:commandButton action="#{indexMB.detalhesImovel()}" value="Mais Detalhes" >
+                            <f:setPropertyActionListener value="#{imovel}" target="#{indexMB.imovel}"/>
+                        </h:commandButton>
+                    </h:form>
                 </p:column>
             </p:dataTable>
 
             <!--todos imoveis-->
-            <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibeTodosImoveis}" rows="6" value="#{indexMB.listarImoveis()}" var="imovel">
-                <p:column width="150">
+            <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibeTodosImoveis}" rows="6" value="#{indexMB.listarImoveisAnunciados()}" var="imovel">
+                <p:column width="20%">
                     <img width="150" height="150" src="img/semimagem.png"></img>
                 </p:column>
 
@@ -56,22 +62,22 @@
                     <h:outputLabel value="Casa" rendered="#{imovel.class.simpleName == 'Casa'}"/>
                     <h:outputLabel value="Apartamento" rendered="#{imovel.class.simpleName == 'Apartamento'}"/>
                     para #{imovel.finalidade}<br/>
-                    #{imovel.endereco.cidade} , #{imovel.endereco.bairro}<br/>
-                    Valor: R$#{imovel.valor}<br/>
-                    Área total m²: #{imovel.areaTotal}<br/> 
-                    Área construida m²: #{imovel.areaConstruida} <br/>
-                </p:column>
-                    
-                <p:column >
-                    <h:commandButton action="#{indexMB.detalhesImovel()}" value="Detalhes" >
-                        <f:setPropertyActionListener value="#{imovel}" target="#{indexMB.imovel}"/>
-                    </h:commandButton>
+                    #{imovel.endereco.bairro}, #{imovel.endereco.cidade}, #{imovel.endereco.estado}<br/>
+                    Valor: <strong style="color:orange ">R$ #{imovel.valor}</strong><br/>
+                    Área total m²: #{imovel.areaTotal}, Área construida m²: #{imovel.areaConstruida} <br/>
+
+                    <h:form>
+                        <p:growl id="messages" showDetail="true" />  
+                        <h:commandButton immediate="true" action="#{indexMB.detalhesImovel()}" value="Mais Detalhes" >
+                            <f:setPropertyActionListener value="#{imovel}" target="#{indexMB.imovel}"/>
+                        </h:commandButton>
+                    </h:form>
                 </p:column>
             </p:dataTable>
 
             <!--imoveis finalidade-->
-            <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibeImovelFinalidade}" rows="6" value="#{indexMB.listarImovelFinalidade()}" var="imovel">
-                <p:column width="150">
+            <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibeImovelFinalidade}" rows="6" value="#{indexMB.listarImoveisFinalidadeAnunciados()}" var="imovel">
+                <p:column width="20%" >
                     <img width="150" height="150" src="img/semimagem.png"></img>
                 </p:column>
 
@@ -79,58 +85,83 @@
                     <h:outputLabel value="Casa" rendered="#{imovel.class.simpleName == 'Casa'}"/>
                     <h:outputLabel value="Apartamento" rendered="#{imovel.class.simpleName == 'Apartamento'}"/>
                     para #{imovel.finalidade}<br/>
-                    #{imovel.endereco.cidade} , #{imovel.endereco.bairro}<br/>
-                    Valor: R$#{imovel.valor}<br/>
-                    Área total m²: #{imovel.areaTotal}<br/> 
-                    Área construida m²: #{imovel.areaConstruida} <br/>
+                    #{imovel.endereco.bairro}, #{imovel.endereco.cidade}, #{imovel.endereco.estado}<br/>
+                    Valor: <strong style="color:orange ">R$ #{imovel.valor}</strong><br/>
+                    Área total m²: #{imovel.areaTotal}, Área construida m²: #{imovel.areaConstruida} <br/>
 
+                    <h:form>
+                        <p:growl id="messages" showDetail="true" />  
+                        <h:commandButton action="#{indexMB.detalhesImovel()}" value="Mais Detalhes" >
+                            <f:setPropertyActionListener value="#{imovel}" target="#{indexMB.imovel}"/>
+                        </h:commandButton>
+                    </h:form>
                 </p:column>
             </p:dataTable>
 
             <!--casas-->
-            <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibeCasa}" rows="6" value="#{indexMB.listarCasa()}" var="casa">
-                <p:column width="150">
+            <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibeCasas}" rows="6" value="#{indexMB.listarCasasAnunciadas()}" var="casa">
+                <p:column width="20%">
                     <img width="150" height="150" src="img/semimagem.png"></img>
                 </p:column>
 
                 <p:column width="350" >
                     Casa para #{casa.finalidade}<br/>
-                    #{casa.endereco.cidade} , #{casa.endereco.bairro}<br/>
-                    Valor: R$#{casa.valor}<br/>
-                    Área total m²: #{casa.areaTotal}<br/> 
-                    Área construida m²: #{casa.areaConstruida} <br/>
+                    #{casa.endereco.bairro}, #{casa.endereco.cidade}, #{casa.endereco.estado}<br/>
+                    Valor: <strong style="color:orange ">R$ #{casa.valor}</strong><br/>
+                    Área total m²: #{casa.areaTotal}, Área construida m²: #{casa.areaConstruida} <br/>
 
+                    <h:form>
+                        <p:growl id="messages" showDetail="true" />  
+                        <h:commandButton action="#{indexMB.detalhesCasa()}" value="Mais Detalhes" >
+                            <f:setPropertyActionListener value="#{casa}" target="#{indexMB.imovel}"/>
+                        </h:commandButton>
+                    </h:form>
                 </p:column>
             </p:dataTable>
 
             <!--aptos-->
-            <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibeApto}" rows="6" value="#{indexMB.listarApartamento()}" var="apto">
-                <p:column width="150">
+            <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibeAptos}" rows="6" value="#{indexMB.listarApartamentosAnunciados()}" var="apto">
+                <p:column width="20%">
                     <img width="150" height="150" src="img/semimagem.png"></img>
                 </p:column>
 
                 <p:column width="350" >
                     Apartamento para #{apto.finalidade}<br/>
-                    #{apto.endereco.cidade} , #{apto.endereco.bairro}<br/>
-                    Valor: R$#{apto.valor}<br/>
-                    Área total m²: #{apto.areaTotal}<br/> 
-                    Área construida m²: #{apto.areaConstruida} <br/>
+                    #{apto.endereco.bairro}, #{apto.endereco.cidade}, #{apto.endereco.estado}<br/>
+                    Valor: <strong style="color:orange ">R$#{apto.valor}</strong><br/>
+                    Área total m²: #{apto.areaTotal}, Área construida m²: #{apto.areaConstruida} <br/>
 
+                    <h:form>
+                        <p:growl id="messages" showDetail="true" />  
+                        <h:commandButton action="#{indexMB.detalhesApto()}" value="Mais Detalhes" >
+                            <f:setPropertyActionListener value="#{apto}" target="#{indexMB.imovel}"/>
+                        </h:commandButton>
+                    </h:form>
                 </p:column>
             </p:dataTable>
-           
+
             <!--Detalhes casa-->
             <h:form id="formdetalhescasa" rendered="#{indexMB.exibeDetalhesCasa}">
                 <ui:include src="/template-detalhes-casa.xhtml"/>
             </h:form>
             
-            <!--Detalhes apto-->
-<!--            <h:form rendered="{indexMB.exibeDetalhesApto}">
+             <!--Detalhes apto-->
+            <h:form id="formdetalhesapto" rendered="#{indexMB.exibeDetalhesApto}">
                 <ui:include src="/template-detalhes-apto.xhtml"/>
-            </h:form>-->
+            </h:form>
+
+            <!--Informações Localização-->
+            <p:panel header="Localização" rendered="#{indexMB.exibeDetalhesApto || indexMB.exibeDetalhesCasa}" style="float:right; width: 745px;">
+                <h:form prependId="false">
+                    <h:inputText disabled="true" id="lat" value="#{indexMB.lat}"/>
+                    <h:inputText disabled="true" id="log" value="#{indexMB.log}"/>
+                </h:form>
+                <div id="map-canvas-loc" style="width: 710px; height: 270px"></div>
+            </p:panel>
+
         </div><!--fim principal-->    
 
-        
+
 
         <div id="rodape">
             <ui:include src="/template-rodape.xhtml"/>
