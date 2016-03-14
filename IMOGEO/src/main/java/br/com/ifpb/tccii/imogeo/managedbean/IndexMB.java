@@ -32,6 +32,7 @@ public class IndexMB implements Serializable {
     private double lat;
     private double log;
     
+    private String tituloH3 = "Imóveis";
     private String finalidade = null;
     private boolean exibeTodosImoveis = true;
     private boolean exibeCasas = false;
@@ -123,6 +124,7 @@ public class IndexMB implements Serializable {
         this.exibeCasas = false;
         this.exibeImovelFinalidade = false;
         this.exibebuscaSimples = false;
+        this.tituloH3 ="Apartamento";
         this.lat = this.apto.getEndereco().getLocalizacao().getCoordinate().x;
         this.log = this.apto.getEndereco().getLocalizacao().getCoordinate().y;
     }
@@ -136,6 +138,7 @@ public class IndexMB implements Serializable {
         this.exibeCasas = false;
         this.exibeImovelFinalidade = false;
         this.exibebuscaSimples = false;
+        this.tituloH3 ="Casa";
         this.lat = this.casa.getEndereco().getLocalizacao().getCoordinate().x;
         this.log = this.casa.getEndereco().getLocalizacao().getCoordinate().y;
     }
@@ -148,6 +151,7 @@ public class IndexMB implements Serializable {
         this.exibeCasas = false;
         this.exibeImovelFinalidade = false;
         this.exibebuscaSimples = true;
+        this.tituloH3 ="Busca Simples";
     }
 
     public void telaExibeTodosImoveis() {
@@ -158,6 +162,7 @@ public class IndexMB implements Serializable {
         this.exibeCasas = false;
         this.exibeImovelFinalidade = false;
         this.exibebuscaSimples = false;
+        this.tituloH3 ="Imóveis";
     }
 
     public void telaExibeCasas() {
@@ -168,6 +173,7 @@ public class IndexMB implements Serializable {
         this.exibeCasas = true;
         this.exibeImovelFinalidade = false;
         this.exibebuscaSimples = false;
+        this.tituloH3 ="Casas";
     }
 
     public void telaExibeAptos() {
@@ -178,6 +184,7 @@ public class IndexMB implements Serializable {
         this.exibeCasas = false;
         this.exibeImovelFinalidade = false;
         this.exibebuscaSimples = false;
+        this.tituloH3 ="Apartamentos";
     }
 
     public void telaExibeImovelTemporada() {
@@ -189,6 +196,7 @@ public class IndexMB implements Serializable {
         this.exibeImovelFinalidade = true;
         this.exibebuscaSimples = false;
         this.finalidade = "TEMPORADA";
+        this.tituloH3 ="Temporada";
     }
 
     public void telaExibeImovelComprar() {
@@ -200,6 +208,7 @@ public class IndexMB implements Serializable {
         this.exibeImovelFinalidade = true;
         this.exibebuscaSimples = false;
         this.finalidade = "VENDER";
+        this.tituloH3 ="Comprar ";
     }
 
     public void telaExibeImovelAlugar() {
@@ -211,6 +220,7 @@ public class IndexMB implements Serializable {
         this.exibeImovelFinalidade = true;
         this.exibebuscaSimples = false;
         this.finalidade = "ALUGAR";
+        this.tituloH3 ="Alugar";
     }
 
     public String getLoc() {
@@ -340,6 +350,15 @@ public class IndexMB implements Serializable {
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
     }
+
+    public String getTituloH3() {
+        return tituloH3;
+    }
+
+    public void setTituloH3(String tituloH3) {
+        this.tituloH3 = tituloH3;
+    }
+    
     
      public void mensagemInformativa(String destino, String msg) {
         FacesContext fc = FacesContext.getCurrentInstance();

@@ -50,8 +50,8 @@ public class Imovel implements Serializable {
     @Column(nullable = false, precision=2)
     private Double valor;
     
-    @Column(nullable = false, columnDefinition="text")
-    private String descricao;
+    @Column( columnDefinition="text")
+    private String observacao;
     
     @Column( nullable = false, length=5)
     private String areaTotal;
@@ -94,12 +94,12 @@ public class Imovel implements Serializable {
         this.valor = valor;
     }
 
-    public String getDescricao() {
-        return descricao;
+    public String getObservacao() {
+        return observacao;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
+    public void setObservacao(String observacao) {
+        this.observacao = observacao;
     }
 
     public String getAreaTotal() {
@@ -172,7 +172,7 @@ public class Imovel implements Serializable {
 
     @Override
     public String toString() {
-        return "Entide.Imovel[ id=" + imovelId + " descrição: "+descricao+ " finalidade: "+finalidade+"]";
+        return "Entide.Imovel[ id=" + imovelId + " descrição: "+observacao+ " finalidade: "+finalidade+"]";
     }
     
 }

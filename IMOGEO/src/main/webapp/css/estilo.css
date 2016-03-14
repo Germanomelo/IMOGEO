@@ -110,14 +110,19 @@ body{
 }
 
 #principal h3{
-    padding: 1px;
+    padding: 0px;
     line-height: 35px;
+    width: 748px;
     /*height: 40px;*/
     /*margin-top: 10px;*/
-    /*float: left;*/
+    border: 1px solid gray;
+/*    border-left: 1px solid gray;
+    border-top: 1px solid gray;*/
+    float: right;
     margin: auto;
     text-align: center;
     background-color: #dcdcdc;
+    border-radius: 10px 10px 10px 10px;
 }
 
 #principal{

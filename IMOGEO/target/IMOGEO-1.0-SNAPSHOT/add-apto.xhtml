@@ -36,9 +36,9 @@
                         </p:selectOneMenu>
                         <p:message for="finalidade"/>
 
-                        <p:outputLabel value="Descrição: " for="descricao" />
-                        <p:inputTextarea  id="descricao" value="#{apartamentoMB.apto.descricao}" maxlength="700" rows="2" cols="25" required="true" requiredMessage="Campo Obrigatório !"/>
-                        <p:message for="descricao" />
+                        <p:outputLabel value="Observação: " for="observacao" />
+                        <p:inputTextarea  id="observacao" value="#{apartamentoMB.apto.observacao}" maxlength="200" rows="2" cols="25"/>
+                        <p:message for="observacao" />
 
                         <p:outputLabel value="Valor Imovél R$:" for="valor" />
                         <p:inputText id="valor" value="#{apartamentoMB.apto.valor}"  maxlength="9" required="true" requiredMessage="Campo Obrigatório !"/>

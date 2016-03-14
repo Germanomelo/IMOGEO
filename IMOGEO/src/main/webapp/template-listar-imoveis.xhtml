@@ -6,14 +6,15 @@
     xmlns:ui="http://java.sun.com/jsf/facelets" 
     xmlns:p="http://primefaces.org/ui"
     xmlns:f="http://java.sun.com/jsf/core">  
-    <h3>Imoveis</h3>
+    
+    <h3>Imóveis</h3>
     <p:messages globalOnly="true"/>
-    <p:dataTable styleClass="tabela" paginator="true"  rows="6" value="#{meusImoveisMB.imoveisIdUser}" var="imovel">
-        <p:column width="20%">
+    <p:dataTable  styleClass="tabela" paginator="true"  rows="6" value="#{meusImoveisMB.imoveisIdUser}" var="imovel">
+        <p:column width="150">
             <img width="150" height="150" src="img/semimagem.png"></img>
         </p:column>
 
-        <p:column width="350" >
+        <p:column >
             <h:outputLabel value="Casa" rendered="#{imovel.class.simpleName == 'Casa'}"/>
             <h:outputLabel value="Apartamento" rendered="#{imovel.class.simpleName == 'Apartamento'}"/>
             para #{imovel.finalidade}<br/>
@@ -30,4 +31,5 @@
             <br/>
         </p:column>
     </p:dataTable>
+    
 </ui:composition>

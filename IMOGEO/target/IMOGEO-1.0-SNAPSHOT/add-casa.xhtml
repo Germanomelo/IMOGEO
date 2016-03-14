@@ -28,7 +28,7 @@
                 <h:form>
                     <p:messages globalOnly="true" />
                     <h:panelGrid columns="3">
-                        <p:outputLabel value="Finalidade :" for="finalidade" />
+                        <p:outputLabel value="Finalidade: " for="finalidade" />
                         <p:selectOneMenu id="finalidade" value="#{casaMB.casa.finalidade}">
                             <f:selectItem itemValue="ALUGAR" itemLabel="ALUGAR" />
                             <f:selectItem itemValue="VENDER" itemLabel="VENDER" />
@@ -36,9 +36,9 @@
                         </p:selectOneMenu>
                         <p:message for="finalidade"/>
 
-                        <p:outputLabel value="Descrição: " for="descricao" />
-                        <p:inputTextarea  id="descricao" value="#{casaMB.casa.descricao}" maxlength="700" rows="2" cols="25" required="true" requiredMessage="Campo Obrigatório !"/>
-                        <p:message for="descricao" />
+                        <p:outputLabel value="Observação: " for="obs" />
+                        <p:inputTextarea  id="obs" value="#{casaMB.casa.observacao}" maxlength="200" rows="2" cols="25"/>
+                        <p:message for="obs" />
 
                         <p:outputLabel value="Valor R$:" for="valor" />
                         <p:inputText id="valor" value="#{casaMB.casa.valor}"  maxlength="9" required="true" requiredMessage="Campo Obrigatório !"/>

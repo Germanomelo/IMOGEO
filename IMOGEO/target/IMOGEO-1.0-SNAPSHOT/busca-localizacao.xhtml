@@ -10,6 +10,7 @@
         <link href="css/estilo.css" type="text/css" rel="stylesheet"/>
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
         <script type="text/javascript" src="js/localizacao.js"></script>
+        <script type="text/javascript" src="js/marker.js"></script>
     </h:head>
     <h:body>
         <div id="topo">
@@ -17,21 +18,24 @@
                 <ui:include src="/template-topo.xhtml"/>
             </div>
         </div>
-        <div id="principal" style="height: 820px;">
+        <div id="principal" style="height: 1050px;">
             <h:form id="menulateral" >
                 <!--<p>Imóvel</p>-->
-                <h:commandLink action="index.jsf" value="Todos Imóveis" styleClass="link"/>
+                <h:commandLink action="index.jsf" value="Imóveis" styleClass="link"/>
                 <h:commandLink action="#{localizacaoMB.telaPesquisaLocalizacao()}" value="Busca por localização" styleClass="link"/>
             </h:form>
-            <p:panel header="Buscar Imovel por localização" rendered="#{localizacaoMB.pesquisaLocalizacao}" style="width: 745px; float: right">
+            <h:form rendered="#{localizacaoMB.resultLocalizacao || localizacaoMB.exibeDetalhesApto || localizacaoMB.exibeDetalhesCasa}">
+                <h3>#{localizacaoMB.tituloH3}</h3>    
+            </h:form>
 
+            <p:panel header="Buscar Imovel por localização" rendered="#{localizacaoMB.pesquisaLocalizacao}" style="width: 745px; float: right">
                 <h:form prependId="false">
                     <h:panelGrid columns="3">
-                    <h:outputLabel value="Raio:"/>
-                    <h:inputText value="#{localizacaoMB.distancia}" maxlength="2" required="true" requiredMessage="Campo Obrigatorio!"/>
-                    <h:commandButton value="Buscar" action="#{localizacaoMB.telaResultLocalizacao()}"/>
-                    <h:inputText  id="loc" value="#{localizacaoMB.loc}" required="true" requiredMessage="Campo Obrigatorio buscar localização"/>
-                    <h:message id="mloc" for="loc"/>
+                        <h:outputLabel value="Raio (Km):"/>
+                        <h:inputText value="#{localizacaoMB.distancia}" maxlength="3" required="true" requiredMessage="Campo Obrigatorio!"/>
+                        <h:commandButton value="Buscar" action="#{localizacaoMB.telaResultLocalizacao()}"/>
+                        <h:inputText  id="loc" value="#{localizacaoMB.loc}" required="true" requiredMessage="Campo Obrigatorio buscar localização"/>
+                        <h:message id="mloc" for="loc"/>
                     </h:panelGrid>
                 </h:form>
 
@@ -66,36 +70,51 @@
                 </h:form>
                 <input type="button" value="Buscar Localização" onclick="codeAddress()"/>
             </p:panel>
-        </div><!--fim principal-->    
 
-        <p:panel header="Imóvel" rendered="#{localizacaoMB.resultLocalizacao}">
-            <p:messages globalOnly="true"/>
-            <p:dataTable styleClass="tabela" paginator="true"  rows="6" value="#{localizacaoMB.imoveisLocalizacao()}" var="imovel">
+            <!--Todos imoveis por localizacao-->
+            <p:dataTable styleClass="tabela" rendered="#{localizacaoMB.resultLocalizacao}" paginator="true"  rows="6" value="#{localizacaoMB.enderecoPorLocalizacao()}" var="endereco">
                 <p:column width="150">
                     <img width="150" height="150" src="img/semimagem.png"></img>
                 </p:column>
 
-                <p:column width="350" >
+                <p:column  >
                     <h:outputLabel value="Casa" rendered="#{imovel.class.simpleName == 'Casa'}"/>
                     <h:outputLabel value="Apartamento" rendered="#{imovel.class.simpleName == 'Apartamento'}"/>
-                    para #{imovel.finalidade}<br/>
-                    #{imovel.endereco.cidade} , #{imovel.endereco.bairro}<br/>
-                    Valor: R$#{imovel.valor}<br/>
-                    Área total m²: #{imovel.areaTotal}<br/> 
-                    Área construida m²: #{imovel.areaConstruida} <br/>
-                    <h:outputLabel value="Imovél Anunciado" rendered="#{imovel.anuncio.anunciado}"/>
-                    <h:outputLabel value="Imovél Não Anunciado" rendered="#{!imovel.anuncio.anunciado}"/><br/>
+                    para #{endereco.imovel.finalidade}<br/>
+                    #{endereco.bairro}, #{endereco.cidade}, #{endereco.estado}<br/>
+                    Valor: <strong style="color: orange">R$#{endereco.imovel.valor}</strong><br/>
+                    Área total m²: #{endereco.imovel.areaTotal}<br/> 
+                    Área construida m²: #{endereco.imovel.areaConstruida} <br/>
 
-                </p:column>
 
-                <p:column width="150">
-<!--                    <p:growl id="messages" showDetail="true" />  
-                    <h:commandButton action="#localizacaoMB.maisInformacoes()}" value="Detalhes" >
-                        <f:setPropertyActionListener value="#imovel}" target="#localizacaoMB.imovel}"/>
-                    </h:commandButton>-->
+                    <h:form>
+                        <h:commandButton action="#{localizacaoMB.detalhesImovel()}" value="Mais Detalhes" >
+                            <f:setPropertyActionListener value="#{endereco.imovel}" target="#{localizacaoMB.imovel}"/>
+                        </h:commandButton>
+                    </h:form>
                 </p:column>
-            </p:dataTable>
-        </p:panel>
+            </p:dataTable>            
+
+            <!--Detalhes casa-->
+            <h:form id="fdetalhescasa" rendered="#{localizacaoMB.exibeDetalhesCasa}">
+                <ui:include src="/template-detalhes-casa-localizacao.xhtml"/>
+            </h:form>
+
+            <!--Detalhes apto-->
+            <h:form id="fdetalhesapto" rendered="#{localizacaoMB.exibeDetalhesApto}">
+                <ui:include src="/template-detalhes-apto-localizacao.xhtml"/>
+            </h:form>
+
+            <!--Informações Localização-->
+            <p:panel header="Localização" rendered="#{localizacaoMB.exibeDetalhesApto || localizacaoMB.exibeDetalhesCasa}" style="float:right; width: 745px;">
+                <h:form prependId="false">
+                    <h:inputText disabled="true" id="lat" value="#{localizacaoMB.lat}"/>
+                    <h:inputText disabled="true" id="log" value="#{localizacaoMB.log}"/>
+                </h:form>
+                <div id="map-canvas-loc" style="width: 710px; height: 270px"></div>
+            </p:panel>
+        </div><!--fim principal-->    
+
         <div id="rodape">
             <ui:include src="/template-rodape.xhtml"/>
         </div>

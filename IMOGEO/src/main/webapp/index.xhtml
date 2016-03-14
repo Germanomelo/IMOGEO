@@ -29,13 +29,14 @@
                 <h:commandLink action="busca-localizacao.jsf" value="Busca por localização" styleClass="link"/>
             </h:form>
 
+            <h3>#{indexMB.tituloH3}</h3>
             <!--busca simples-->
             <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibebuscaSimples}" rows="6" value="#{indexMB.buscaSimplesDescricao()}" var="imovel">
-                <p:column width="20%">
+                <p:column width="150">
                     <img width="150" height="150" src="img/semimagem.png"></img>
                 </p:column>
 
-                <p:column width="350" >
+                <p:column >
                     <h:outputLabel value="Casa" rendered="#{imovel.class.simpleName == 'Casa'}"/>
                     <h:outputLabel value="Apartamento" rendered="#{imovel.class.simpleName == 'Apartamento'}"/>
                     para #{imovel.finalidade}<br/>
@@ -54,11 +55,11 @@
 
             <!--todos imoveis-->
             <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibeTodosImoveis}" rows="6" value="#{indexMB.listarImoveisAnunciados()}" var="imovel">
-                <p:column width="20%">
+                <p:column width="150">
                     <img width="150" height="150" src="img/semimagem.png"></img>
                 </p:column>
 
-                <p:column width="350" >
+                <p:column >
                     <h:outputLabel value="Casa" rendered="#{imovel.class.simpleName == 'Casa'}"/>
                     <h:outputLabel value="Apartamento" rendered="#{imovel.class.simpleName == 'Apartamento'}"/>
                     para #{imovel.finalidade}<br/>
@@ -77,11 +78,11 @@
 
             <!--imoveis finalidade-->
             <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibeImovelFinalidade}" rows="6" value="#{indexMB.listarImoveisFinalidadeAnunciados()}" var="imovel">
-                <p:column width="20%" >
+                <p:column width="150" >
                     <img width="150" height="150" src="img/semimagem.png"></img>
                 </p:column>
 
-                <p:column width="350" >
+                <p:column >
                     <h:outputLabel value="Casa" rendered="#{imovel.class.simpleName == 'Casa'}"/>
                     <h:outputLabel value="Apartamento" rendered="#{imovel.class.simpleName == 'Apartamento'}"/>
                     para #{imovel.finalidade}<br/>
@@ -100,11 +101,11 @@
 
             <!--casas-->
             <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibeCasas}" rows="6" value="#{indexMB.listarCasasAnunciadas()}" var="casa">
-                <p:column width="20%">
+                <p:column width="150">
                     <img width="150" height="150" src="img/semimagem.png"></img>
                 </p:column>
 
-                <p:column width="350" >
+                <p:column>
                     Casa para #{casa.finalidade}<br/>
                     #{casa.endereco.bairro}, #{casa.endereco.cidade}, #{casa.endereco.estado}<br/>
                     Valor: <strong style="color:orange ">R$ #{casa.valor}</strong><br/>
@@ -121,11 +122,11 @@
 
             <!--aptos-->
             <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibeAptos}" rows="6" value="#{indexMB.listarApartamentosAnunciados()}" var="apto">
-                <p:column width="20%">
+                <p:column width="150">
                     <img width="150" height="150" src="img/semimagem.png"></img>
                 </p:column>
 
-                <p:column width="350" >
+                <p:column >
                     Apartamento para #{apto.finalidade}<br/>
                     #{apto.endereco.bairro}, #{apto.endereco.cidade}, #{apto.endereco.estado}<br/>
                     Valor: <strong style="color:orange ">R$#{apto.valor}</strong><br/>
