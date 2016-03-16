@@ -9,6 +9,7 @@
         <title>IMOGEO</title>
         <link href="css/estilo.css" type="text/css" rel="stylesheet"/>
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+        <script type="text/javascript" src="js/localizacao.js"></script>
         <script type="text/javascript" src="js/marker.js"></script>
 
     </h:head>
@@ -18,7 +19,7 @@
                 <ui:include src="/template-topo.xhtml"/>
             </div>
         </div>
-        <div id="principal">
+        <div id="principal" style="height: 1050px">
             <h:form id="menulateral">
                 <h:commandLink action="#{indexMB.telaExibeTodosImoveis()}" value="Todos Imóveis" styleClass="link"/>
                 <h:commandLink action="#{indexMB.telaExibeImovelAlugar()}" value="Alugar Imóvel" styleClass="link"/>
@@ -26,10 +27,13 @@
                 <h:commandLink action="#{indexMB.telaExibeImovelTemporada()}" value="Temporada Imóvel " styleClass="link"/>
                 <h:commandLink action="#{indexMB.telaExibeCasas()}" value="Casas" styleClass="link"/>
                 <h:commandLink action="#{indexMB.telaExibeAptos()}" value="Apartamentos" styleClass="link"/>
-                <h:commandLink action="busca-localizacao.jsf" value="Busca por localização" styleClass="link"/>
+                <h:commandLink action="#{indexMB.telaPesquisaLocalizacao()}" value="Busca por localização" styleClass="link"/>
             </h:form>
 
-            <h3>#{indexMB.tituloH3}</h3>
+            <h:form rendered="#{!indexMB.exibePesquisaLocalizacao}">
+                <h3>#{indexMB.tituloH3}</h3>
+            </h:form>
+
             <!--busca simples-->
             <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibebuscaSimples}" rows="6" value="#{indexMB.buscaSimplesDescricao()}" var="imovel">
                 <p:column width="150">
@@ -110,7 +114,6 @@
                     #{casa.endereco.bairro}, #{casa.endereco.cidade}, #{casa.endereco.estado}<br/>
                     Valor: <strong style="color:orange ">R$ #{casa.valor}</strong><br/>
                     Área total m²: #{casa.areaTotal}, Área construida m²: #{casa.areaConstruida} <br/>
-
                     <h:form>
                         <p:growl id="messages" showDetail="true" />  
                         <h:commandButton action="#{indexMB.detalhesCasa()}" value="Mais Detalhes" >
@@ -145,8 +148,8 @@
             <h:form id="formdetalhescasa" rendered="#{indexMB.exibeDetalhesCasa}">
                 <ui:include src="/template-detalhes-casa.xhtml"/>
             </h:form>
-            
-             <!--Detalhes apto-->
+
+            <!--Detalhes apto-->
             <h:form id="formdetalhesapto" rendered="#{indexMB.exibeDetalhesApto}">
                 <ui:include src="/template-detalhes-apto.xhtml"/>
             </h:form>
@@ -160,9 +163,79 @@
                 <div id="map-canvas-loc" style="width: 710px; height: 270px"></div>
             </p:panel>
 
+            <!--Busca Localização-->
+            <p:panel header="Buscar Imovel por localização" rendered="#{indexMB.exibePesquisaLocalizacao}" style="width: 745px; float: right">
+                <h:form prependId="false">
+                    <h:panelGrid columns="2">
+                        <h:outputLabel value="Raio (Km):"/>
+                        <h:inputText value="#{indexMB.distancia}" maxlength="3" required="true" requiredMessage="Campo Obrigatorio!"/>
+                        <h:outputLabel value="Ponto:"/>
+                        <h:inputText  id="loc" value="#{indexMB.loc}" required="true" requiredMessage="Campo Obrigatorio buscar localização"/>
+                        <h:commandButton value="Buscar" action="#{indexMB.telaResultadoPesquisaLocalizacao()}"/>
+                        <h:message id="mloc" for="loc"/>
+                    </h:panelGrid>
+                </h:form>
+                <div id="map-canvas" style="width: 700px; height: 350px;"></div>
+            </p:panel>
+
+            <!--Localização por endereço-->
+            <p:panel header="Localização por endereço" rendered="#{indexMB.exibePesquisaLocalizacao}" style="width: 745px; float: right">
+                <h:form id="form" prependId="false" >
+                    <h:panelGrid columns="3">
+                        <p:outputLabel value="Rua"/>
+                        <p:inputText  id="rua" value="" required="true" requiredMessage="Campo Obrigatorio"  />
+                        <p:message id="mrua" for="rua"/>
+
+                        <p:outputLabel value="Número"/>
+                        <p:inputText  id="numero" value="" required="true" requiredMessage="Campo Obrigatorio"  />
+                        <p:message id="mnumero" for="numero"/>
+
+                        <p:outputLabel value="Bairro"/>
+                        <p:inputText  id="bairro" value="" required="true" requiredMessage="Campo Obrigatorio" />
+                        <p:message id="mbairro" for="bairro"/>
+
+                        <p:outputLabel value="Cidade"/>
+                        <p:inputText  id="cidade" value="" required="true" requiredMessage="Campo Obrigatorio"/>
+                        <p:message id="mcidade" for="cidade"/>
+
+                        <p:outputLabel value="Estado"/>
+                        <p:inputText  id="estado" value="" required="true" requiredMessage="Campo Obrigatorio" />
+                        <p:message id="mestado" for="estado"/>
+
+                    </h:panelGrid>
+                </h:form>
+                <input type="button" value="Buscar Localização" onclick="codeAddress()"/>
+            </p:panel>
+
+            <!--Todos imoveis por localizacao-->
+            <p:dataTable id="vaitataruguinha" rendered="#{indexMB.exibeResultadoPesquisaLocalizacao}" paginator="true" rows="6" styleClass="tabela" value="#{indexMB.enderecoPorLocalizacao()}" var="endereco">
+                <p:column width="150">
+                    <img width="150" height="150" src="img/semimagem.png"></img>
+                </p:column>
+
+                <p:column  >
+                    <h:outputLabel value="Casa" rendered="#{endereco.imovel.class.simpleName == 'Casa'}"/>
+                    <h:outputLabel value="Apartamento" rendered="#{endereco.imovel.class.simpleName == 'Apartamento'}"/>
+                    para #{endereco.imovel.finalidade}<br/>
+                    #{endereco.bairro}, #{endereco.cidade}, #{endereco.estado}<br/>
+                    Valor: <strong style="color: orange">R$#{endereco.imovel.valor}</strong><br/>
+                    Área total m²: #{endereco.imovel.areaTotal}<br/> 
+                    Área construida m²: #{endereco.imovel.areaConstruida} <br/>
+                    Distância:
+                    <h:outputText value="#{indexMB.geometriaLocalUser().distance(endereco.localizacao)*111111.32}" >
+                        <f:convertNumber minFractionDigits="3" />
+                    </h:outputText>
+                    metros
+                    <h:form>
+                        <h:commandButton action="#{indexMB.detalhesImovel()}" value="Mais Detalhes" >
+                            <f:setPropertyActionListener value="#{endereco.imovel}" target="#{indexMB.imovel}"/>
+                        </h:commandButton>
+                    </h:form>
+                </p:column>
+            </p:dataTable>          
+
+
         </div><!--fim principal-->    
-
-
 
         <div id="rodape">
             <ui:include src="/template-rodape.xhtml"/>

@@ -7,10 +7,17 @@ import br.com.ifpb.tccii.imogeo.entidades.especializacao.Apartamento;
 import br.com.ifpb.tccii.imogeo.entidades.especializacao.Casa;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ApartamentoDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.CasaDao;
+import br.com.ifpb.tccii.imogeo.sessionbeans.EnderecoDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ImovelDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.UsuarioDao;
+import com.vividsolutions.jts.geom.Geometry;
+import com.vividsolutions.jts.io.ParseException;
+import com.vividsolutions.jts.io.WKTReader;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -31,10 +38,12 @@ public class IndexMB implements Serializable {
     private String loc;
     private double lat;
     private double log;
-    
+    private int distancia = 5;
     private String tituloH3 = "Imóveis";
     private String finalidade = null;
     private boolean exibeTodosImoveis = true;
+    private boolean exibePesquisaLocalizacao = false;
+    private boolean exibeResultadoPesquisaLocalizacao = false;
     private boolean exibeCasas = false;
     private boolean exibeAptos = false;
     private boolean exibeImovelFinalidade = false;
@@ -51,6 +60,9 @@ public class IndexMB implements Serializable {
 
     @EJB
     private UsuarioDao userDao;
+    
+    @EJB
+    private EnderecoDao enderecoDao;
 
     @EJB
     private CasaDao casaDao;
@@ -62,6 +74,22 @@ public class IndexMB implements Serializable {
     private ApartamentoDao aptoDao;
 
     public IndexMB() {
+    }
+    
+    public Geometry geometriaLocalUser() throws ParseException{
+        Geometry g1 = new WKTReader().read(this.loc);
+        return g1;
+    }
+    
+    public List<Endereco> enderecoPorLocalizacao() throws ParseException {
+        List<Endereco> result = new ArrayList<Endereco>();
+        List<Endereco> enderecos = enderecoDao.listarEnderecosPorDistancia(this.loc, this.distancia);
+        for (int i = 0; i < enderecos.size(); i++) {
+            if (enderecos.get(i).getImovel().getAnuncio().getAnunciado() == true) {
+                result.add(enderecos.get(i));
+            }
+        }
+        return result;
     }
 
     public void buscarUsuario() {
@@ -93,7 +121,6 @@ public class IndexMB implements Serializable {
     }
 
     public void detalhesImovel() {
-        System.out.println("\n Entrou detalhes imovel!!!!!!!!!!!!!!!!");
         if (this.imovel instanceof Casa) {
             this.detalhesCasa();
         } else if (this.imovel instanceof Apartamento) {
@@ -104,19 +131,18 @@ public class IndexMB implements Serializable {
     }
 
     public void detalhesCasa() {
-        System.out.println("\n Entrou Detalhes casa!!!!!!!!!!!!!!!!!");
         this.casa = casaDao.retornarCasa(this.imovel.getId());
         this.telaDetalhesCasa();
     }
 
     public void detalhesApto() {
-        System.out.println("\n Entrou detalhes apto!!!!!!!!!!!!!!!");
         this.apto = aptoDao.retornarApartamento(this.imovel.getId());
         this.telaDetalhesApto();
     }
 
     public void telaDetalhesApto() {
-        System.out.println("\n Entrou tela detalhes apto");
+        this.exibePesquisaLocalizacao = false;
+        this.exibeResultadoPesquisaLocalizacao = false;
         this.exibeDetalhesApto = true;
         this.exibeDetalhesCasa = false;
         this.exibeTodosImoveis = false;
@@ -130,7 +156,8 @@ public class IndexMB implements Serializable {
     }
 
     public void telaDetalhesCasa() {
-        System.out.println("\nEntrou tela detalhes casa!!!!!!!!!!!!!!!!!");
+        this.exibePesquisaLocalizacao = false;
+        this.exibeResultadoPesquisaLocalizacao = false;
         this.exibeDetalhesApto = false;
         this.exibeDetalhesCasa = true;
         this.exibeTodosImoveis = false;
@@ -144,6 +171,8 @@ public class IndexMB implements Serializable {
     }
 
     public void telaExibebuscaSimples() {
+        this.exibePesquisaLocalizacao = false;
+        this.exibeResultadoPesquisaLocalizacao = false;
         this.exibeDetalhesApto = false;
         this.exibeDetalhesCasa = false;
         this.exibeTodosImoveis = false;
@@ -155,6 +184,8 @@ public class IndexMB implements Serializable {
     }
 
     public void telaExibeTodosImoveis() {
+        this.exibePesquisaLocalizacao = false;
+        this.exibeResultadoPesquisaLocalizacao = false;
         this.exibeDetalhesApto = false;
         this.exibeDetalhesCasa = false;
         this.exibeTodosImoveis = true;
@@ -166,6 +197,8 @@ public class IndexMB implements Serializable {
     }
 
     public void telaExibeCasas() {
+        this.exibePesquisaLocalizacao = false;
+        this.exibeResultadoPesquisaLocalizacao = false;
         this.exibeDetalhesApto = false;
         this.exibeDetalhesCasa = false;
         this.exibeTodosImoveis = false;
@@ -177,6 +210,8 @@ public class IndexMB implements Serializable {
     }
 
     public void telaExibeAptos() {
+        this.exibePesquisaLocalizacao = false;
+        this.exibeResultadoPesquisaLocalizacao = false;
         this.exibeDetalhesApto = false;
         this.exibeDetalhesCasa = false;
         this.exibeTodosImoveis = false;
@@ -188,6 +223,8 @@ public class IndexMB implements Serializable {
     }
 
     public void telaExibeImovelTemporada() {
+        this.exibePesquisaLocalizacao = false;
+        this.exibeResultadoPesquisaLocalizacao = false;
         this.exibeDetalhesApto = false;
         this.exibeDetalhesCasa = false;
         this.exibeTodosImoveis = false;
@@ -200,6 +237,8 @@ public class IndexMB implements Serializable {
     }
 
     public void telaExibeImovelComprar() {
+        this.exibePesquisaLocalizacao = false;
+        this.exibeResultadoPesquisaLocalizacao = false;
         this.exibeDetalhesApto = false;
         this.exibeDetalhesCasa = false;
         this.exibeTodosImoveis = false;
@@ -212,6 +251,8 @@ public class IndexMB implements Serializable {
     }
 
     public void telaExibeImovelAlugar() {
+        this.exibePesquisaLocalizacao = false;
+        this.exibeResultadoPesquisaLocalizacao = false;
         this.exibeDetalhesApto = false;
         this.exibeDetalhesCasa = false;
         this.exibeTodosImoveis = false;
@@ -221,6 +262,31 @@ public class IndexMB implements Serializable {
         this.exibebuscaSimples = false;
         this.finalidade = "ALUGAR";
         this.tituloH3 ="Alugar";
+    }
+    
+     public void telaResultadoPesquisaLocalizacao() {
+        this.exibePesquisaLocalizacao = false;
+        this.setExibeResultadoPesquisaLocalizacao(true);
+        this.exibeDetalhesApto = false;
+        this.exibeDetalhesCasa = false;
+        this.exibeTodosImoveis = false;
+        this.exibeAptos = false;
+        this.exibeCasas = false;
+        this.exibeImovelFinalidade = false;
+        this.exibebuscaSimples = false;
+        this.tituloH3 = "Raio de atuação da busca: "+ this.distancia + "Km";
+    }
+     
+     public void telaPesquisaLocalizacao() {
+       this.exibePesquisaLocalizacao = true;
+        this.exibeResultadoPesquisaLocalizacao = false;
+        this.exibeDetalhesApto = false;
+        this.exibeDetalhesCasa = false;
+        this.exibeTodosImoveis = false;
+        this.exibeAptos = false;
+        this.exibeCasas = false;
+        this.exibeImovelFinalidade = false;
+        this.exibebuscaSimples = false;
     }
 
     public String getLoc() {
@@ -247,28 +313,28 @@ public class IndexMB implements Serializable {
         this.log = log;
     }
 
-    public Casa getCasa() {
-        return casa;
+    public int getDistancia() {
+        return distancia;
     }
 
-    public void setCasa(Casa casa) {
-        this.casa = casa;
+    public void setDistancia(int distancia) {
+        this.distancia = distancia;
     }
 
-    public Apartamento getApto() {
-        return apto;
+    public String getTituloH3() {
+        return tituloH3;
     }
 
-    public void setApto(Apartamento apto) {
-        this.apto = apto;
+    public void setTituloH3(String tituloH3) {
+        this.tituloH3 = tituloH3;
     }
 
-    public Imovel getImovel() {
-        return imovel;
+    public String getFinalidade() {
+        return finalidade;
     }
 
-    public void setImovel(Imovel imovel) {
-        this.imovel = imovel;
+    public void setFinalidade(String finalidade) {
+        this.finalidade = finalidade;
     }
 
     public boolean isExibeTodosImoveis() {
@@ -279,28 +345,28 @@ public class IndexMB implements Serializable {
         this.exibeTodosImoveis = exibeTodosImoveis;
     }
 
+    public boolean isExibePesquisaLocalizacao() {
+        return exibePesquisaLocalizacao;
+    }
+
+    public void setExibePesquisaLocalizacao(boolean exibePesquisaLocalizacao) {
+        this.exibePesquisaLocalizacao = exibePesquisaLocalizacao;
+    }
+
     public boolean isExibeCasas() {
         return exibeCasas;
+    }
+
+    public void setExibeCasas(boolean exibeCasas) {
+        this.exibeCasas = exibeCasas;
     }
 
     public boolean isExibeAptos() {
         return exibeAptos;
     }
 
-    public String getBusca() {
-        return busca;
-    }
-
-    public void setBusca(String busca) {
-        this.busca = busca;
-    }
-
-    public String getFinalidade() {
-        return finalidade;
-    }
-
-    public void setFinalidade(String finalidade) {
-        this.finalidade = finalidade;
+    public void setExibeAptos(boolean exibeAptos) {
+        this.exibeAptos = exibeAptos;
     }
 
     public boolean isExibeImovelFinalidade() {
@@ -335,6 +401,38 @@ public class IndexMB implements Serializable {
         this.exibeDetalhesApto = exibeDetalhesApto;
     }
 
+    public String getBusca() {
+        return busca;
+    }
+
+    public void setBusca(String busca) {
+        this.busca = busca;
+    }
+
+    public Casa getCasa() {
+        return casa;
+    }
+
+    public void setCasa(Casa casa) {
+        this.casa = casa;
+    }
+
+    public Imovel getImovel() {
+        return imovel;
+    }
+
+    public void setImovel(Imovel imovel) {
+        this.imovel = imovel;
+    }
+
+    public Apartamento getApto() {
+        return apto;
+    }
+
+    public void setApto(Apartamento apto) {
+        this.apto = apto;
+    }
+
     public Usuario getUser() {
         return user;
     }
@@ -351,14 +449,13 @@ public class IndexMB implements Serializable {
         this.endereco = endereco;
     }
 
-    public String getTituloH3() {
-        return tituloH3;
+    public boolean isExibeResultadoPesquisaLocalizacao() {
+        return exibeResultadoPesquisaLocalizacao;
     }
 
-    public void setTituloH3(String tituloH3) {
-        this.tituloH3 = tituloH3;
+    public void setExibeResultadoPesquisaLocalizacao(boolean exibeResultadoPesquisaLocalizacao) {
+        this.exibeResultadoPesquisaLocalizacao = exibeResultadoPesquisaLocalizacao;
     }
-    
     
      public void mensagemInformativa(String destino, String msg) {
         FacesContext fc = FacesContext.getCurrentInstance();

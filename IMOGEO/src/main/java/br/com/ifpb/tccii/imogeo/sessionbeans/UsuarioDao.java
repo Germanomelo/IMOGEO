@@ -32,7 +32,6 @@ public class UsuarioDao {
     }
     
       public Usuario listarUsuarioPorImovel(Imovel imovel) {
-//        Query query = manager.createQuery("Select i from Usuario u join u.imoveis i where u.id = :id");
         Query query = manager.createQuery("Select u from Imovel i join i.usuario u where i.id = :id");
         query.setParameter("id", imovel.getId());
         Usuario user = (Usuario) query.getSingleResult();
@@ -48,6 +47,13 @@ public class UsuarioDao {
         
         return usuarioRecuperado;
     }
+    
+//    public List<Imovel> listarFavoritosIdUser(Usuario usuario) {
+//        Query query = manager.createQuery("Select i from Usuario u join u.imoveis i where u.id = :id");
+//        query.setParameter("id", usuario.getId());
+//        List<Imovel> imoveis = query.getResultList();
+//        return imoveis;
+//    }
 
     public void removerUsuario(Usuario usuario) {        
         manager.remove(usuario);

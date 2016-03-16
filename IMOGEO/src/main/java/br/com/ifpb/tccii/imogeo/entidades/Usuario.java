@@ -17,6 +17,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -36,8 +37,8 @@ public class Usuario implements Serializable {
 //    @OneToMany(/*fetch= FetchType.EAGER,*/ cascade= CascadeType.REMOVE)
 //    private List<Qualificacao> qualificacoes = new ArrayList<Qualificacao>();
 //    
-//    @ManyToMany(/*fetch= FetchType.EAGER*/)
-//    private List<Imovel> favoritos = new ArrayList<Imovel>();
+    @ManyToMany
+    private List<Imovel> favoritos = new ArrayList<Imovel>();
 //    
     @OneToMany(mappedBy="usuario", fetch= FetchType.EAGER, cascade= CascadeType.REMOVE)
     private List<Imovel> imoveis = new ArrayList<Imovel>();
@@ -80,13 +81,13 @@ public class Usuario implements Serializable {
 //        this.qualificacoes = qualificacoes;
 //    }
 //
-//    public List<Imovel> getFavoritos() {
-//        return favoritos;
-//    }
-//
-//    public void setFavoritos(List<Imovel> favoritos) {
-//        this.favoritos = favoritos;
-//    }
+    public List<Imovel> getFavoritos() {
+        return favoritos;
+    }
+
+    public void setFavoritos(List<Imovel> favoritos) {
+        this.favoritos = favoritos;
+    }
     
     public List<Imovel> getImoveis() {
         return imoveis;
