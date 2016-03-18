@@ -17,7 +17,6 @@
         </div>
         <div id="principal" style="height: 530px">
             <h:form id="menulateral" style="height: 500px;">
-                <!--<p>Minha Conta</p>-->
                 <h:commandLink action="#{usuarioMB.telaPerfilUsuario()}" value="Perfil" styleClass="link"/>
                 <h:commandLink action="#{usuarioMB.telaEditarPerfilUsuario()}" value="Editar Perfil" styleClass="link"/>
                 <h:commandLink action="#{usuarioMB.telaEditarSenhaUsuario()}" value="Editar Senha" styleClass="link"/>
@@ -27,9 +26,13 @@
 
             </h:form>
 
-            <p:panel header="Perfil" rendered="#{usuarioMB.perfilUsuario}" style="width: 745px; float: right">
+            <!--Perfil-->
+            <p:panel header="Perfil" rendered="#{usuarioMB.exibePerfilUsuario}" style="width: 745px; float: right">
                 <h:form >
-                    <p:messages globalOnly="true"/>
+                    <p:growl id="growl" showDetail="true" sticky="true" />  
+                    <h:panelGrid>
+                        <img width="150" height="150" src="img/semimagem.png"></img>
+                    </h:panelGrid>
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Nome:" for="nome"/>
                         <p:outputLabel id="nome" value="#{usuarioMB.usuario.nome}" />
@@ -55,16 +58,15 @@
                         <p:outputLabel value="Data Criação" for="dtc"/>
                         <p:outputLabel id="dtc" value="#{usuarioMB.usuario.dataCriacao}" />
 
-                        <h:commandButton action="#{usuarioMB.telaEditarPerfilUsuario()}" value="Editar Perfil"/>
-
+                        <p:commandButton ajax="false" icon="ui-icon-pencil" action="#{usuarioMB.telaEditarPerfilUsuario()}" value="Editar Perfil"/>
                     </h:panelGrid>
-
                 </h:form>
             </p:panel>
-            <p:panel header="Editar Perfil" rendered="#{usuarioMB.editarPerfilUsuario}" style="width: 745px; float: right">
 
+            <!--Editar Perfil-->
+            <p:panel header="Editar Perfil" rendered="#{usuarioMB.editarPerfilUsuario}" style="width: 745px; float: right">
                 <h:form >
-                    <p:messages globalOnly="true"/>
+                    <p:growl id="growl" showDetail="true" sticky="true" />  
                     <h:panelGrid columns="3">
                         <p:outputLabel value="Nome:" for="nome"/>
                         <p:inputText id="nome" maxlength="50" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.nome}" />
@@ -98,46 +100,46 @@
                         <p:outputLabel id="dtc" value="#{usuarioMB.usuario.dataCriacao}" />
                         <p:message for="dtc"/>
 
-                        <h:commandButton action="#{usuarioMB.atualizarUsuario()}" value="Atualizar"/>
+                        <p:commandButton ajax="false" icon="ui-icon-refresh" action="#{usuarioMB.atualizarUsuario()}" value="Atualizar"/>
+                    </h:panelGrid>
+                </h:form>
+            </p:panel>
+
+            <p:panel header="Editar Senha" rendered="#{usuarioMB.exibeEditarSenhaUsuario}" style="width: 745px; float: right">
+                <h:form >
+                    <p:growl id="growl" showDetail="true" sticky="true" />  
+                    <h:panelGrid columns="3">
+                        <p:outputLabel value="Senha Atual:" for="senhaatual"/>
+                        <p:password id="senhaatual" maxlength="20" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.senhaAtual}"/>
+                        <p:message for="senhaatual"/>
+
+                        <p:outputLabel value="Nova Senha:" for="senha"/>
+                        <p:password id="senha" maxlength="20" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.novaSenha}"/>
+                        <p:message for="senha"/>
+
+                        <p:outputLabel value="Confirme Nova Senha:" for="senha"/>
+                        <p:password id="novasenha" maxlength="20" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.confirmeSenha}"/>
+                        <p:message for="novasenha"/>
+
+                        <p:commandButton ajax="false" icon="ui-icon-refresh" action="#{usuarioMB.atualizarSenhaUsuario()}" value="Atualizar"/>
+                    </h:panelGrid>
+                </h:form>
+            </p:panel>
+
+            <!--Excluir conta-->
+            <p:panel header="Excluir Conta" rendered="#{usuarioMB.excluirPerfilUsuario}" style="width: 745px; float: right">
+               <p:growl id="growl" showDetail="true" sticky="true" /> 
+                <h:form >
+                    <strong style="color: orangered;">
+                        <p>Se excluir sua conta todos seu dados serão apagados permanentemente da base de dados.</p>
+                        <p>Ainda deseja excluir o seu Perfil?</p>
+                    </strong>
+                    <h:panelGrid columns="2">
+                        <p:commandButton ajax="false" icon="ui-icon-check" action="#{usuarioMB.removerUsuario()}" value="Sim"/>
+                        <p:commandButton ajax="false" icon="ui-icon-close" action="#{usuarioMB.telaPerfilUsuario()}" value="Não"/>
                     </h:panelGrid>
 
                 </h:form>
-            </p:panel>
-            
-            <p:panel header="Editar Senha" rendered="#{usuarioMB.editarSenhaUsuario}" style="width: 745px; float: right">
-            <h:form >
-                <p:messages globalOnly="true"/>
-                <h:panelGrid columns="3">
-                    <p:outputLabel value="Senha Atual:" for="senhaatual"/>
-                    <p:password id="senhaatual" maxlength="20" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.senhaAtual}"/>
-                    <p:message for="senhaatual"/>
-
-                    <p:outputLabel value="Nova Senha:" for="senha"/>
-                    <p:password id="senha" maxlength="20" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.novaSenha}"/>
-                    <p:message for="senha"/>
-
-                    <p:outputLabel value="Confirme Nova Senha:" for="senha"/>
-                    <p:password id="novasenha" maxlength="20" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.confirmeSenha}"/>
-                    <p:message for="novasenha"/>
-
-                    <h:commandButton action="#{usuarioMB.atualizarSenhaUsuario()}" value="Atualizar"/>
-                </h:panelGrid>
-
-            </h:form>
-            </p:panel>
-            
-            <p:panel header="Excluir Conta" rendered="#{usuarioMB.excluirPerfilUsuario}" style="width: 745px; float: right">
-
-            <h:form >
-                <p>Se excluir sua conta todos seu dados serão apagados permanentemente da memória.</p>
-                <p>Ainda deseja excluir o seu Perfil?</p>
-                <p:messages globalOnly="true"/>
-                <h:panelGrid columns="2">
-                    <h:commandButton action="#{usuarioMB.removerUsuario()}" value="Sim"/>
-                    <h:commandButton action="#{usuarioMB.telaPerfilUsuario()}" value="Não"/>
-                </h:panelGrid>
-
-            </h:form>
             </p:panel>
         </div><!--fim principal-->
 

@@ -8,17 +8,17 @@
     xmlns:f="http://java.sun.com/jsf/core">
 
     <h:form >
-        <h:commandButton action="#{meusImoveisMB.telaEditarApartamento()}" value="Editar" />
-        <h:commandButton action="#{meusImoveisMB.desanunciarApto()}" rendered="#{meusImoveisMB.imovel.anuncio.anunciado}"
+         <p:commandButton ajax="false" icon="ui-icon-pencil" action="#{meusImoveisMB.telaEditarApartamento()}" value="Editar" />
+        <p:commandButton ajax="false" icon="ui-icon-cancel" action="#{meusImoveisMB.desanunciarApto()}" rendered="#{meusImoveisMB.imovel.anuncio.anunciado}"
                          value="Desanunciar" styleClass="bt2">
             <f:setPropertyActionListener value="#{imovel}" target="#{meusImoveisMB.imovel}"/>
-        </h:commandButton>
+        </p:commandButton>
 
-        <h:commandButton action="#{meusImoveisMB.anunciarApto()}" rendered="#{!meusImoveisMB.imovel.anuncio.anunciado}" 
+        <p:commandButton ajax="false" icon="ui-icon-check" action="#{meusImoveisMB.anunciarApto()}" rendered="#{!meusImoveisMB.imovel.anuncio.anunciado}" 
                          value="Anunciar" styleClass="bt2">
             <f:setPropertyActionListener value="#{imovel}" target="#{meusImoveisMB.imovel}"/>
-        </h:commandButton>
-        <h:commandButton action="#{meusImoveisMB.telaExcluirImovelPemissaoTrue()}" value="Excluir" /><br/>
+        </p:commandButton>
+        <p:commandButton ajax="false" icon="ui-icon-trash" action="#{meusImoveisMB.telaExcluirImovelPemissaoTrue()}" value="Excluir" /><br/>
     </h:form>
     
     <p:panel header="Imagens" style="float:right; width: 745px;">

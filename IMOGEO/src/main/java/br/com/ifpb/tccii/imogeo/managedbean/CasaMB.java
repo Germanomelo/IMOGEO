@@ -42,9 +42,6 @@ public class CasaMB implements Serializable{
     @EJB
     private CasaDao casaDao;
     
-//    @EJB
-//    private EnderecoDao enderecoDao;
-    
     public boolean isCadastrarCasa() {
         return cadastrarCasa;
     }
@@ -61,6 +58,7 @@ public class CasaMB implements Serializable{
     }
    
     public String addCasa() throws ParseException{
+        try{
         Geometry g1 = new WKTReader().read(this.loc.toString());
         this.endereco.setLocalizacao((Point) g1);
         this.endereco.setImovel(this.casa);
@@ -68,7 +66,12 @@ public class CasaMB implements Serializable{
         this.casa.setAnuncio(new Anuncio());
         this.casa.setEndereco(this.endereco);
         this.casaDao.inserirCasa(this.casa);
+            mensagemInformativa("Sucesso", "Casa cadastrada com sucesso.");
         return "meus-imoveis.jsf";
+        }catch(Exception e){
+            mensagemErro("Erro!", "Erro ao cadastrar casa");
+        }
+        return null;
     }
     
     public Casa getCasa() {
@@ -113,5 +116,27 @@ public class CasaMB implements Serializable{
     public void addImagem(FileUploadEvent event) {  
         FacesMessage msg = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");  
         FacesContext.getCurrentInstance().addMessage(null, msg); 
+    }
+    
+    //    Mensagens
+    public void mensagemInformativa(String titulo, String msg) {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        FacesMessage fm = new FacesMessage(titulo, msg);
+        fm.setSeverity(FacesMessage.SEVERITY_INFO);
+        fc.addMessage(null, fm);
+    }
+
+    public void mensagemErro(String titulo, String msg) {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        FacesMessage fm = new FacesMessage(titulo, msg);
+        fm.setSeverity(FacesMessage.SEVERITY_ERROR);
+        fc.addMessage(null, fm);
+    }
+
+    public void mensagemAlerta(String titulo, String msg) {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        FacesMessage fm = new FacesMessage(titulo, msg);
+        fm.setSeverity(FacesMessage.SEVERITY_WARN);
+        fc.addMessage(null, fm);
     }
 }

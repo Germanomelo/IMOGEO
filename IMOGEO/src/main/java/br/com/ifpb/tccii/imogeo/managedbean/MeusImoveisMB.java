@@ -2,7 +2,6 @@
  * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package br.com.ifpb.tccii.imogeo.managedbean;
 
 import br.com.ifpb.tccii.imogeo.entidades.Endereco;
@@ -22,6 +21,8 @@ import com.vividsolutions.jts.io.WKTReader;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -36,15 +37,13 @@ import javax.servlet.http.HttpSession;
  * @author Mano
  */
 //@Named(value = "meusImoveisMB")
-@ManagedBean
+@ManagedBean(name = "meusImoveisMB")
 @ViewScoped
 public class MeusImoveisMB implements Serializable {
 
     private String loc;
     private double lat;
     private double log;
-    
-    
     private boolean excluirImovelPermission = false;
     private boolean listarImoveis = true;
     private boolean informacoesCasa = false;
@@ -56,13 +55,13 @@ public class MeusImoveisMB implements Serializable {
     private boolean editarEndereco = false;
     private boolean editarEnderecoCasa = false;
     private boolean editarEnderecoApto = false;
-    
+
     private Casa casa = new Casa();
     private Apartamento apto = new Apartamento();
     private Imovel imovel = new Imovel();
     private Imagem imagem = new Imagem();
     private Endereco endereco = new Endereco();
-    
+
     @EJB
     private CasaDao casaDao;
     @EJB
@@ -102,8 +101,8 @@ public class MeusImoveisMB implements Serializable {
         this.editarEndereco = false;
         this.excluirImovelPermission = false;
     }
-    
-    public void telaEditarEnderecoCasa(){
+
+    public void telaEditarEnderecoCasa() {
         this.endereco = this.casa.getEndereco();
         this.informacoesCasa = false;
         this.informacoesApto = false;
@@ -117,7 +116,8 @@ public class MeusImoveisMB implements Serializable {
         this.editarEndereco = true;
         this.excluirImovelPermission = false;
     }
-    public void telaEditarEnderecoApto(){
+
+    public void telaEditarEnderecoApto() {
         this.endereco = this.apto.getEndereco();
         this.informacoesCasa = false;
         this.informacoesApto = false;
@@ -140,10 +140,10 @@ public class MeusImoveisMB implements Serializable {
         this.editarApartamento = true;
         this.imagemApartamento = false;
         this.imagemCasa = false;
-         this.editarEnderecoCasa = false;
+        this.editarEnderecoCasa = false;
         this.editarEnderecoApto = false;
         this.editarEndereco = false;
-         this.excluirImovelPermission = false;
+        this.excluirImovelPermission = false;
     }
 
     public void telaImagemCasa() {
@@ -192,14 +192,15 @@ public class MeusImoveisMB implements Serializable {
         this.log = this.apto.getEndereco().getLocalizacao().getCoordinate().y;
     }
 
-    public void telaExcluirImovelPemissaoTrue(){
+    public void telaExcluirImovelPemissaoTrue() {
         this.excluirImovelPermission = true;
     }
-    
-    public void telaExcluirImovelPemissaoFalse(){
+
+    public void telaExcluirImovelPemissaoFalse() {
         this.excluirImovelPermission = false;
     }
 //    ----------------------------------------Imovel--------------------------
+
     public List<Imovel> getImoveis() {
         return imovelDao.listarImoveis();
     }
@@ -210,87 +211,82 @@ public class MeusImoveisMB implements Serializable {
     }
 
     public void removerImovel() {
-        if(informacoesCasa){
+        if (informacoesCasa) {
             removerCasa();
-        }else if (informacoesApto){
+        } else if (informacoesApto) {
             removerApto();
-        }else{
-            this.mensagemErro(null, "Erro ao excluir Imóvel");
-        }
-            
-    }
-
-    public void atualizarEndereco() throws ParseException{
-        if(editarEnderecoCasa){
-            this.atualizarCasaEndereco();
-        } else if(editarEnderecoApto){
-            this.atualizarAptoEndereco();
-        }else{
-            this.mensagemErro(null, "Erro ao editar Imóvel");
-        }
-    }
-    public void editarImovel() {
-        if (this.imovel instanceof Casa) {
-            this.casa.setId(this.imovel.getId());
-            this.casa = this.buscarCasaId();
-            this.telaEditarCasa();
-        } else if (this.imovel instanceof Apartamento) {
-            this.apto.setId(this.imovel.getId());
-            this.apto = this.buscarAptoId();
-            this.telaEditarApartamento();
         } else {
-            this.mensagemErro(null, "Erro ao editar Imóvel");
+            this.mensagemErro("Erro!", "Erro ao excluir Imóvel");
+        }
+
+    }
+    public void atualizarEndereco() throws ParseException {
+        if (editarEnderecoCasa) {
+            this.atualizarCasaEndereco();
+        } else if (editarEnderecoApto) {
+            this.atualizarAptoEndereco();
+        } else {
+            this.mensagemErro("Erro!", "Erro ao editar Imóvel");
         }
     }
-
+//    public void editarImovel() {
+//        if (this.imovel instanceof Casa) {
+//            this.casa.setId(this.imovel.getId());
+//            this.casa = this.buscarCasaId();
+//            this.telaEditarCasa();
+//        } else if (this.imovel instanceof Apartamento) {
+//            this.apto.setId(this.imovel.getId());
+//            this.apto = this.buscarAptoId();
+//            this.telaEditarApartamento();
+//        } else {
+//            this.mensagemErro("Erro!", "Erro ao editar Imóvel, tente novamente");
+//        }
+//    }
     public void maisInformacoes() {
         if (this.imovel instanceof Casa) {
             this.casa = casaDao.retornarCasa(this.imovel.getId());
-//            System.out.println(this.casa);
             this.telaInformacoesCasa();
         } else if (this.imovel instanceof Apartamento) {
             this.apto = aptoDao.retornarApartamento(this.imovel.getId());
             this.telaInformacoesApto();
         } else {
-            this.mensagemErro(null, "Erro ao ver informações de Imovél, tente novamente");
+            this.mensagemErro("Erro!", "Erro ao ver informações de Imovél, tente novamente");
         }
 
     }
 
-    public void desanunciarImovel() {
-        if (this.imovel instanceof Casa) {
-            Casa c = (Casa) this.imovel;
-            this.casa = c;
-            this.desanunciarCasa();
-        } else if (this.imovel instanceof Apartamento) {
-            Apartamento ap = (Apartamento) this.imovel;
-            this.apto = ap;
-            this.apto.getAnuncio().setAnunciado(false);
-            this.atualizarApto();
-        } else {
-            this.mensagemErro(null, "Erro ao desanunciar Imovél, tente novamente");
-        }
-        this.telaListarImoveis();
-    }
-
-    public void anunciarImovel() {
-        if (this.imovel instanceof Casa) {
-            Casa c = (Casa) this.imovel;
-            this.casa = c;
-            this.anunciarCasa();
-        } else if (this.imovel instanceof Apartamento) {
-            Apartamento ap = (Apartamento) this.imovel;
-            this.apto = ap;
-            this.apto.getAnuncio().setAnunciado(true);
-            this.apto.getAnuncio().setDataPublicacao(new Date());
-            this.atualizarApto();
-        } else {
-            this.mensagemErro(null, "Erro ao desanunciar Imovél, tente novamente");
-        }
-        this.telaListarImoveis();
-    }
+//    public void desanunciarImovel() {
+//        if (this.imovel instanceof Casa) {
+//            Casa c = (Casa) this.imovel;
+//            this.casa = c;
+//            this.desanunciarCasa();
+//        } else if (this.imovel instanceof Apartamento) {
+//            Apartamento ap = (Apartamento) this.imovel;
+//            this.apto = ap;
+//            this.apto.getAnuncio().setAnunciado(false);
+//            this.atualizarApto();
+//        } else {
+//            this.mensagemErro("Erro!", "Erro ao desanunciar Imovél, tente novamente");
+//        }
+//        this.telaListarImoveis();
+//    }
+//    public void anunciarImovel() {
+//        if (this.imovel instanceof Casa) {
+//            Casa c = (Casa) this.imovel;
+//            this.casa = c;
+//            this.anunciarCasa();
+//        } else if (this.imovel instanceof Apartamento) {
+//            Apartamento ap = (Apartamento) this.imovel;
+//            this.apto = ap;
+//            this.apto.getAnuncio().setAnunciado(true);
+//            this.apto.getAnuncio().setDataPublicacao(new Date());
+//            this.atualizarApto();
+//        } else {
+//            this.mensagemErro("Erro!", "Erro ao anunciar Imovél, tente novamente");
+//        }
+//        this.telaListarImoveis();
+//    }
 //    ----------------------------------------Casa--------------------------    
-
     public Casa buscarCasaId() {
         return casaDao.retornarCasa(casa.getId());
     }
@@ -298,34 +294,52 @@ public class MeusImoveisMB implements Serializable {
     public void atualizarCasa() {
         casaDao.atualizarCasa(casa);
         this.telaListarImoveis();
-        this.mensagemInformativa(null, "Casa atualizada com sucesso.");
     }
-    
-    public void atualizarCasaEndereco() throws ParseException {
-        Geometry g1 = new WKTReader().read(this.loc.toString());
-        this.endereco.setLocalizacao((Point) g1);
-        this.casa.setEndereco(this.endereco);
-        casaDao.atualizarCasa(casa);
-        this.telaListarImoveis();
-        this.mensagemInformativa(null, "Casa atualizada com sucesso.");
+
+    public void atualizarCasaEndereco() {
+        Geometry g1;
+        try {
+            g1 = new WKTReader().read(this.loc.toString());
+            this.endereco.setLocalizacao((Point) g1);
+            this.casa.setEndereco(this.endereco);
+            casaDao.atualizarCasa(casa);
+            this.telaListarImoveis();
+            this.mensagemInformativa("Sucesso!", "Casa atualizada com sucesso.");
+        } catch (ParseException ex) {
+            this.mensagemErro("Erro!", "Erro ao atualizar casa");
+        }
     }
-    
+
     public void removerCasa() {
-        casaDao.removerCasa(casa);
-        this.telaExcluirImovelPemissaoFalse();
-        this.telaListarImoveis();
-        this.mensagemInformativa(null, "Casa excluida com sucesso.");
+        try {
+            casaDao.removerCasa(casa);
+            this.telaExcluirImovelPemissaoFalse();
+            this.telaListarImoveis();
+            this.mensagemInformativa("Sucesso", "Casa excluida com sucesso.");
+        } catch (Exception e) {
+            this.mensagemInformativa("Erro!", "Erro ao excluir casa.");
+        }
     }
 
     public void anunciarCasa() {
-        this.casa.getAnuncio().setAnunciado(true);
-        this.casa.getAnuncio().setDataPublicacao(new Date());
-        this.atualizarCasa();
+        try {
+            this.casa.getAnuncio().setAnunciado(true);
+            this.casa.getAnuncio().setDataPublicacao(new Date());
+            this.atualizarCasa();
+            this.mensagemInformativa("Sucesso!", "Casa anunciada com sucesso.");
+        } catch (Exception e) {
+            this.mensagemErro("Erro!", "Erro ao anunciar casa");
+        }
     }
 
     public void desanunciarCasa() {
-        this.casa.getAnuncio().setAnunciado(false);
-        this.atualizarCasa();
+        try {
+            this.casa.getAnuncio().setAnunciado(false);
+            this.atualizarCasa();
+            this.mensagemInformativa("Sucesso!", "Casa desanunciada com sucesso.");
+        } catch (Exception e) {
+            this.mensagemErro("Erro!", "Erro ao desanunciar casa");
+        }
     }
 
 //    ----------------------------------------Apto--------------------------
@@ -336,35 +350,54 @@ public class MeusImoveisMB implements Serializable {
     public void atualizarApto() {
         aptoDao.atualizarApartamento(apto);
         this.telaListarImoveis();
-        this.mensagemInformativa(null, "Apartamento atualizado com sucesso.");
     }
 
-     public void atualizarAptoEndereco() throws ParseException {
-        Geometry g1 = new WKTReader().read(this.loc.toString());
-        this.endereco.setLocalizacao((Point) g1);
-        this.apto.setEndereco(this.endereco);
-        aptoDao.atualizarApartamento(apto);
-        this.telaListarImoveis();
-        this.mensagemInformativa(null, "Apartamento atualizada com sucesso.");
+    public void atualizarAptoEndereco() throws ParseException {
+        Geometry g1;
+        try {
+            g1 = new WKTReader().read(this.loc.toString());
+            this.endereco.setLocalizacao((Point) g1);
+            this.apto.setEndereco(this.endereco);
+            aptoDao.atualizarApartamento(apto);
+            this.telaListarImoveis();
+            this.mensagemInformativa("Sucesso!", "Apartamento atualizado com sucesso.");
+        } catch (ParseException ex) {
+            this.mensagemErro("Erro!", "Erro ao atualizar apartamento");
+        }
     }
-    
+
     public void removerApto() {
-        aptoDao.removerApartamento(apto);
-        this.telaListarImoveis();
-        this.mensagemInformativa(null, "Apartamento excluido com sucesso.");
+        try {
+            aptoDao.removerApartamento(apto);
+            this.telaListarImoveis();
+            this.mensagemInformativa("Sucesso", "Apartamento excluido com sucesso.");
+        } catch (Exception e) {
+            this.mensagemInformativa("Erro!", "Erro ao excluir apartamento.");
+        }
     }
-    
-     public void anunciarApto() {
-        this.apto.getAnuncio().setAnunciado(true);
-        this.apto.getAnuncio().setDataPublicacao(new Date());
-        this.atualizarApto();
+
+    public void anunciarApto() {
+        try {
+            this.apto.getAnuncio().setAnunciado(true);
+            this.apto.getAnuncio().setDataPublicacao(new Date());
+            this.atualizarApto();
+            this.mensagemInformativa("Sucesso!", "Apartamento anunciado com sucesso.");
+        } catch (Exception e) {
+            this.mensagemErro("Erro!", "Erro ao anunciar apartamento");
+        }
     }
 
     public void desanunciarApto() {
-        this.apto.getAnuncio().setAnunciado(false);
-        this.atualizarApto();
+        try {
+            this.apto.getAnuncio().setAnunciado(false);
+            this.atualizarApto();
+            this.mensagemInformativa("Sucesso!", "Apartamento desanunciada com sucesso.");
+        } catch (Exception e) {
+            this.mensagemErro("Erro!", "Erro ao desanunciar aparteamento");
+        }
     }
 //    <------------------------------------------------Get Set-------------->>>
+
     public boolean isListarImoveis() {
         return listarImoveis;
     }
@@ -468,8 +501,7 @@ public class MeusImoveisMB implements Serializable {
     public void setEditarEnderecoCasa(boolean enderecoCasa) {
         this.editarEnderecoCasa = enderecoCasa;
     }
-    
-    
+
     public double getLat() {
         return lat;
     }
@@ -485,7 +517,7 @@ public class MeusImoveisMB implements Serializable {
     public void setLog(double log) {
         this.log = log;
     }
-    
+
     public String getLoc() {
         return loc;
     }
@@ -509,8 +541,6 @@ public class MeusImoveisMB implements Serializable {
     public void setEditarEnderecoApto(boolean editarEnderecoApto) {
         this.editarEnderecoApto = editarEnderecoApto;
     }
-    
-    
 
     public boolean isExcluirImovelPermission() {
         return excluirImovelPermission;
@@ -527,18 +557,26 @@ public class MeusImoveisMB implements Serializable {
         return user;
     }
 
-    public void mensagemInformativa(String destino, String msg) {
+    //    Mensagens
+    public void mensagemInformativa(String titulo, String msg) {
         FacesContext fc = FacesContext.getCurrentInstance();
-        FacesMessage fm = new FacesMessage(msg);
+        FacesMessage fm = new FacesMessage(titulo, msg);
         fm.setSeverity(FacesMessage.SEVERITY_INFO);
-        fc.addMessage(destino, fm);
+        fc.addMessage(null, fm);
     }
 
-    public void mensagemErro(String destino, String msg) {
+    public void mensagemErro(String titulo, String msg) {
         FacesContext fc = FacesContext.getCurrentInstance();
-        FacesMessage fm = new FacesMessage(msg);
+        FacesMessage fm = new FacesMessage(titulo, msg);
         fm.setSeverity(FacesMessage.SEVERITY_ERROR);
-        fc.addMessage(destino, fm);
+        fc.addMessage(null, fm);
+    }
+
+    public void mensagemAlerta(String titulo, String msg) {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        FacesMessage fm = new FacesMessage(titulo, msg);
+        fm.setSeverity(FacesMessage.SEVERITY_WARN);
+        fc.addMessage(null, fm);
     }
 
 //    public void processFileUploadCasa(FileUploadEvent uploadEvent) {
@@ -570,13 +608,9 @@ public class MeusImoveisMB implements Serializable {
     //        FacesMessage msg = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
     //        FacesContext.getCurrentInstance().addMessage(null, msg);
     //    }
-    public void enderecoToString() {
-        System.out.println(endereco.toString());
+    public void destroyWorld(ActionEvent actionEvent) {
+        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "System Error", "Please try again later.");
+
+        FacesContext.getCurrentInstance().addMessage(null, message);
     }
-    
-    public void destroyWorld(ActionEvent actionEvent){  
-        FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "System Error",  "Please try again later.");  
-          
-        FacesContext.getCurrentInstance().addMessage(null, message);  
-    }  
 }

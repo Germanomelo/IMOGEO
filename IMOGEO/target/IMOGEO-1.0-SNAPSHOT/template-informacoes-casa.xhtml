@@ -10,21 +10,19 @@
 
     <h:form >
 
-        <h:commandButton action="#{meusImoveisMB.telaEditarCasa()}" value="Editar" />
-        <h:commandButton action="#{meusImoveisMB.desanunciarCasa()}" rendered="#{meusImoveisMB.imovel.anuncio.anunciado}"
+        <p:commandButton ajax="false" icon="ui-icon-pencil" action="#{meusImoveisMB.telaEditarCasa()}" value="Editar" />
+        <p:commandButton ajax="false" icon="ui-icon-cancel" action="#{meusImoveisMB.desanunciarCasa()}" rendered="#{meusImoveisMB.imovel.anuncio.anunciado}"
                          value="Desanunciar" styleClass="bt2">
             <f:setPropertyActionListener value="#{imovel}" target="#{meusImoveisMB.imovel}"/>
-        </h:commandButton>
+        </p:commandButton>
 
-        <h:commandButton action="#{meusImoveisMB.anunciarCasa()}" rendered="#{!meusImoveisMB.imovel.anuncio.anunciado}" 
+        <p:commandButton ajax="false" icon="ui-icon-check" action="#{meusImoveisMB.anunciarCasa()}" rendered="#{!meusImoveisMB.imovel.anuncio.anunciado}" 
                          value="Anunciar" styleClass="bt2">
             <f:setPropertyActionListener value="#{imovel}" target="#{meusImoveisMB.imovel}"/>
-        </h:commandButton>
-        <h:commandButton action="#{meusImoveisMB.telaExcluirImovelPemissaoTrue()}" value="Excluir" /><br/>
+        </p:commandButton>
+        <p:commandButton ajax="false" icon="ui-icon-trash" action="#{meusImoveisMB.telaExcluirImovelPemissaoTrue()}" value="Excluir" /><br/>
         </h:form>
-        <!--<p:fieldset>-->
         <p:panel header="Imagens" style="float:right; width: 745px;">
-            <!--<h3>Imagens</h3>-->
             <p:lightBox styleClass="imagebox">  
                 <h:outputLink value="../img/semimagem.png" title="imagem">  
                     <h:graphicImage value="/img/semimagem.png"/>  

@@ -24,6 +24,7 @@
                 <h:commandLink action="add-apto.jsf" value="Cadastrar Apartamento" styleClass="link"/>
                 <h:commandLink action="minha-conta.jsf" value="Perfil" styleClass="link"/>
             </h:form>
+            <p:growl id="growl" showDetail="true" sticky="true" /> 
             <p:panel header="Cadastrar Casa"  rendered="#{casaMB.cadastrarCasa}" style="width: 745px; float: right"> 
                 <h:form>
                     <p:messages globalOnly="true" />
@@ -41,31 +42,31 @@
                         <p:message for="obs" />
 
                         <p:outputLabel value="Valor R$:" for="valor" />
-                        <p:inputText id="valor" value="#{casaMB.casa.valor}"  maxlength="9" required="true" requiredMessage="Campo Obrigatório !"/>
+                        <p:inputText id="valor" type="number" value="#{casaMB.casa.valor}"  maxlength="9" required="true" requiredMessage="Campo Obrigatório !"/>
                         <p:message for="valor"/>
 
                         <p:outputLabel value="Área Total m²:" for="areatotal" />
-                        <p:inputText id="areatotal" value="#{casaMB.casa.areaTotal}" maxlength="5" required="true" requiredMessage="Campo Obrigatório !"/>
+                        <p:inputText id="areatotal" type="number" value="#{casaMB.casa.areaTotal}" maxlength="5" required="true" requiredMessage="Campo Obrigatório !"/>
                         <p:message for="areatotal"/>
 
                         <p:outputLabel value="Área Construida m²:" for="areaconstruida" />
-                        <p:inputText id="areaconstruida" maxlength="5" value="#{casaMB.casa.areaConstruida}" required="true" requiredMessage="Campo Obrigatório !"/>
+                        <p:inputText id="areaconstruida" type="number" maxlength="5" value="#{casaMB.casa.areaConstruida}" required="true" requiredMessage="Campo Obrigatório !"/>
                         <p:message for="areaconstruida"/>
 
                         <p:outputLabel value="Quartos :" for="quartos" />
-                        <p:inputText id="quartos" maxlength="2" value="#{casaMB.casa.quarto}" required="true"  requiredMessage="Campo Obrigatório !"/>
+                        <p:inputText id="quartos" type="number" maxlength="2" value="#{casaMB.casa.quarto}" required="true"  requiredMessage="Campo Obrigatório !"/>
                         <p:message for="quartos"/>
 
                         <p:outputLabel value="Suites :" for="suites" />
-                        <p:inputText id="suites" maxlength="2" value="#{casaMB.casa.suite}" required="true"  requiredMessage="Campo Obrigatório !"/>
+                        <p:inputText id="suites" maxlength="2" type="number" value="#{casaMB.casa.suite}" required="true"  requiredMessage="Campo Obrigatório !"/>
                         <p:message for="suites"/>
 
                         <p:outputLabel value="Vagas Garagem :" for="garagem" />
-                        <p:inputText id="garagem" maxlength="2" value="#{casaMB.casa.vagaGaragem}" required="true"  requiredMessage="Campo Obrigatório !"/>
+                        <p:inputText id="garagem" maxlength="2" type="number" value="#{casaMB.casa.vagaGaragem}" required="true"  requiredMessage="Campo Obrigatório !"/>
                         <p:message for="garagem"/>
 
                         <p:outputLabel value="Banheiros Sociais:" for="banheiro" />
-                        <p:inputMask id="banheiro" mask="9" value="#{casaMB.casa.banheiroSocial}" required="true"  requiredMessage="Campo Obrigatório !"/>
+                        <p:inputText id="banheiro" maxlength="2" type="number" value="#{casaMB.casa.banheiroSocial}" required="true"  requiredMessage="Campo Obrigatório !"/>
                         <p:message for="banheiro"/>
 
                         <p:outputLabel value="Possui Piscina? " for="piscina" />  
@@ -88,7 +89,7 @@
                         <p:selectBooleanCheckbox id="jardim" value="#{casaMB.casa.jardim}" />  
                         <p:message for="jardim"/>
 
-                        <h:commandButton value="Avançar" action="#{casaMB.telaCadastrarEnderecoCasa()}" />
+                        <p:commandButton ajax="false" icon="ui-icon-circle-triangle-e" value="Avançar" action="#{casaMB.telaCadastrarEnderecoCasa()}" />
                     </h:panelGrid>
                 </h:form>
             </p:panel>
@@ -100,7 +101,7 @@
                         <p:message id="mrua" for="rua"/>
 
                         <p:outputLabel value="Numero"/>
-                        <p:inputText  id="numero" value="#{casaMB.endereco.numero}" required="true" requiredMessage="Campo Obrigatorio"  />
+                        <p:inputText  id="numero" type="number" maxlength="7" value="#{casaMB.endereco.numero}" required="true" requiredMessage="Campo Obrigatorio"  />
                         <p:message id="mnumero" for="numero"/>
 
                         <p:outputLabel value="Bairro"/>
@@ -129,6 +130,7 @@
 
                         <input type="button" value="Buscar Localização" onclick="codeAddress()"/>
                         <h:commandButton value="Cadastrar" action="#{casaMB.addCasa()}"/>
+                       
                     </h:panelGrid>
                     <div onload="initialize()"/>
                     <div id="map_canvas" style="width: 710px; height: 450px;"/>

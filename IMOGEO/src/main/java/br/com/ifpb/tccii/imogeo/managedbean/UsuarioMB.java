@@ -5,8 +5,13 @@
 package br.com.ifpb.tccii.imogeo.managedbean;
 
 import br.com.ifpb.tccii.imogeo.criptografia.Criptografia;
+import br.com.ifpb.tccii.imogeo.entidades.Imagem;
 import br.com.ifpb.tccii.imogeo.entidades.Usuario;
+import br.com.ifpb.tccii.imogeo.sessionbeans.ImagemDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.UsuarioDao;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -14,47 +19,53 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
+import org.primefaces.event.FileUploadEvent;
 
 /**
  *
  * @author Mano
  */
-//@Named(value = "usuarioMB")
 @ManagedBean(name = "usuarioMB")
 @SessionScoped
 public class UsuarioMB implements Serializable {
 
     //telas
-    private boolean perfilUsuario = true;
-    private boolean editarPerfilUsuario = false;
-    private boolean editarSenhaUsuario = false;
-    private boolean excluirPerfilUsuario = false;
+    private boolean exibePerfilUsuario = true;
+    private boolean exibeEditarPerfilUsuario = false;
+    private boolean exibeEditarSenhaUsuario = false;
+    private boolean ExibeExcluirPerfilUsuario = false;
     private boolean ativo = false;
     //senhas
     private String senhaAtual = null;
     private String novaSenha = null;
     private String confirmeSenha = null;
     private Usuario usuario = new Usuario();
+    Criptografia crip = new Criptografia();
+
     @EJB
-    private UsuarioDao users;
+    UsuarioDao users;
+
+    @EJB
+    ImagemDao imagemDao;
+
+    private Imagem imagem = new Imagem();
 
     public UsuarioMB() {
     }
 
     public String cadastarUsuario() {
-        String pagina;
-        Criptografia crip = new Criptografia();
+        String pagina = "cadastro-login.jsf";
         if (this.confirmeSenha.equals(this.usuario.getSenha())) {
-            this.usuario.setSenha(crip.encriptar(this.usuario.getSenha()));
-            System.out.println(usuario.getSenha());
-            users.cadastrarUsuario(usuario);
-            this.setAtivo(true);
-//            }catch(Exception e){
-//                this.mensagemErro("fromcadastrouser:email", "Erro: Usuario já existe");
-//            }
-            pagina = "minha-conta.jsf";
+            try {
+                this.usuario.setSenha(this.crip.encriptar(this.usuario.getSenha()));
+                this.users.cadastrarUsuario(this.usuario);
+                this.setAtivo(true);
+                pagina = "minha-conta.jsf";
+            } catch (Exception e) {
+                this.mensagemErro("Erro: ", e.getMessage());
+            }
         } else {
-            this.mensagemErro("fromcadastrouser:senha1", "Erro: Senhas não conferem");
+            this.mensagemAlerta("Alerta!", "Senhas não compativeis");
             pagina = "cadastro-login.jsf";
         }
         return pagina;
@@ -64,11 +75,10 @@ public class UsuarioMB implements Serializable {
         String paginaRetorno = "/cadastro-login.jsf";
         Usuario usuarioNovo = null;
         try {
-            Criptografia crip = new Criptografia();
             this.usuario.setSenha(crip.encriptar(this.usuario.getSenha()));
             usuarioNovo = users.loginUsuarios(this.usuario);
         } catch (Exception e) {
-            this.mensagemErro(null, "Erro: Usuário e/ou Senha Inválidos.");
+            this.mensagemAlerta("Alerta!", "Usuário e/ou Senha Inválidos.");
         }
         if (usuarioNovo != null) {
             paginaRetorno = "/minha-conta.jsf";
@@ -79,35 +89,49 @@ public class UsuarioMB implements Serializable {
     }
 
     public void atualizarUsuario() {
-        users.atualizarUsuario(usuario);
-        this.mensagemInformativa(null, "Editado com Sucesso.");
-    }
-
-    public String atualizarSenhaUsuario() {
-
-        FacesContext fc = FacesContext.getCurrentInstance();
-        if (this.novaSenha != null && (this.novaSenha.equals(this.confirmeSenha)) && this.senhaAtual.equals(this.usuario.getSenha())) {
-            this.usuario.setSenha(novaSenha);
+        try {
             users.atualizarUsuario(usuario);
-            this.mensagemInformativa(null, "Editado com Sucesso.");
-        } else {
-            this.mensagemErro(null, "ERRO: senhas incompativeis");
+        } catch (Exception e) {
+            this.mensagemErro("Erro!", "Erro ao atualizar usuário.");
         }
-        return "/minha-conta.jsf";
+        this.mensagemInformativa("Sucesso!", "Usuário atualizado com Sucesso.");
+        this.telaPerfilUsuario();
     }
 
-    public String minhaConta(){
-        if(this.ativo){
+    public void atualizarSenhaUsuario() {
+        if (this.novaSenha != null && (this.novaSenha.equals(this.confirmeSenha)) && this.crip.encriptar(this.senhaAtual).equals(this.usuario.getSenha())) {
+            this.usuario.setSenha(this.crip.encriptar(novaSenha));
+            try {
+                users.atualizarUsuario(usuario);
+            } catch (Exception e) {
+                this.mensagemErro("Erro!", e.getMessage());
+            }
+            this.mensagemInformativa("Sucesso!", "Senha atulizada com Sucesso.");
+            this.telaPerfilUsuario();
+        } else {
+            this.mensagemAlerta("Alerta!", "Senhas incompativeis");
+        }
+    }
+
+    public String minhaConta() {
+        if (this.ativo) {
             return "/minha-conta.jsf";
         }
         return "/cadastro-login.jsf";
     }
+
     public String removerUsuario() {
-        users.removerUsuario(usuario);
-        setAtivo(false);
-        this.usuario = new Usuario();
-        this.mensagemInformativa(null, "Excluido com Sucesso!");
-        return "/index.jsf";
+        try {
+            users.removerUsuario(usuario);
+            setAtivo(false);
+            this.usuario = new Usuario();
+            this.mensagemInformativa("Sucesso!", "Usuário excluido com sucesso.");
+            return "/index.jsf";
+        } catch (Exception e) {
+            this.mensagemErro("Erro!", e.getMessage());
+        }
+        return null;
+
     }
 
     public String logout() {
@@ -118,56 +142,56 @@ public class UsuarioMB implements Serializable {
 
     // Telas ---------------------------->>>>>>>>
     public void telaPerfilUsuario() {
-        this.perfilUsuario = true;
-        this.editarPerfilUsuario = false;
-        this.editarSenhaUsuario = false;
-        this.excluirPerfilUsuario = false;
+        this.exibePerfilUsuario = true;
+        this.exibeEditarPerfilUsuario = false;
+        this.exibeEditarSenhaUsuario = false;
+        this.ExibeExcluirPerfilUsuario = false;
     }
 
     public void telaEditarPerfilUsuario() {
-        this.perfilUsuario = false;
-        this.editarPerfilUsuario = true;
-        this.editarSenhaUsuario = false;
-        this.excluirPerfilUsuario = false;
+        this.exibePerfilUsuario = false;
+        this.exibeEditarPerfilUsuario = true;
+        this.exibeEditarSenhaUsuario = false;
+        this.ExibeExcluirPerfilUsuario = false;
     }
 
     public void telaEditarSenhaUsuario() {
-        this.perfilUsuario = false;
-        this.editarPerfilUsuario = false;
-        this.editarSenhaUsuario = true;
-        this.excluirPerfilUsuario = false;
+        this.exibePerfilUsuario = false;
+        this.exibeEditarPerfilUsuario = false;
+        this.exibeEditarSenhaUsuario = true;
+        this.ExibeExcluirPerfilUsuario = false;
     }
 
     public void telaExcluirPerfilUsuario() {
-        this.perfilUsuario = false;
-        this.editarPerfilUsuario = false;
-        this.editarSenhaUsuario = false;
-        this.excluirPerfilUsuario = true;
+        this.exibePerfilUsuario = false;
+        this.exibeEditarPerfilUsuario = false;
+        this.exibeEditarSenhaUsuario = false;
+        this.ExibeExcluirPerfilUsuario = true;
     }
 
     // Get e Set ----------------------------->>>>>>>>
-    public boolean isPerfilUsuario() {
-        return perfilUsuario;
+    public boolean isExibePerfilUsuario() {
+        return exibePerfilUsuario;
     }
 
-    public void setPerfilUsuario(boolean perfilUsuario) {
-        this.perfilUsuario = perfilUsuario;
+    public void setExibePerfilUsuario(boolean exibePerfilUsuario) {
+        this.exibePerfilUsuario = exibePerfilUsuario;
     }
 
     public boolean isEditarPerfilUsuario() {
-        return editarPerfilUsuario;
+        return exibeEditarPerfilUsuario;
     }
 
     public void setEditarPerfilUsuario(boolean editarPerfilUsuario) {
-        this.editarPerfilUsuario = editarPerfilUsuario;
+        this.exibeEditarPerfilUsuario = editarPerfilUsuario;
     }
 
-    public boolean isEditarSenhaUsuario() {
-        return editarSenhaUsuario;
+    public boolean isExibeEditarSenhaUsuario() {
+        return exibeEditarSenhaUsuario;
     }
 
-    public void setEditarSenhaUsuario(boolean editarSenhaUsuario) {
-        this.editarSenhaUsuario = editarSenhaUsuario;
+    public void setExibeEditarSenhaUsuario(boolean exibeEditarSenhaUsuario) {
+        this.exibeEditarSenhaUsuario = exibeEditarSenhaUsuario;
     }
 
     public String getSenhaAtual() {
@@ -202,12 +226,20 @@ public class UsuarioMB implements Serializable {
         this.usuario = usuario;
     }
 
+    public Imagem getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(Imagem imagem) {
+        this.imagem = imagem;
+    }
+
     public boolean isExcluirPerfilUsuario() {
-        return excluirPerfilUsuario;
+        return ExibeExcluirPerfilUsuario;
     }
 
     public void setExcluirPerfilUsuario(boolean excluirUsuario) {
-        this.excluirPerfilUsuario = excluirUsuario;
+        this.ExibeExcluirPerfilUsuario = excluirUsuario;
     }
 
     public boolean isAtivo() {
@@ -225,18 +257,50 @@ public class UsuarioMB implements Serializable {
         }
     }
 
-    //Mensagens------------------------------>>>>>>>>>>>>>>>
-    public void mensagemInformativa(String destino, String msg) {
-        FacesContext fc = FacesContext.getCurrentInstance();
-        FacesMessage fm = new FacesMessage(msg);
-        fm.setSeverity(FacesMessage.SEVERITY_INFO);
-        fc.addMessage(destino, fm);
+//    Imagens
+    public void processFileUpload(FileUploadEvent uploadEvent) {
+        try {
+            imagem.setFoto(uploadEvent.getFile().getContents());
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+
     }
 
-    public void mensagemErro(String destino, String msg) {
+    private void criaArquivo(byte[] bytes, String arquivo) throws IOException {
+        FileOutputStream fos;
+
+        try {
+            fos = new FileOutputStream(arquivo);
+            fos.write(bytes);
+            fos.flush();
+            fos.close();
+        } catch (FileNotFoundException ex) {
+            ex.printStackTrace();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+    }
+
+    //Mensagens------------------------------>>>>>>>>>>>>>>>
+    public void mensagemInformativa(String titulo, String msg) {
         FacesContext fc = FacesContext.getCurrentInstance();
-        FacesMessage fm = new FacesMessage(msg);
+        FacesMessage fm = new FacesMessage(titulo, msg);
+        fm.setSeverity(FacesMessage.SEVERITY_INFO);
+        fc.addMessage(null, fm);
+    }
+
+    public void mensagemErro(String titulo, String msg) {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        FacesMessage fm = new FacesMessage(titulo, msg);
         fm.setSeverity(FacesMessage.SEVERITY_ERROR);
-        fc.addMessage(destino, fm);
+        fc.addMessage(null, fm);
+    }
+
+    public void mensagemAlerta(String titulo, String msg) {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        FacesMessage fm = new FacesMessage(titulo, msg);
+        fm.setSeverity(FacesMessage.SEVERITY_WARN);
+        fc.addMessage(null, fm);
     }
 }

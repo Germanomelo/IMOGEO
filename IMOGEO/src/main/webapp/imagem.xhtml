@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:f="http://java.sun.com/jsf/core">
+    <h:head>
+        <title>Imagem</title>
+    </h:head>
+    <h:body>
+        <h:form id="form" enctype="multipart/form-data">
+        <p:growl id="msgs" showDetail="false" showSummary="true" />
+ 
+        <p:panel>
+            <h:panelGrid columns="2">
+                <h:outputText value="Nome:" />
+                <p:inputText value="#mbProduto.produto.nome}" />
+ 
+                <h:outputText value="Preço:" />
+                <p:inputText value="#mbProduto.produto.preco}" />
+ 
+                <p:commandButton value="Salvar" action="#mbProduto.salvaProduto()}"
+                    update=":form:msgs, :form:dtProdutos, :form" />
+                <p:commandButton value="Limpar" onclick="form.reset()" />
+            </h:panelGrid>
+        </p:panel>
+ 
+        <p:dataTable id="dtProdutos" value="#mbProduto.produtos}" var="p"
+            style="text-align: center;" emptyMessage="Nenhum produto cadastrado.">
+            <p:column headerText="ID" style="width:2%; font-weight: bold;">
+                <h:outputText value="#p.id}" />
+            </p:column>
+ 
+            <p:column headerText="Nome" style="width:24%">
+                <h:outputText value="#p.nome}" />
+            </p:column>
+ 
+            <p:column headerText="Preço" style="width:24%">
+                <h:outputText value="#p.preco}" />
+            </p:column>
+ 
+            <p:column style="width:4%">
+                <p:commandButton id="addButton" update=":form:infoFoto"
+                    oncomplete="fotoDialog.show()" icon="ui-icon-plus"
+                    title="Adicionar imagens">
+                    <f:setPropertyActionListener value="#p}"
+                        target="#mbProduto.produtoSelecionado}" />
+                </p:commandButton>
+ 
+                <p:spacer width="10" />
+ 
+                <p:commandButton id="showButton" update=":form:infoProduto"
+                    oncomplete="produtoDialog.show()" icon="ui-icon-search"
+                    title="Visualizar imagens" action="#mbProduto.listaFotosProduto}">
+                    <f:setPropertyActionListener value="#p}"
+                        target="#mbProduto.produtoSelecionado}" />
+                </p:commandButton>
+            </p:column>
+        </p:dataTable>
+ 
+        <p:dialog header="Detalhes do produto" widgetVar="produtoDialog"
+            resizable="false" id="produtoDlg" showEffect="fade"
+            hideEffect="explode" modal="true" draggable="true" maximizable="true"
+            minimizable="true">
+ 
+            <h:panelGrid id="infoProduto" columns="2" style="margin:0 auto;">
+ 
+                <h:outputText value="Nenhnuma imagem encontrada"
+                    rendered="#mbProduto.fotos.size() == 0}" />
+ 
+<!--                <p:galleria var="f" value="#bProduto.fotos}" effect="slide"
+                    effectSpeed="100" panelHeight="250" panelWidth="500"
+                    frameHeight="70" frameWidth="160" filmstripPosition="bottom"
+                    showOverlays="true">
+ 
+                    <p:graphicImage value="/temp/#f.id}.jpg" cache="false" width="500"
+                        height="250" />
+                    <p:galleriaOverlay title="Descrição:">
+                        <h:outputText value="#f.descricao}" />
+                    </p:galleriaOverlay>-->
+ 
+                <!--</p:galleria>-->
+            </h:panelGrid>
+        </p:dialog>
+ 
+            <p:dialog header="Adicionar imagens" widgetVar="fotoDialog"
+                      position="center" resizable="false" id="fotoDlg" showEffect="fade"
+                      hideEffect="explode" modal="true" width="800">
+
+                <h:panelGrid id="infoFoto" columns="2">
+
+                    <h:outputText value="Foto: " />
+                    <p:fileUpload fileUploadListener="#{imagemMB.processFileUpload}"
+                                  label="Escolher" cancelLabel="Cancelar" sizeLimit="400000"
+                                  invalidSizeMessage="Imagem muito grande" auto="true"
+                                  invalidFileMessage="Tipo de imagem não suportado"
+                                  allowTypes="/(\.|\/)(jpe?g|png)$/" />
+
+                    <h:outputText value="Descrição: " />
+                    <p:inputText value="#{imagemMB.imagem.descricao}" />
+
+                    <p:commandButton value="Adicionar" icon="ui-icon-plus"
+                                     action="#{imagemMB.inserirImagem()}" update="infoFoto, form" />
+
+                </h:panelGrid>
+            </p:dialog>
+        </h:form>
+    </h:body>
+</html>
+

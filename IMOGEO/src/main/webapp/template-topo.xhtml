@@ -30,8 +30,8 @@
             <h:form id="buscaform">
                 <h:panelGrid columns="3">
                     <p:inputText id="busca" value="#{indexMB.busca}" required="true" requiredMessage="Nada foi Digitado"/>
-                    <h:commandButton action="#{indexMB.telaExibebuscaSimples()}" value="Buscar"/>
-                    <p:message for="busca"/>
+                    <p:commandButton ajax="false" icon="ui-icon-search" action="#{indexMB.telaExibebuscaSimples()}" value="Buscar"/>
+                    <!--<p:message for="busca"/>-->
                 </h:panelGrid>
             </h:form>
         </div>

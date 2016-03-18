@@ -48,14 +48,7 @@ public class UsuarioDao {
         return usuarioRecuperado;
     }
     
-//    public List<Imovel> listarFavoritosIdUser(Usuario usuario) {
-//        Query query = manager.createQuery("Select i from Usuario u join u.imoveis i where u.id = :id");
-//        query.setParameter("id", usuario.getId());
-//        List<Imovel> imoveis = query.getResultList();
-//        return imoveis;
-//    }
-
     public void removerUsuario(Usuario usuario) {        
-        manager.remove(usuario);
+        manager.remove(manager.getReference(Usuario.class, usuario.getId()));
     }
 }

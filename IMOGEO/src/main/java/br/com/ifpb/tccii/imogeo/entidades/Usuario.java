@@ -19,6 +19,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -42,7 +43,9 @@ public class Usuario implements Serializable {
 //    
     @OneToMany(mappedBy="usuario", fetch= FetchType.EAGER, cascade= CascadeType.REMOVE)
     private List<Imovel> imoveis = new ArrayList<Imovel>();
-//
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private Imagem imagem;
 //    //rever as buscas pois ela tem atributos de valor localização e preço 
 //    @OneToMany(/*fetch= FetchType.EAGER,*/)
 //    private List<Imovel> procuras = new ArrayList<Imovel>();
@@ -72,6 +75,14 @@ public class Usuario implements Serializable {
    
     @Temporal(TemporalType.DATE)
     private Date dataCriacao = new Date();
+
+    public Imagem getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(Imagem imagem) {
+        this.imagem = imagem;
+    }
 
 //    public List<Qualificacao> getQualificacoes() {
 //        return qualificacoes;

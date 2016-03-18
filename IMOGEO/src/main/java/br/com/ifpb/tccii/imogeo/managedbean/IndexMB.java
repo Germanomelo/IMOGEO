@@ -35,6 +35,7 @@ import javax.faces.context.FacesContext;
 @ManagedBean(name = "indexMB")
 @ViewScoped
 public class IndexMB implements Serializable {
+
     private String loc;
     private double lat;
     private double log;
@@ -60,7 +61,7 @@ public class IndexMB implements Serializable {
 
     @EJB
     private UsuarioDao userDao;
-    
+
     @EJB
     private EnderecoDao enderecoDao;
 
@@ -75,49 +76,86 @@ public class IndexMB implements Serializable {
 
     public IndexMB() {
     }
-    
-    public Geometry geometriaLocalUser() throws ParseException{
-        Geometry g1 = new WKTReader().read(this.loc);
+
+    public Geometry geometriaLocalUser() {
+        Geometry g1 = null;
+        try {
+            g1 = new WKTReader().read(this.loc);
+        } catch (ParseException ex) {
+            this.mensagemErro("Erro!", ex.getMessage());
+        }
         return g1;
     }
-    
+
     public List<Endereco> enderecoPorLocalizacao() throws ParseException {
         List<Endereco> result = new ArrayList<Endereco>();
-        List<Endereco> enderecos = enderecoDao.listarEnderecosPorDistancia(this.loc, this.distancia);
-        for (int i = 0; i < enderecos.size(); i++) {
-            if (enderecos.get(i).getImovel().getAnuncio().getAnunciado() == true) {
-                result.add(enderecos.get(i));
+        List<Endereco> enderecos;
+        try {
+            enderecos = enderecoDao.listarEnderecosPorDistancia(this.loc, this.distancia);
+            for (int i = 0; i < enderecos.size(); i++) {
+                if (enderecos.get(i).getImovel().getAnuncio().getAnunciado() == true) {
+                    result.add(enderecos.get(i));
+                }
             }
+        } catch (Exception e) {
+            this.mensagemErro("Erro!", e.getMessage());
         }
+
         return result;
     }
-
-    public void buscarUsuario() {
-        this.user = userDao.listarUsuarioPorImovel(this.imovel);
-    }
+//
+//    public void buscarUsuario() {
+//        
+//        this.user = userDao.listarUsuarioPorImovel(this.imovel);
+//    }
 
     public List<Imovel> buscaAvançada() {
         return null;
     }
 
-    public List<Imovel> buscaSimplesDescricao() {
-        return imovelDao.listarSimplesDescricao(busca);
+    public List<Imovel> buscaSimplesPorPalavraChave() {
+        try {
+            return imovelDao.listarSimplesPorPalavraChave(busca);
+        } catch (Exception e) {
+            this.mensagemErro("Erro!", e.getMessage());
+        }
+        return null;
     }
 
     public List<Apartamento> listarApartamentosAnunciados() {
-        return aptoDao.listarApartamentosAnunciados();
+        try {
+            return aptoDao.listarApartamentosAnunciados();
+        } catch (Exception e) {
+            this.mensagemErro("Erro!", e.getMessage());
+        }
+        return null;
     }
 
     public List<Casa> listarCasasAnunciadas() {
-        return casaDao.listarCasasAnunciadas();
+        try {
+            return casaDao.listarCasasAnunciadas();
+        } catch (Exception e) {
+            this.mensagemErro("Erro!", e.getMessage());
+        }
+        return null;
     }
 
     public List<Imovel> listarImoveisAnunciados() {
-        return imovelDao.listarImoveisAnunciados();
+        try {
+            return imovelDao.listarImoveisAnunciados();
+        } catch (Exception e) {
+            this.mensagemErro("Erro!", e.getMessage());
+        }
+        return null;
     }
 
     public List listarImoveisFinalidadeAnunciados() {
-        return imovelDao.listarImoveisFinalidadeAnunciados(finalidade);
+        try {
+            return imovelDao.listarImoveisFinalidadeAnunciados(finalidade);
+        } catch (Exception e) {
+            this.mensagemErro("Erro!", e.getMessage());
+        }
+        return null;
     }
 
     public void detalhesImovel() {
@@ -126,17 +164,25 @@ public class IndexMB implements Serializable {
         } else if (this.imovel instanceof Apartamento) {
             this.detalhesApto();
         } else {
-            this.mensagemErro(null, "Erro ao ver informações de Imovél, tente novamente");
+            this.mensagemErro("Erro!", "Erro ao ver informações de Imovél, tente mais tarde");
         }
     }
 
     public void detalhesCasa() {
-        this.casa = casaDao.retornarCasa(this.imovel.getId());
+        try {
+            this.casa = casaDao.retornarCasa(this.imovel.getId());
+        } catch (Exception e) {
+            this.mensagemErro("Erro!", e.getMessage());
+        }
         this.telaDetalhesCasa();
     }
 
     public void detalhesApto() {
-        this.apto = aptoDao.retornarApartamento(this.imovel.getId());
+        try {
+            this.apto = aptoDao.retornarApartamento(this.imovel.getId());
+        } catch (Exception e) {
+            this.mensagemErro("Erro!", e.getMessage());
+        }
         this.telaDetalhesApto();
     }
 
@@ -150,7 +196,7 @@ public class IndexMB implements Serializable {
         this.exibeCasas = false;
         this.exibeImovelFinalidade = false;
         this.exibebuscaSimples = false;
-        this.tituloH3 ="Apartamento";
+        this.tituloH3 = "Apartamento";
         this.lat = this.apto.getEndereco().getLocalizacao().getCoordinate().x;
         this.log = this.apto.getEndereco().getLocalizacao().getCoordinate().y;
     }
@@ -165,7 +211,7 @@ public class IndexMB implements Serializable {
         this.exibeCasas = false;
         this.exibeImovelFinalidade = false;
         this.exibebuscaSimples = false;
-        this.tituloH3 ="Casa";
+        this.tituloH3 = "Casa";
         this.lat = this.casa.getEndereco().getLocalizacao().getCoordinate().x;
         this.log = this.casa.getEndereco().getLocalizacao().getCoordinate().y;
     }
@@ -180,7 +226,7 @@ public class IndexMB implements Serializable {
         this.exibeCasas = false;
         this.exibeImovelFinalidade = false;
         this.exibebuscaSimples = true;
-        this.tituloH3 ="Busca Simples";
+        this.tituloH3 = "Busca Simples";
     }
 
     public void telaExibeTodosImoveis() {
@@ -193,7 +239,7 @@ public class IndexMB implements Serializable {
         this.exibeCasas = false;
         this.exibeImovelFinalidade = false;
         this.exibebuscaSimples = false;
-        this.tituloH3 ="Imóveis";
+        this.tituloH3 = "Imóveis";
     }
 
     public void telaExibeCasas() {
@@ -206,7 +252,7 @@ public class IndexMB implements Serializable {
         this.exibeCasas = true;
         this.exibeImovelFinalidade = false;
         this.exibebuscaSimples = false;
-        this.tituloH3 ="Casas";
+        this.tituloH3 = "Casas";
     }
 
     public void telaExibeAptos() {
@@ -219,7 +265,7 @@ public class IndexMB implements Serializable {
         this.exibeCasas = false;
         this.exibeImovelFinalidade = false;
         this.exibebuscaSimples = false;
-        this.tituloH3 ="Apartamentos";
+        this.tituloH3 = "Apartamentos";
     }
 
     public void telaExibeImovelTemporada() {
@@ -233,7 +279,7 @@ public class IndexMB implements Serializable {
         this.exibeImovelFinalidade = true;
         this.exibebuscaSimples = false;
         this.finalidade = "TEMPORADA";
-        this.tituloH3 ="Temporada";
+        this.tituloH3 = "Temporada";
     }
 
     public void telaExibeImovelComprar() {
@@ -247,7 +293,7 @@ public class IndexMB implements Serializable {
         this.exibeImovelFinalidade = true;
         this.exibebuscaSimples = false;
         this.finalidade = "VENDER";
-        this.tituloH3 ="Comprar ";
+        this.tituloH3 = "Comprar ";
     }
 
     public void telaExibeImovelAlugar() {
@@ -261,10 +307,10 @@ public class IndexMB implements Serializable {
         this.exibeImovelFinalidade = true;
         this.exibebuscaSimples = false;
         this.finalidade = "ALUGAR";
-        this.tituloH3 ="Alugar";
+        this.tituloH3 = "Alugar";
     }
-    
-     public void telaResultadoPesquisaLocalizacao() {
+
+    public void telaResultadoPesquisaLocalizacao() {
         this.exibePesquisaLocalizacao = false;
         this.setExibeResultadoPesquisaLocalizacao(true);
         this.exibeDetalhesApto = false;
@@ -274,11 +320,11 @@ public class IndexMB implements Serializable {
         this.exibeCasas = false;
         this.exibeImovelFinalidade = false;
         this.exibebuscaSimples = false;
-        this.tituloH3 = "Raio de atuação da busca: "+ this.distancia + "Km";
+        this.tituloH3 = "Raio de atuação da busca: " + this.distancia + "Km";
     }
-     
-     public void telaPesquisaLocalizacao() {
-       this.exibePesquisaLocalizacao = true;
+
+    public void telaPesquisaLocalizacao() {
+        this.exibePesquisaLocalizacao = true;
         this.exibeResultadoPesquisaLocalizacao = false;
         this.exibeDetalhesApto = false;
         this.exibeDetalhesCasa = false;
@@ -456,19 +502,26 @@ public class IndexMB implements Serializable {
     public void setExibeResultadoPesquisaLocalizacao(boolean exibeResultadoPesquisaLocalizacao) {
         this.exibeResultadoPesquisaLocalizacao = exibeResultadoPesquisaLocalizacao;
     }
-    
-     public void mensagemInformativa(String destino, String msg) {
+
+//    Mensagens
+    public void mensagemInformativa(String titulo, String msg) {
         FacesContext fc = FacesContext.getCurrentInstance();
-        FacesMessage fm = new FacesMessage(msg);
+        FacesMessage fm = new FacesMessage(titulo, msg);
         fm.setSeverity(FacesMessage.SEVERITY_INFO);
-        fc.addMessage(destino, fm);
+        fc.addMessage(null, fm);
     }
 
-    public void mensagemErro(String destino, String msg) {
+    public void mensagemErro(String titulo, String msg) {
         FacesContext fc = FacesContext.getCurrentInstance();
-        FacesMessage fm = new FacesMessage(msg);
+        FacesMessage fm = new FacesMessage(titulo, msg);
         fm.setSeverity(FacesMessage.SEVERITY_ERROR);
-        fc.addMessage(destino, fm);
+        fc.addMessage(null, fm);
     }
 
+    public void mensagemAlerta(String titulo, String msg) {
+        FacesContext fc = FacesContext.getCurrentInstance();
+        FacesMessage fm = new FacesMessage(titulo, msg);
+        fm.setSeverity(FacesMessage.SEVERITY_WARN);
+        fc.addMessage(null, fm);
+    }
 }

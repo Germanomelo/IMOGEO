@@ -16,68 +16,70 @@
             </div>
         </div>
         <div id="principal" style="height: 530px">
+
+            <!--Logar-->
             <p:panel header="Já sou cliente" style="margin: 10px; float:left; height: 430px; width: 450px;">
-            <h:form >
-                <!--<h3>Já sou cliente</h3>-->
-                <p:messages globalOnly="true"/>
-                <h:panelGrid columns="3">
-                    <p:outputLabel value="Email:" for="email"/>
-                    <p:inputText id="email" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.email}" />
-                    <p:message for="email"/>
-                                        
-                    <p:outputLabel value="Senha:" for="senha"/>
-                    <p:password id="senha" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.senha}"/>
-                    <p:message for="senha"/>
-                    
-                    <h:commandButton value="Logar" action="#{usuarioMB.login()}" />
-                    
-                </h:panelGrid>
-            </h:form>
+                <h:form >
+                    <p:growl id="growl" showDetail="true" sticky="true" />  
+                    <h:panelGrid columns="3">
+                        <p:outputLabel value="Email:" for="email"/>
+                        <p:inputText id="email" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.email}" />
+                        <p:message for="email"/>
+
+                        <p:outputLabel value="Senha:" for="senha"/>
+                        <p:password id="senha" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.senha}"/>
+                        <p:message for="senha"/>
+
+                        <p:commandButton ajax="false" value="Logar" action="#{usuarioMB.login()}" />
+
+                    </h:panelGrid>
+                </h:form>
             </p:panel>
-             <p:panel header="Ainda não sou cliente" style=" margin: 10px; float:right; height: 430px; width: 450px;">
-            <h:form ><!--inicio cadastro-->
-                <!--<h3>Ainda não sou cliente</h3>-->
-                <h:panelGrid columns="3">
-                    <p:outputLabel value="Nome:" for="nome"/>
-                    <p:inputText id="nome" maxlength="50" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.nome}" />
-                    <p:message for="nome"/>
-                    
-                    <p:outputLabel value="Email:" for="email"/>
-                    <p:inputText id="email" maxlength="50" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.email}" />
-                    <p:message for="email"/>
-                    
-                    <p:outputLabel value="Data Nascimento:" for="datanasc"/>
-                    <p:calendar id="datanasc" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.dataNascimento}" locale="pt_BR" pattern="dd/MM/yyyy" />  
-                    <p:message for="datanasc"/>
-                    
-                    <p:outputLabel value="Senha:" for="senha1"/>
-                    <p:password id="senha1" maxlength="20" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.senha}"/>
-                    <p:message for="senha1"/>
-                    
-                    <p:outputLabel value="Confirme Senha:" for="senha2"/>
-                    <p:password id="senha2" maxlength="20" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.confirmeSenha}"/>
-                    <p:message for="senha2"/>
-                    
-                    <p:outputLabel value="CPF:" for="cpf"/>
-                    <p:inputMask id="cpf"  mask="999.999.999-99" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.cpf}" />
-                    <p:message for="cpf"/>
-                    
-                    <p:outputLabel value="Tel Residencial:" for="telresid"/>
-                    <p:inputMask id="telresid" mask="(99) 99999-9999" value="#{usuarioMB.usuario.telefoneResidencial}" />
-                    <p:message for="telresid"/>
-                    
-                    <p:outputLabel value="Tel Comercial:" for="telcom"/>
-                    <p:inputMask id="telcom" mask="(99) 99999-9999"  value="#{usuarioMB.usuario.telefoneComercial}" />
-                    <p:message for="telcom"/>
-                    
-                    <p:outputLabel value="Tel Celular:" for="telcel"/>
-                    <p:inputMask id="telcel" mask="(99) 99999-9999" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.telefoneCelular}" />
-                    <p:message for="telcel"/>
-                    
-                    <h:commandButton action="#{usuarioMB.cadastarUsuario()}" value="Cadastrar"/>
-                </h:panelGrid>
-            </h:form>
-             </p:panel>
+
+            <!--Cadastrar Usuario-->
+            <p:panel header="Ainda não sou cliente" style=" margin: 10px; float:right; height: 430px; width: 450px;">
+                <h:form >
+                    <h:panelGrid columns="3">
+                        <p:outputLabel value="Nome:" for="nome"/>
+                        <p:inputText id="nome" maxlength="50" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.nome}" />
+                        <p:message for="nome"/>
+
+                        <p:outputLabel value="Email:" for="email"/>
+                        <p:inputText id="email" maxlength="50" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.email}" />
+                        <p:message for="email"/>
+
+                        <p:outputLabel value="Senha:" for="senha1"/>
+                        <p:password id="senha1" maxlength="20" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.senha}"/>
+                        <p:message for="senha1"/>
+
+                        <p:outputLabel value="Confirme Senha:" for="senha2"/>
+                        <p:password id="senha2" maxlength="20" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.confirmeSenha}"/>
+                        <p:message for="senha2"/>
+
+                        <p:outputLabel value="Data Nascimento:" for="datanasc"/>
+                        <p:calendar id="datanasc" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.dataNascimento}" locale="pt_BR" pattern="dd/MM/yyyy" />  
+                        <p:message for="datanasc"/>
+
+                        <p:outputLabel value="CPF:" for="cpf"/>
+                        <p:inputMask id="cpf"  mask="999.999.999-99" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.cpf}" />
+                        <p:message for="cpf"/>
+
+                        <p:outputLabel value="Tel Residencial:" for="telresid"/>
+                        <p:inputMask id="telresid" mask="(99) 99999-9999" value="#{usuarioMB.usuario.telefoneResidencial}" />
+                        <p:message for="telresid"/>
+
+                        <p:outputLabel value="Tel Comercial:" for="telcom"/>
+                        <p:inputMask id="telcom" mask="(99) 99999-9999"  value="#{usuarioMB.usuario.telefoneComercial}" />
+                        <p:message for="telcom"/>
+
+                        <p:outputLabel value="Tel Celular:" for="telcel"/>
+                        <p:inputMask id="telcel" mask="(99) 99999-9999" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.telefoneCelular}" />
+                        <p:message for="telcel"/>
+
+                        <p:commandButton ajax="false" action="#{usuarioMB.cadastarUsuario()}" value="Cadastrar"/>
+                    </h:panelGrid>
+                </h:form>
+            </p:panel>
         </div><!--Principal-->
         <div id="rodape">
             <ui:include src="/template-rodape.xhtml"/>

@@ -8,15 +8,23 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-    <p:panel header="Imagens" style="float:right; width: 745px;">
+    <p:panel header="Contato" style="float:right; width: 330px; height: 254px">      
+        Nome: #{indexMB.casa.usuario.nome} <br/>
+        Email: #{indexMB.casa.usuario.email} <br/>
+        Telefone Comercial: #{indexMB.casa.usuario.telefoneComercial} <br/>
+        Telefone Residencial: #{indexMB.casa.usuario.telefoneResidencial} <br/>
+        Telefone Celular: #{indexMB.casa.usuario.telefoneCelular} <br/>  
+    </p:panel>
+    
+    <p:panel header="Imagens" style="float:right; width: 405px;">
         <p:lightBox styleClass="imagebox">  
             <h:outputLink value="../img/semimagem.png" title="imagem">  
                 <h:graphicImage value="/img/semimagem.png"/>  
             </h:outputLink>  
         </p:lightBox>
     </p:panel>
-    <p:panel header="Endereço" style="float:right; width: 368px; height: 350px">
-        <div>
+    
+    <p:panel header="Endereço" style="float:right; width: 330px; height: 350px">
             Rua: #{indexMB.casa.endereco.rua} <br/>
             Número: #{indexMB.casa.endereco.numero} <br/>
             Bairro: #{indexMB.casa.endereco.bairro} <br/>
@@ -24,10 +32,9 @@
             Estado: #{indexMB.casa.endereco.estado} <br/>
             CEP: #{indexMB.casa.endereco.cep} <br/>
             Complemento: #{indexMB.casa.endereco.complemento} <br/>
-        </div>
     </p:panel>
-    <p:panel header="Casa" style="float:right; width: 368px; height: 350px"> 
-        <div>
+    
+    <p:panel header="Informações" style="float:right; width: 405px; height: 350px"> 
             Finalidade: #{indexMB.casa.finalidade}<br/>
             Valor: <strong style="color: orange">R$#{indexMB.casa.valor}</strong><br/>
             Área Total m²: #{indexMB.casa.areaTotal}<br/>
@@ -43,7 +50,7 @@
             <h:outputLabel value=" Churrasqueira," rendered="#{indexMB.casa.churrasqueira}"/>
             <h:outputLabel value=" Jardim" rendered="#{indexMB.casa.jardim}"/><br/>
             Observação: #{indexMB.casa.observacao}<br/>
-        </div>
     </p:panel>
+    
 </ui:composition>
 

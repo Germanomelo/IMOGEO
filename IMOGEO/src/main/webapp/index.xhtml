@@ -7,6 +7,7 @@
       xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
         <title>IMOGEO</title>
+        <link rel="stylesheet" type="text/css" href="/IMOGEO/jsfcrud.jsf" />
         <link href="css/estilo.css" type="text/css" rel="stylesheet"/>
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
         <script type="text/javascript" src="js/localizacao.js"></script>
@@ -34,8 +35,19 @@
                 <h3>#{indexMB.tituloH3}</h3>
             </h:form>
 
+<!--
+            <h:form rendered="#indexMB.exibeDetalhesApto || indexMB.exibeDetalhesCasa}" style="float:right; width: 745px;">
+                <p:growl id="messages"/>
+                <p:menubar>
+                    <p:menuitem value="Quit" url="http://www.primefaces.org" icon="ui-icon-close" />
+                    <p:commandButton ajax="false" icon="ui-icon-heart" action="#" value="Favoritar"/>
+                    <p:commandButton ajax="false" icon="ui-icon-circle-minus" action="#" value="Desfavoritar"/>
+                </p:menubar>
+            </h:form>-->
+
+
             <!--busca simples-->
-            <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibebuscaSimples}" rows="6" value="#{indexMB.buscaSimplesDescricao()}" var="imovel">
+            <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibebuscaSimples}" rows="6" value="#{indexMB.buscaSimplesPorPalavraChave()}" var="imovel">
                 <p:column width="150">
                     <img width="150" height="150" src="img/semimagem.png"></img>
                 </p:column>
@@ -50,9 +62,9 @@
 
                     <h:form>
                         <p:growl id="messages" showDetail="true" />  
-                        <h:commandButton action="#{indexMB.detalhesImovel()}" value="Mais Detalhes" >
+                        <p:commandButton ajax="false" icon="ui-icon-newwin"  action="#{indexMB.detalhesImovel()}" value="Mais Detalhes" >
                             <f:setPropertyActionListener value="#{imovel}" target="#{indexMB.imovel}"/>
-                        </h:commandButton>
+                        </p:commandButton>
                     </h:form>
                 </p:column>
             </p:dataTable>
@@ -73,9 +85,9 @@
 
                     <h:form>
                         <p:growl id="messages" showDetail="true" />  
-                        <h:commandButton immediate="true" action="#{indexMB.detalhesImovel()}" value="Mais Detalhes" >
+                        <p:commandButton ajax="false" icon="ui-icon-newwin" action="#{indexMB.detalhesImovel()}" value="Mais Detalhes" >
                             <f:setPropertyActionListener value="#{imovel}" target="#{indexMB.imovel}"/>
-                        </h:commandButton>
+                        </p:commandButton>
                     </h:form>
                 </p:column>
             </p:dataTable>
@@ -96,9 +108,9 @@
 
                     <h:form>
                         <p:growl id="messages" showDetail="true" />  
-                        <h:commandButton action="#{indexMB.detalhesImovel()}" value="Mais Detalhes" >
+                        <p:commandButton ajax="false" icon="ui-icon-newwin" action="#{indexMB.detalhesImovel()}" value="Mais Detalhes" >
                             <f:setPropertyActionListener value="#{imovel}" target="#{indexMB.imovel}"/>
-                        </h:commandButton>
+                        </p:commandButton>
                     </h:form>
                 </p:column>
             </p:dataTable>
@@ -116,9 +128,9 @@
                     Área total m²: #{casa.areaTotal}, Área construida m²: #{casa.areaConstruida} <br/>
                     <h:form>
                         <p:growl id="messages" showDetail="true" />  
-                        <h:commandButton action="#{indexMB.detalhesCasa()}" value="Mais Detalhes" >
+                        <p:commandButton ajax="false" icon="ui-icon-newwin" action="#{indexMB.detalhesCasa()}" value="Mais Detalhes" >
                             <f:setPropertyActionListener value="#{casa}" target="#{indexMB.imovel}"/>
-                        </h:commandButton>
+                        </p:commandButton>
                     </h:form>
                 </p:column>
             </p:dataTable>
@@ -137,9 +149,9 @@
 
                     <h:form>
                         <p:growl id="messages" showDetail="true" />  
-                        <h:commandButton action="#{indexMB.detalhesApto()}" value="Mais Detalhes" >
+                        <p:commandButton ajax="false" icon="ui-icon-newwin" action="#{indexMB.detalhesApto()}" value="Mais Detalhes" >
                             <f:setPropertyActionListener value="#{apto}" target="#{indexMB.imovel}"/>
-                        </h:commandButton>
+                        </p:commandButton>
                     </h:form>
                 </p:column>
             </p:dataTable>
@@ -171,7 +183,7 @@
                         <h:inputText value="#{indexMB.distancia}" maxlength="3" required="true" requiredMessage="Campo Obrigatorio!"/>
                         <h:outputLabel value="Ponto:"/>
                         <h:inputText  id="loc" value="#{indexMB.loc}" required="true" requiredMessage="Campo Obrigatorio buscar localização"/>
-                        <h:commandButton value="Buscar" action="#{indexMB.telaResultadoPesquisaLocalizacao()}"/>
+                        <p:commandButton ajax="false" icon="ui-icon-search" value="Buscar" action="#{indexMB.telaResultadoPesquisaLocalizacao()}"/>
                         <h:message id="mloc" for="loc"/>
                     </h:panelGrid>
                 </h:form>
@@ -222,14 +234,14 @@
                     Área total m²: #{endereco.imovel.areaTotal}<br/> 
                     Área construida m²: #{endereco.imovel.areaConstruida} <br/>
                     Distância:
-                    <h:outputText value="#{indexMB.geometriaLocalUser().distance(endereco.localizacao)*111111.32}" >
+                    <h:outputText style="color: orange; font-weight: bold;" value="#{indexMB.geometriaLocalUser().distance(endereco.localizacao)*111111.32}" >
                         <f:convertNumber minFractionDigits="3" />
                     </h:outputText>
-                    metros
+                    <strong style="color: orange;">metros</strong>
                     <h:form>
-                        <h:commandButton action="#{indexMB.detalhesImovel()}" value="Mais Detalhes" >
+                        <p:commandButton ajax="false" icon="ui-icon-newwin" action="#{indexMB.detalhesImovel()}" value="Mais Detalhes" >
                             <f:setPropertyActionListener value="#{endereco.imovel}" target="#{indexMB.imovel}"/>
-                        </h:commandButton>
+                        </p:commandButton>
                     </h:form>
                 </p:column>
             </p:dataTable>          
@@ -241,5 +253,6 @@
             <ui:include src="/template-rodape.xhtml"/>
         </div>
     </h:body>
+
 </html>
 

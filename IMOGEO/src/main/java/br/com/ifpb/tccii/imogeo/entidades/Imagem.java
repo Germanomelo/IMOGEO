@@ -26,6 +26,7 @@ public class Imagem implements Serializable {
     private Long id;
 
     @Lob
+    @Column(columnDefinition = "LOMGBLOB")
     private byte[] foto;
     
     @Column(length=50)

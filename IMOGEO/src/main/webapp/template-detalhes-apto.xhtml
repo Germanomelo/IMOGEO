@@ -8,44 +8,57 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-    <p:panel header="Imagens" style="float:right; width: 745px;">
+    <!--    <p:panel header="Apartamento" style="float:right; width: 745px;">
+        </p:panel>-->
+
+    <p:panel header="Contato" style="float:right; width: 330px; height: 254px">    
+        Nome: #{indexMB.apto.usuario.nome} <br/>
+        Email: #{indexMB.apto.usuario.email} <br/>
+        Telefone Comercial: #{indexMB.apto.usuario.telefoneComercial} <br/>
+        Telefone Residencial: #{indexMB.apto.usuario.telefoneResidencial} <br/>
+        Telefone Celular: #{indexMB.apto.usuario.telefoneCelular} <br/>  
+    </p:panel>
+
+    <p:panel header="Imagens" style="float:right; width: 405px;">
         <p:lightBox styleClass="imagebox">  
             <h:outputLink value="../img/semimagem.png" title="imagem">  
                 <h:graphicImage value="/img/semimagem.png"/>  
             </h:outputLink>  
         </p:lightBox>
     </p:panel>
-    <p:panel header="Endereço" style="float:right; width: 368px; height: 350px">
-        <div>
-            Rua: #{indexMB.apto.endereco.rua} <br/>
-            Número: #{indexMB.apto.endereco.numero} <br/>
-            Bairro: #{indexMB.apto.endereco.bairro} <br/>
-            Cidade: #{indexMB.apto.endereco.cidade} <br/>
-            Estado: #{indexMB.apto.endereco.estado} <br/>
-            CEP: #{indexMB.apto.endereco.cep} <br/>
-            Complemento: #{indexMB.apto.endereco.complemento} <br/>
-        </div>
+    <!--    <p:galleria value="#imagesView.images}" var="image" panelWidth="500" panelHeight="313" showCaption="true">
+            <p:graphicImage name="/img/semimagem.png" alt="Image Description for #image}" title="#image}"/>
+        </p:galleria>-->
+
+    <p:panel header="Endereço" style="float:right; width: 330px; height: 350px">
+        Rua: #{indexMB.apto.endereco.rua} <br/>
+        Número: #{indexMB.apto.endereco.numero} <br/>
+        Bairro: #{indexMB.apto.endereco.bairro} <br/>
+        Cidade: #{indexMB.apto.endereco.cidade} <br/>
+        Estado: #{indexMB.apto.endereco.estado} <br/>
+        CEP: #{indexMB.apto.endereco.cep} <br/>
+        Complemento: #{indexMB.apto.endereco.complemento} <br/>   
     </p:panel>
-    <p:panel header="Apartamento" style="float:right; width: 368px; height: 350px"> 
-        <div>
-            Finalidade: #{indexMB.apto.finalidade}<br/>
-            Valor Imovél: <strong style="color: orange">R$#{indexMB.apto.valor}</strong><br/>
-            Valor Condominio: R$#{indexMB.apto.valor}<br/>
-            Área Total m²: #{indexMB.apto.areaTotal}<br/>
-            Área Construida m²: #{indexMB.apto.areaConstruida} <br/>
-            Quartos: value= #{indexMB.apto.quarto} <br/>
-            Suites: value= #{indexMB.apto.suite} <br/>
-            Andar: value= #{indexMB.apto.andar} <br/>
-            Vagas Garagem: #{indexMB.apto.vagaGaragem} <br/>
-            Banheiros Sociais: #{indexMB.apto.banheiroSocial} <br/>
-            Possui:
-            <h:outputLabel value=" Piscina," rendered="#{indexMB.apto.piscina}"/>
-            <h:outputLabel value=" Despenda," rendered="#{indexMB.apto.despensa}"/>
-            <h:outputLabel value=" Área de Serviço," rendered="#{indexMB.apto.areaServico}"/>
-            <h:outputLabel value=" Churrasqueira," rendered="#{indexMB.apto.churrasqueira}"/>
-            <h:outputLabel value=" Porteiro" rendered="#{indexMB.apto.porteiro}"/><br/>
-            Observação: #{indexMB.apto.observacao}<br/>
-        </div>
+
+    <p:panel header="Informações" style="float:right; width: 405px; height: 350px"> 
+        Finalidade: #{indexMB.apto.finalidade}<br/>
+        Valor Imovél: <strong style="color: orange">R$#{indexMB.apto.valor}</strong><br/>
+        Valor Condominio: R$#{indexMB.apto.valor}<br/>
+        Área Total m²: #{indexMB.apto.areaTotal}<br/>
+        Área Construida m²: #{indexMB.apto.areaConstruida} <br/>
+        Quartos: value: #{indexMB.apto.quarto} <br/>
+        Suites: value: #{indexMB.apto.suite} <br/>
+        Andar: value: #{indexMB.apto.andar} <br/>
+        Vagas Garagem: #{indexMB.apto.vagaGaragem} <br/>
+        Banheiros Sociais: #{indexMB.apto.banheiroSocial} <br/>
+        Possui:
+        <h:outputLabel value=" Piscina," rendered="#{indexMB.apto.piscina}"/>
+        <h:outputLabel value=" Despenda," rendered="#{indexMB.apto.despensa}"/>
+        <h:outputLabel value=" Área de Serviço," rendered="#{indexMB.apto.areaServico}"/>
+        <h:outputLabel value=" Churrasqueira," rendered="#{indexMB.apto.churrasqueira}"/>
+        <h:outputLabel value=" Porteiro" rendered="#{indexMB.apto.porteiro}"/><br/>
+        Observação: #{indexMB.apto.observacao}<br/>
     </p:panel>
+
 </ui:composition>
 

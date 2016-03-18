@@ -81,10 +81,12 @@
                     <div id="map_canvas" style="width: 710px; height: 450px;"/>
                 </h:form>
             </p:panel>
-            <h:form rendered="#{meusImoveisMB.excluirImovelPermission}">
-                <h:outputText value="Deseja realmente excluir este imóvel?"/><br/>
-                <h:commandButton  action="#{meusImoveisMB.removerImovel()}" value="Sim" />
-                <h:commandButton action="#{meusImoveisMB.telaExcluirImovelPemissaoFalse()}" value="Não" /><br/><br/>
+            
+            <!--excluir imovel-->
+            <h:form rendered="#{meusImoveisMB.excluirImovelPermission}" >
+                <h:outputText style="color: orangered; font-weight: bold;" value="Deseja realmente excluir este imóvel?"/><br/>
+                <p:commandButton ajax="false" icon="ui-icon-check" action="#{meusImoveisMB.removerImovel()}" value="Sim" />
+                <p:commandButton ajax="false" icon="ui-icon-close" action="#{meusImoveisMB.telaExcluirImovelPemissaoFalse()}" value="Não" /><br/><br/>
             </h:form>
             
             <!--Editar Apartamento-->
