@@ -9,28 +9,31 @@ import br.com.ifpb.tccii.imogeo.entidades.Imagem;
 import br.com.ifpb.tccii.imogeo.entidades.Usuario;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ImagemDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.UsuarioDao;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import org.primefaces.event.FileUploadEvent;
 
 /**
  *
- * @author Mano
+ * @author Germano
  */
 @ManagedBean(name = "usuarioMB")
 @SessionScoped
 public class UsuarioMB implements Serializable {
 
     //telas
-    private boolean exibePerfilUsuario = true;
+    private boolean exibePerfilUsuario = false;
     private boolean exibeEditarPerfilUsuario = false;
     private boolean exibeEditarSenhaUsuario = false;
     private boolean ExibeExcluirPerfilUsuario = false;
@@ -39,18 +42,20 @@ public class UsuarioMB implements Serializable {
     private String senhaAtual = null;
     private String novaSenha = null;
     private String confirmeSenha = null;
+
     private Usuario usuario = new Usuario();
     Criptografia crip = new Criptografia();
+    private Imagem imagem = new Imagem();
+    List<Imagem> imagens;
 
     @EJB
-    UsuarioDao users;
+    UsuarioDao usuarioDao;
 
     @EJB
     ImagemDao imagemDao;
 
-    private Imagem imagem = new Imagem();
-
-    public UsuarioMB() {
+    public UsuarioMB() {  
+        this.telaPerfilUsuario();
     }
 
     public String cadastarUsuario() {
@@ -58,7 +63,7 @@ public class UsuarioMB implements Serializable {
         if (this.confirmeSenha.equals(this.usuario.getSenha())) {
             try {
                 this.usuario.setSenha(this.crip.encriptar(this.usuario.getSenha()));
-                this.users.cadastrarUsuario(this.usuario);
+                this.usuarioDao.inserirUsuario(this.usuario);
                 this.setAtivo(true);
                 pagina = "minha-conta.jsf";
             } catch (Exception e) {
@@ -76,7 +81,7 @@ public class UsuarioMB implements Serializable {
         Usuario usuarioNovo = null;
         try {
             this.usuario.setSenha(crip.encriptar(this.usuario.getSenha()));
-            usuarioNovo = users.loginUsuarios(this.usuario);
+            usuarioNovo = usuarioDao.loginUsuario(this.usuario);
         } catch (Exception e) {
             this.mensagemAlerta("Alerta!", "Usuário e/ou Senha Inválidos.");
         }
@@ -90,7 +95,7 @@ public class UsuarioMB implements Serializable {
 
     public void atualizarUsuario() {
         try {
-            users.atualizarUsuario(usuario);
+            usuarioDao.atualizarUsuario(usuario);
         } catch (Exception e) {
             this.mensagemErro("Erro!", "Erro ao atualizar usuário.");
         }
@@ -102,7 +107,7 @@ public class UsuarioMB implements Serializable {
         if (this.novaSenha != null && (this.novaSenha.equals(this.confirmeSenha)) && this.crip.encriptar(this.senhaAtual).equals(this.usuario.getSenha())) {
             this.usuario.setSenha(this.crip.encriptar(novaSenha));
             try {
-                users.atualizarUsuario(usuario);
+                usuarioDao.atualizarUsuario(usuario);
             } catch (Exception e) {
                 this.mensagemErro("Erro!", e.getMessage());
             }
@@ -122,7 +127,7 @@ public class UsuarioMB implements Serializable {
 
     public String removerUsuario() {
         try {
-            users.removerUsuario(usuario);
+            usuarioDao.removerUsuario(usuario);
             setAtivo(false);
             this.usuario = new Usuario();
             this.mensagemInformativa("Sucesso!", "Usuário excluido com sucesso.");
@@ -146,6 +151,7 @@ public class UsuarioMB implements Serializable {
         this.exibeEditarPerfilUsuario = false;
         this.exibeEditarSenhaUsuario = false;
         this.ExibeExcluirPerfilUsuario = false;
+        this.ImagemUsuario();
     }
 
     public void telaEditarPerfilUsuario() {
@@ -170,6 +176,30 @@ public class UsuarioMB implements Serializable {
     }
 
     // Get e Set ----------------------------->>>>>>>>
+    public boolean isExibeEditarPerfilUsuario() {
+        return exibeEditarPerfilUsuario;
+    }
+
+    public void setExibeEditarPerfilUsuario(boolean exibeEditarPerfilUsuario) {
+        this.exibeEditarPerfilUsuario = exibeEditarPerfilUsuario;
+    }
+
+    public boolean isExibeExcluirPerfilUsuario() {
+        return ExibeExcluirPerfilUsuario;
+    }
+
+    public void setExibeExcluirPerfilUsuario(boolean ExibeExcluirPerfilUsuario) {
+        this.ExibeExcluirPerfilUsuario = ExibeExcluirPerfilUsuario;
+    }
+
+    public List<Imagem> getImagens() {
+        return imagens;
+    }
+
+    public void setImagens(List<Imagem> imagens) {
+        this.imagens = imagens;
+    }
+
     public boolean isExibePerfilUsuario() {
         return exibePerfilUsuario;
     }
@@ -257,22 +287,86 @@ public class UsuarioMB implements Serializable {
         }
     }
 
-//    Imagens
+//    imagens
+//    public void salvaFoto() {
+//        try {
+//            this.imagemDao.inserirImagem(this.imagem);
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        } finally {
+//            imagem = new Imagem();
+//            mensagemInformativa("Sucesso!","Imagem adicionada com sucesso.");
+//        }
+// 
+//    }
     public void processFileUpload(FileUploadEvent uploadEvent) {
         try {
-            imagem.setFoto(uploadEvent.getFile().getContents());
+            this.imagem.setFoto(uploadEvent.getFile().getContents());
+            this.imagem.setUsuario(this.usuario);
+            this.usuario.setImagem(this.imagem);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public void ImagemUsuario() {
+        try {
+            ServletContext sContext = (ServletContext) FacesContext
+                    .getCurrentInstance().getExternalContext().getContext();
+
+            this.imagem = this.imagemDao.listarImagensIdUsuario(this.usuario);
+            if(imagem.getFoto()==null){
+                mensagemErro("Erro", "foto nula");
+            }
+            //criar pasta
+            File folder = new File(sContext.getRealPath("/temp"));
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+
+                String nomeArquivo = this.imagem.getId() + ".jpg";
+                String arquivo = sContext.getRealPath("/temp") + File.separator
+                        + nomeArquivo;
+                criaArquivo(imagem.getFoto(), arquivo);
+            
         } catch (Exception ex) {
             ex.printStackTrace();
         }
 
     }
 
-    private void criaArquivo(byte[] bytes, String arquivo) throws IOException {
+//    public void listaFotosProduto() {
+//        try {
+//            ServletContext sContext = (ServletContext) FacesContext
+//                    .getCurrentInstance().getExternalContext().getContext();
+//
+//            imagens = imagemDao.listarImagensIdUsuario(usuario);
+//
+//            File folder = new File(sContext.getRealPath("/temp"));
+//            if (!folder.exists()) {
+//                folder.mkdirs();
+//            }
+//
+//            for (Imagem i : imagens) {
+//                String nomeArquivo = i.getId() + ".jpg";
+//                String arquivo = sContext.getRealPath("/temp") + File.separator
+//                        + nomeArquivo;
+//
+//                criaArquivo(i.getFoto(), arquivo);
+//            }
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//
+//    }
+
+    private void criaArquivo(byte[] bytes, String arquivo) {
         FileOutputStream fos;
 
         try {
             fos = new FileOutputStream(arquivo);
             fos.write(bytes);
+
             fos.flush();
             fos.close();
         } catch (FileNotFoundException ex) {

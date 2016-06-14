@@ -18,13 +18,13 @@ import javax.persistence.Entity;
 public class Casa extends Imovel{
     
     @Column(length=2)
-    private String quarto;
+    private int quarto;
     
     @Column(length=2)
-    private String suite;
+    private int suite;
     
     @Column(length=2)        
-    private String vagaGaragem;
+    private int vagaGaragem;
     
     @Column(length=2)        
     private String banheiroSocial;
@@ -39,27 +39,27 @@ public class Casa extends Imovel{
     
     private Boolean jardim = false;
 
-    public String getQuarto() {
+    public int getQuarto() {
         return quarto;
     }
 
-    public void setQuarto(String quarto) {
+    public void setQuarto(int quarto) {
         this.quarto = quarto;
     }
 
-    public String getSuite() {
+    public int getSuite() {
         return suite;
     }
 
-    public void setSuite(String suite) {
+    public void setSuite(int suite) {
         this.suite = suite;
     }
 
-    public String getVagaGaragem() {
+    public int getVagaGaragem() {
         return vagaGaragem;
     }
 
-    public void setVagaGaragem(String vagaGaragem) {
+    public void setVagaGaragem(int vagaGaragem) {
         this.vagaGaragem = vagaGaragem;
     }
 

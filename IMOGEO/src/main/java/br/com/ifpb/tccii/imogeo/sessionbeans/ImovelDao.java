@@ -15,7 +15,7 @@ import javax.persistence.Query;
 
 /**
  *
- * @author germano
+ * @author Germano
  */
 @Stateless
 public class ImovelDao {
@@ -46,7 +46,7 @@ public class ImovelDao {
         return imoveis;
     }
 
-    public List<Imovel> listarSimplesPorPalavraChave(String valor) {
+    public List<Imovel> listarImoveisPorPalavraChaveAnunciados(String valor) {
         StringBuilder sbValor = new StringBuilder();
         Query query = manager.createQuery("SELECT i FROM Imovel i WHERE i.observacao LIKE :valor OR i.endereco.bairro LIKE :valor OR i.endereco.rua LIKE :valor OR i.endereco.cidade LIKE :valor OR i.finalidade LIKE :valor");
         sbValor.append("%");
@@ -70,32 +70,21 @@ public class ImovelDao {
         return result;
     }
 
-    public List<Imovel> listarImoveisFinalidade(String finalidade) {
-        Query query = manager.createQuery("Select i from Imovel i where i.finalidade like :finalidade");
-        query.setParameter("finalidade", finalidade);
+    public List<Imovel> listarImoveisIdUser(Usuario usuario) {
+        Query query = manager.createQuery("Select i from Usuario u join u.imoveis i where u.id = :id");
+        query.setParameter("id", usuario.getId());
         List<Imovel> imoveis = query.getResultList();
         return imoveis;
     }
-
-    public List<Imovel> listarImoveisIdUser(Usuario usuario) {
-//        Query query = manager.createQuery("Select i from Imovel i");
-        Query query = manager.createQuery("Select i from Usuario u join u.imoveis i where u.id = :id");
-//        Query query = manager.createQuery("Select i from Usuario.imoveis i");
+    
+    public List<Imovel> listarImoveisFavoritos(Usuario usuario) {
+        Query query = manager.createQuery("Select f from Usuario u join u.favoritos f where u.id = :id");
         query.setParameter("id", usuario.getId());
         List<Imovel> imoveis = query.getResultList();
         return imoveis;
     }
 
-    public void inserirImovel(Imovel imovel) {
-        manager.persist(imovel);
-    }
-
-    public void atualizarImovel(Imovel imovel) {
-        manager.merge(imovel);
-    }
-
     public void removerImovel(Imovel imovel) {
-//        manager.flush();
         manager.remove(manager.getReference(Imovel.class, imovel.getId()));
     }
 

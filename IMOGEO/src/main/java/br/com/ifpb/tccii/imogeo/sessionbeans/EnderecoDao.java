@@ -18,7 +18,7 @@ import javax.persistence.Query;
 
 /**
  *
- * @author Mano
+ * @author Germano
  */
 @Stateless
 public class EnderecoDao {
@@ -44,29 +44,11 @@ public class EnderecoDao {
     }
     
      public List<Endereco> listarEnderecosPorDistancia(String ponto, int distancia) throws ParseException {
-//        double lat;
-//        double log;
         Query query = manager.createQuery("Select e from Endereco e WHERE ST_DISTANCE(GEOMFROMTEXT(:ponto), e.localizacao) * 111.32 <=:distancia");
-//        Query query = manager.createQuery("select e from Endereco i join i.endereco e ST_DISTANCE(:ponto, e.localizacao) * 111.32 <=:distancia");
-//        Query query = manager.createQuery("select i from Imovel i where ST_Distance_Sphere(GeomFromText(:ponto), GeomFromText(i.endereco.localizacao)) * 111.32 <=:distancia");
-//        Query query = manager.createQuery("select e from Endereco e where ST_Distance_Sphere(e.endereco.localizacao, ST_MakePoint(:log,:lat)) * 111.32 <=:distancia");
-//        Query query = manager.createQuery("select i from imovel i join i.endereco e ST_Distance(ST_Point(ST_X(ST_Centroid(e.localizacao)), ST_Y(ST_Centroid(e.localizacao))),ST_MakePoint(:log,:lat)) * 111.32 <=:distancia");
-//        Query query = manager.createQuery("select i from Imovel i where ST_INTERSERTS(ST_Point(ST_X(ST_Centroid(i.endereco.localizacao)), ST_Y(ST_Centroid(i.endereco.localizacao))), ST_BUFFER(ST_MakePoint(:log,:lat),:distancia,8))");
-//        Query query = manager.createQuery("select i from imovel i join i.endereco e ST_Distance(GeomFromText(:ponto), e.localizacao) * 111.32 <=:distancia");
-//        Query query = manager.createQuery("select i from imovel i join i.endereco e ST_Distance(GeomFromText(':ponto'), e.localizacao) * 111.32 <=:distancia");
-//        Query query = manager.createQuery("select i from imovel i join i.endereco e ST_Distance(GeomFromText(':ponto'), GeomFromText(e.localizacao)) * 111.32 <=:distancia");
-//        query.setParameter("distancia", distancia);
         Geometry g1 = new WKTReader().read(ponto);
-//        lat = g1.getCoordinate().x;
-//        log = g1.getCoordinate().y;
-//        local.getEndereco().setLocalizacao((Point) g1);
-//        query.setParameter("lat", lat);
-//        query.setParameter("log", log);
         query.setParameter("ponto", g1);
         query.setParameter("distancia", Double.parseDouble(String.valueOf(distancia)));
         List<Endereco> enderecos = query.getResultList();
-//        System.out.println(imoveis);
-//        g1.buffer(, distancia)
         return enderecos;
     }
     

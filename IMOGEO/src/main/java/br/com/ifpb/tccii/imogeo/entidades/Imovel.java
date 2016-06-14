@@ -54,10 +54,10 @@ public class Imovel implements Serializable {
     private String observacao;
     
     @Column( nullable = false, length=5)
-    private String areaTotal;
+    private int areaTotal;
     
     @Column(nullable = false, length=5)
-    private String areaConstruida;
+    private int areaConstruida;
     
     @Column(length = 10)
     private String finalidade;
@@ -102,19 +102,19 @@ public class Imovel implements Serializable {
         this.observacao = observacao;
     }
 
-    public String getAreaTotal() {
+    public int getAreaTotal() {
         return areaTotal;
     }
 
-    public void setAreaTotal(String areaTotal) {
+    public void setAreaTotal(int areaTotal) {
         this.areaTotal = areaTotal;
     }
 
-    public String getAreaConstruida() {
+    public int getAreaConstruida() {
         return areaConstruida;
     }
 
-    public void setAreaConstruida(String areaConstruida) {
+    public void setAreaConstruida(int areaConstruida) {
         this.areaConstruida = areaConstruida;
     }
 

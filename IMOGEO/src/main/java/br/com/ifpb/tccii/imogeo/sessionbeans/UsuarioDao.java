@@ -14,16 +14,15 @@ import javax.persistence.Query;
 
 /**
  *
- * @author Mano
+ * @author Germano
  */
 @Stateless
-//@RolesAllowed(value = "usuarioDao") 
 public class UsuarioDao {
 
     @PersistenceContext(unitName = "IMOGEOPU-JTA")
     private EntityManager manager;
 
-    public void cadastrarUsuario(Usuario usuario) {
+    public void inserirUsuario(Usuario usuario) {
         manager.persist(usuario);
     }
 
@@ -31,14 +30,18 @@ public class UsuarioDao {
         manager.merge(usuario);
     }
     
-      public Usuario listarUsuarioPorImovel(Imovel imovel) {
+    public void removerUsuario(Usuario usuario) {        
+        manager.remove(manager.getReference(Usuario.class, usuario.getId()));
+    }
+    
+      public Usuario usuarioPorImovel(Imovel imovel) {
         Query query = manager.createQuery("Select u from Imovel i join i.usuario u where i.id = :id");
         query.setParameter("id", imovel.getId());
         Usuario user = (Usuario) query.getSingleResult();
         return user;
     }
 
-    public Usuario loginUsuarios(Usuario usuario) {
+    public Usuario loginUsuario(Usuario usuario) {
         Usuario usuarioRecuperado = null;
             Query query = manager.createQuery("SELECT u FROM Usuario u WHERE u.email=:email and u.senha =:senha");
             query.setParameter("email", usuario.getEmail());
@@ -48,7 +51,4 @@ public class UsuarioDao {
         return usuarioRecuperado;
     }
     
-    public void removerUsuario(Usuario usuario) {        
-        manager.remove(manager.getReference(Usuario.class, usuario.getId()));
-    }
 }

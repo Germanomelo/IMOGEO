@@ -34,7 +34,7 @@ import javax.servlet.http.HttpSession;
 
 /**
  *
- * @author Mano
+ * @author Germano
  */
 //@Named(value = "meusImoveisMB")
 @ManagedBean(name = "meusImoveisMB")

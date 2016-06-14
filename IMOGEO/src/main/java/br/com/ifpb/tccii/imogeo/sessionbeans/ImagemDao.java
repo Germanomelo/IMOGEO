@@ -6,6 +6,7 @@ package br.com.ifpb.tccii.imogeo.sessionbeans;
 
 import br.com.ifpb.tccii.imogeo.entidades.Imagem;
 import br.com.ifpb.tccii.imogeo.entidades.Imovel;
+import br.com.ifpb.tccii.imogeo.entidades.Usuario;
 import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
@@ -14,7 +15,7 @@ import javax.persistence.Query;
 
 /**
  *
- * @author Mano
+ * @author Germano
  */
 @Stateless
 public class ImagemDao {
@@ -41,6 +42,13 @@ public class ImagemDao {
         query.setParameter("id", imovel.getId());
         List<Imagem> imagens = query.getResultList();
         return imagens;
+    }
+    
+    public Imagem listarImagensIdUsuario(Usuario usuario) {
+        Query query = manager.createQuery("Select img from Imovel i join i.imagens img where i.id = :id");
+        query.setParameter("id", usuario.getId());
+        Imagem image = (Imagem) query.getResultList();
+        return image;
     }
     
     public void inserirImagem(Imagem img) {

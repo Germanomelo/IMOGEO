@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
 
 /**
  *
@@ -34,6 +35,9 @@ public class Imagem implements Serializable {
 
     @ManyToOne
     private Imovel imovel;
+    
+    @OneToOne
+    private Usuario usuario;
 
     public Long getId() {
         return id;
@@ -65,6 +69,14 @@ public class Imagem implements Serializable {
 
     public void setImovel(Imovel imovel) {
         this.imovel = imovel;
+    }
+
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
     }
     
     @Override

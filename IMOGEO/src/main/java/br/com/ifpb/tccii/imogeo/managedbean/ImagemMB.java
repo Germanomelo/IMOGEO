@@ -23,7 +23,7 @@ import org.primefaces.event.FileUploadEvent;
 
 /**
  *
- * @author germano
+ * @author Germano
  */
 @ViewScoped
 @ManagedBean

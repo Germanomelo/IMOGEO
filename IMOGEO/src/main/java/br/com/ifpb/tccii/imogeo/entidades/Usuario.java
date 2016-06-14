@@ -17,6 +17,8 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
@@ -34,45 +36,46 @@ public class Usuario implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    
+
 //    @OneToMany(/*fetch= FetchType.EAGER,*/ cascade= CascadeType.REMOVE)
 //    private List<Qualificacao> qualificacoes = new ArrayList<Qualificacao>();
 //    
-    @ManyToMany
-    private List<Imovel> favoritos = new ArrayList<Imovel>();
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(name = " Imoveis_Favoritos",
+            joinColumns = @JoinColumn(name = " User_ID "),
+            inverseJoinColumns = @JoinColumn(name = " Imovel_ID "))
+    private List<Imovel> favoritos;
 //    
-    @OneToMany(mappedBy="usuario", fetch= FetchType.EAGER, cascade= CascadeType.REMOVE)
-    private List<Imovel> imoveis = new ArrayList<Imovel>();
+    @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    private List<Imovel> imoveis;
 
     @OneToOne(cascade = CascadeType.ALL)
     private Imagem imagem;
-//    //rever as buscas pois ela tem atributos de valor localização e preço 
-//    @OneToMany(/*fetch= FetchType.EAGER,*/)
-//    private List<Imovel> procuras = new ArrayList<Imovel>();
+
     @Column(nullable = false, length = 50)
     private String nome;
-    
+
     @Column(nullable = false, unique = true, length = 50)
     private String email;
-    
+
     @Column(nullable = false, length = 90)
     private String senha;
-   
+
     @Column(nullable = false, unique = true, length = 14)
     private String cpf;
-   
+
     @Temporal(TemporalType.DATE)
     private Date dataNascimento;
-   
+
     @Column(length = 15)
     private String telefoneResidencial;
-   
+
     @Column(length = 15)
     private String telefoneComercial;
-   
+
     @Column(length = 15)
     private String telefoneCelular;
-   
+
     @Temporal(TemporalType.DATE)
     private Date dataCriacao = new Date();
 
@@ -99,7 +102,7 @@ public class Usuario implements Serializable {
     public void setFavoritos(List<Imovel> favoritos) {
         this.favoritos = favoritos;
     }
-    
+
     public List<Imovel> getImoveis() {
         return imoveis;
     }
@@ -107,7 +110,7 @@ public class Usuario implements Serializable {
     public void setImoveis(List<Imovel> imoveis) {
         this.imoveis = imoveis;
     }
-    
+
     public Long getId() {
         return id;
     }
@@ -214,7 +217,7 @@ public class Usuario implements Serializable {
         }
         return true;
     }
-    
+
     @Override
     public String toString() {
         return "Entide.Usuario[ id=" + id + " nome=" + nome + " ]";

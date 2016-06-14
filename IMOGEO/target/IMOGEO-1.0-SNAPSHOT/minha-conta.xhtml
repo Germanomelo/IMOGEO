@@ -15,7 +15,7 @@
                 <ui:include src="/template-topo.xhtml"/>
             </div>
         </div>
-        <div id="principal" style="height: 530px">
+        <div id="principal" style="height: 650px">
             <h:form id="menulateral" style="height: 500px;">
                 <h:commandLink action="#{usuarioMB.telaPerfilUsuario()}" value="Perfil" styleClass="link"/>
                 <h:commandLink action="#{usuarioMB.telaEditarPerfilUsuario()}" value="Editar Perfil" styleClass="link"/>
@@ -29,10 +29,17 @@
             <!--Perfil-->
             <p:panel header="Perfil" rendered="#{usuarioMB.exibePerfilUsuario}" style="width: 745px; float: right">
                 <h:form >
-                    <p:growl id="growl" showDetail="true" sticky="true" />  
-                    <h:panelGrid>
-                        <img width="150" height="150" src="img/semimagem.png"></img>
-                    </h:panelGrid>
+
+                    <p:growl showDetail="true" sticky="true" />
+
+                    <p:panel style="width:175px; height:165px;">
+                        <h:graphicImage value="img/foto_user.png" width="150"
+                                        height="150" alt="#{usuarioMB.imagem.descricao}" />
+                    </p:panel>
+                    <!--                url="/temp/#{usuarioMB.imagem.id}.jpg"    <h:panelGrid>
+                                            <img width="150" height="150" src="img/loading.gif"></img>
+                                        </h:panelGrid>            -->
+
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Nome:" for="nome"/>
                         <p:outputLabel id="nome" value="#{usuarioMB.usuario.nome}" />
@@ -66,7 +73,16 @@
             <!--Editar Perfil-->
             <p:panel header="Editar Perfil" rendered="#{usuarioMB.editarPerfilUsuario}" style="width: 745px; float: right">
                 <h:form >
-                    <p:growl id="growl" showDetail="true" sticky="true" />  
+                    <p:growl id="messages" showDetail="true" sticky="true" />  
+                    <h:panelGrid id="infoFoto" columns="2">
+                        <h:outputText value="Foto: " />
+                        <p:fileUpload fileUploadListener="#{usuarioMB.processFileUpload}" mode="advanced" dragDropSupport="false"
+                                      update="messages" sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />         
+                        <h:outputText value="Descrição: " />
+                        <p:inputText value="#{usuarioMB.imagem.descricao}" />
+                        <!--<p:commandButton ajax="false" icon="ui-icon-plus" action="#usuarioMB.salvaFoto()}" value="Adicionar foto"/>-->
+                    </h:panelGrid>
+                    <p:separator/>
                     <h:panelGrid columns="3">
                         <p:outputLabel value="Nome:" for="nome"/>
                         <p:inputText id="nome" maxlength="50" required="true" requiredMessage="Campo Obrigatorio!" value="#{usuarioMB.usuario.nome}" />
@@ -101,10 +117,12 @@
                         <p:message for="dtc"/>
 
                         <p:commandButton ajax="false" icon="ui-icon-refresh" action="#{usuarioMB.atualizarUsuario()}" value="Atualizar"/>
+
                     </h:panelGrid>
                 </h:form>
             </p:panel>
 
+            <!--Editar senha-->
             <p:panel header="Editar Senha" rendered="#{usuarioMB.exibeEditarSenhaUsuario}" style="width: 745px; float: right">
                 <h:form >
                     <p:growl id="growl" showDetail="true" sticky="true" />  
@@ -128,7 +146,7 @@
 
             <!--Excluir conta-->
             <p:panel header="Excluir Conta" rendered="#{usuarioMB.excluirPerfilUsuario}" style="width: 745px; float: right">
-               <p:growl id="growl" showDetail="true" sticky="true" /> 
+                <p:growl id="growl" showDetail="true" sticky="true" /> 
                 <h:form >
                     <strong style="color: orangered;">
                         <p>Se excluir sua conta todos seu dados serão apagados permanentemente da base de dados.</p>

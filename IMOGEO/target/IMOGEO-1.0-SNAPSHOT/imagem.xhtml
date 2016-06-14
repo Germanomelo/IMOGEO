@@ -1,4 +1,4 @@
-<?xml version='1.0' encoding='UTF-8' ?>
+<!--<?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
@@ -69,7 +69,7 @@
                 <h:outputText value="Nenhnuma imagem encontrada"
                     rendered="#mbProduto.fotos.size() == 0}" />
  
-<!--                <p:galleria var="f" value="#bProduto.fotos}" effect="slide"
+                <p:galleria var="f" value="#bProduto.fotos}" effect="slide"
                     effectSpeed="100" panelHeight="250" panelWidth="500"
                     frameHeight="70" frameWidth="160" filmstripPosition="bottom"
                     showOverlays="true">
@@ -78,9 +78,9 @@
                         height="250" />
                     <p:galleriaOverlay title="Descrição:">
                         <h:outputText value="#f.descricao}" />
-                    </p:galleriaOverlay>-->
+                    </p:galleriaOverlay>
  
-                <!--</p:galleria>-->
+                </p:galleria>
             </h:panelGrid>
         </p:dialog>
  
@@ -109,3 +109,63 @@
     </h:body>
 </html>
 
+ <p:panel header="Buscar Imovel por localização" rendered="#{indexMB.exibePesquisaLocalizacao}" style="width: 745px; float: right">
+                <h:form prependId="false"  >
+                    <p:tabView prependId="false">
+                        <p:tab title="Busca Simples" prependId="false">
+                            <h:panelGrid columns="2">
+
+                                <h:outputLabel value="Raio (Km):"/>
+                                <p:inputText value="#{indexMB.distancia}" maxlength="3" required="true" requiredMessage="Campo Obrigatorio!"/>
+                                
+                                <h:outputLabel value="Ponto:"/>
+                                <p:inputText  id="loc" value="#{indexMB.loc}" required="true" requiredMessage="Campo Obrigatorio buscar localização"/>
+                                <p:commandButton ajax="false" icon="ui-icon-search" value="Buscar" action="#{indexMB.telaResultadoPesquisaLocalizacao()}"/>
+                                <h:message id="mloc" for="loc"/>
+
+                            </h:panelGrid>
+                        </p:tab> 
+                        <p:tab title="Busca avançada" prependId="false">
+                            <h:panelGrid columns="2">
+                                <h:outputLabel value="Raio (Km):"/>
+                                <p:inputText value="#{indexMB.distancia}" maxlength="3" required="true" requiredMessage="Campo Obrigatorio!"/>
+
+                                <p:outputLabel value="Finalidade :" for="finalidade" />
+                                <p:selectOneMenu id="finalidade" value="#{indexMB.pesqFinalidade}">
+                                    <f:selectItem itemValue="TODOS" itemLabel="TODOS" />
+                                    <f:selectItem itemValue="ALUGAR" itemLabel="ALUGAR" />
+                                    <f:selectItem itemValue="VENDER" itemLabel="COMPRAR" />
+                                    <f:selectItem itemValue="TEMPORADA" itemLabel="TEMPORADA" />
+                                </p:selectOneMenu>
+
+                                <h:outputLabel value="Valor de R$:"/>
+                                <p:inputText value="#{indexMB.pesqValorDe}" type="number" maxlength="9"/>
+
+                                <h:outputLabel value="Valor até R$:"/>
+                                <p:inputText value="#{indexMB.pesqValorAte}" type="number" maxlength="9"/>
+
+                                <h:outputLabel value="Quartos:"/>
+                                <p:inputText value="#{indexMB.pesqQtdeQuarto}"   maxlength="2"/>
+
+                                <h:outputLabel value="Suites:"/>
+                                <p:inputText value="#{indexMB.pesqQtdeSuite}" type="number" maxlength="2"/>
+
+                                <h:outputLabel value="Área de m²:"/>
+                                <p:inputText value="#{indexMB.pesqAreaDe}" type="number" maxlength="9"/>
+
+                                <h:outputLabel value="Área até m²:"/>
+                                <p:inputText value="#{indexMB.pesqAreaAte}" type="number" maxlength="9"/>
+
+                                <h:outputLabel value="Vagas Garagem :"/>
+                                <p:inputText value="#{indexMB.pesqQtdeVagaGaragem}" type="number" maxlength="2"/>
+
+                                <h:outputLabel value="Ponto:"/>
+                                <p:inputText  id="loc2" value="#{indexMB.loc}" required="true" requiredMessage="Campo Obrigatorio buscar localização"/>
+                                <p:commandButton ajax="false" icon="ui-icon-search" value="Buscar" action="#{indexMB.telaResultadoPesquisaLocalizacao()}"/>
+                                <h:message id="mloc2" for="loc"/>
+                            </h:panelGrid>
+                        </p:tab>
+                    </p:tabView>
+                </h:form>
+                <div id="map-canvas" style="width: 700px; height: 350px;"></div>
+            </p:panel>-->

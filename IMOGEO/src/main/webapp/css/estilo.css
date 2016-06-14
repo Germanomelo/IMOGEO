@@ -10,11 +10,11 @@ root {
     display: block;
 
 }
-
-/*.ui-widget {  
-    font-size: 15px !important;  
-}  */
-
+.ui-widget {
+    font-size: 12px !important;
+    font-family: Verdana, Arial, Tahoma;
+    font-weight: light;
+}
 body{
     margin: 0px;
     font-family: Arial;
@@ -44,7 +44,7 @@ body{
     /*border: 1px solid black;*/
     float: left;
     margin-top: 5px;
-    width: 260px;
+    width: 320px;
     height: 60px;
     /*background: url("../img/imogeologop.png") no-repeat;*/
 
@@ -83,9 +83,9 @@ body{
     height: 27px;
     /*background: #dcdcdc;*/ 
     background: orange; 
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ececec', endColorstr='orange'); 
-    background: -webkit-gradient(linear, left top, left bottom, from(#ececec), to(orange));   
-    background: -moz-linear-gradient(top, #ececec, orange);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcd7b0', endColorstr='orange'); 
+    background: -webkit-gradient(linear, left top, left bottom, from(#fcd7b0), to(orange));   
+    background: -moz-linear-gradient(top, #fcd7b0, orange);
     /*background: -moz-linear-gradient(top, #ececec, orange);*/
     /*background: #00BFFF;*/
     /*border-right: 5px solid #00BFFF;*/
@@ -112,17 +112,21 @@ body{
 #principal h3{
     padding: 0px;
     line-height: 35px;
-    width: 748px;
+    width: 750px;
     /*height: 40px;*/
     /*margin-top: 10px;*/
     border: 1px solid gray;
-/*    border-left: 1px solid gray;
-    border-top: 1px solid gray;*/
+    /*    border-left: 1px solid gray;
+        border-top: 1px solid gray;*/
     float: right;
     margin: auto;
     text-align: center;
-    background-color: #dcdcdc;
-    border-radius: 10px 10px 10px 10px;
+    /*background-color: #dcdcdc;*/
+    background-color: orange;
+    border-radius: 5px 5px 5px 5px;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcd7b0', endColorstr='orange'); 
+    background: -webkit-gradient(linear, left top, left bottom, from(#fcd7b0), to(orange));   
+    background: -moz-linear-gradient(top, #fcd7b0, orange);
 }
 
 #principal{
