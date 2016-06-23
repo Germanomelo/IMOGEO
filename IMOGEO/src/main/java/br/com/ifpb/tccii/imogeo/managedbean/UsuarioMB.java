@@ -6,6 +6,7 @@ package br.com.ifpb.tccii.imogeo.managedbean;
 
 import br.com.ifpb.tccii.imogeo.criptografia.Criptografia;
 import br.com.ifpb.tccii.imogeo.entidades.Imagem;
+import br.com.ifpb.tccii.imogeo.entidades.Imovel;
 import br.com.ifpb.tccii.imogeo.entidades.Usuario;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ImagemDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.UsuarioDao;
@@ -14,6 +15,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -36,7 +38,7 @@ public class UsuarioMB implements Serializable {
     private boolean exibePerfilUsuario = false;
     private boolean exibeEditarPerfilUsuario = false;
     private boolean exibeEditarSenhaUsuario = false;
-    private boolean ExibeExcluirPerfilUsuario = false;
+    private boolean exibeExcluirPerfilUsuario = false;
     private boolean ativo = false;
     //senhas
     private String senhaAtual = null;
@@ -54,7 +56,7 @@ public class UsuarioMB implements Serializable {
     @EJB
     ImagemDao imagemDao;
 
-    public UsuarioMB() {  
+    public UsuarioMB() {
         this.telaPerfilUsuario();
     }
 
@@ -146,33 +148,40 @@ public class UsuarioMB implements Serializable {
     }
 
     // Telas ---------------------------->>>>>>>>
+    public void telaFavoritos() {
+        this.exibePerfilUsuario = false;
+        this.exibeEditarPerfilUsuario = false;
+        this.exibeEditarSenhaUsuario = false;
+        this.exibeExcluirPerfilUsuario = false;
+    }
+
     public void telaPerfilUsuario() {
         this.exibePerfilUsuario = true;
         this.exibeEditarPerfilUsuario = false;
         this.exibeEditarSenhaUsuario = false;
-        this.ExibeExcluirPerfilUsuario = false;
-        this.ImagemUsuario();
+        this.exibeExcluirPerfilUsuario = false;
+//        this.ImagemUsuario();
     }
 
     public void telaEditarPerfilUsuario() {
         this.exibePerfilUsuario = false;
         this.exibeEditarPerfilUsuario = true;
         this.exibeEditarSenhaUsuario = false;
-        this.ExibeExcluirPerfilUsuario = false;
+        this.exibeExcluirPerfilUsuario = false;
     }
 
     public void telaEditarSenhaUsuario() {
         this.exibePerfilUsuario = false;
         this.exibeEditarPerfilUsuario = false;
         this.exibeEditarSenhaUsuario = true;
-        this.ExibeExcluirPerfilUsuario = false;
+        this.exibeExcluirPerfilUsuario = false;
     }
 
     public void telaExcluirPerfilUsuario() {
         this.exibePerfilUsuario = false;
         this.exibeEditarPerfilUsuario = false;
         this.exibeEditarSenhaUsuario = false;
-        this.ExibeExcluirPerfilUsuario = true;
+        this.exibeExcluirPerfilUsuario = true;
     }
 
     // Get e Set ----------------------------->>>>>>>>
@@ -185,11 +194,11 @@ public class UsuarioMB implements Serializable {
     }
 
     public boolean isExibeExcluirPerfilUsuario() {
-        return ExibeExcluirPerfilUsuario;
+        return exibeExcluirPerfilUsuario;
     }
 
     public void setExibeExcluirPerfilUsuario(boolean ExibeExcluirPerfilUsuario) {
-        this.ExibeExcluirPerfilUsuario = ExibeExcluirPerfilUsuario;
+        this.exibeExcluirPerfilUsuario = ExibeExcluirPerfilUsuario;
     }
 
     public List<Imagem> getImagens() {
@@ -265,11 +274,11 @@ public class UsuarioMB implements Serializable {
     }
 
     public boolean isExcluirPerfilUsuario() {
-        return ExibeExcluirPerfilUsuario;
+        return exibeExcluirPerfilUsuario;
     }
 
     public void setExcluirPerfilUsuario(boolean excluirUsuario) {
-        this.ExibeExcluirPerfilUsuario = excluirUsuario;
+        this.exibeExcluirPerfilUsuario = excluirUsuario;
     }
 
     public boolean isAtivo() {
@@ -308,33 +317,32 @@ public class UsuarioMB implements Serializable {
             ex.printStackTrace();
         }
     }
-    
-    public void ImagemUsuario() {
-        try {
-            ServletContext sContext = (ServletContext) FacesContext
-                    .getCurrentInstance().getExternalContext().getContext();
 
-            this.imagem = this.imagemDao.listarImagensIdUsuario(this.usuario);
-            if(imagem.getFoto()==null){
-                mensagemErro("Erro", "foto nula");
-            }
-            //criar pasta
-            File folder = new File(sContext.getRealPath("/temp"));
-            if (!folder.exists()) {
-                folder.mkdirs();
-            }
-
-                String nomeArquivo = this.imagem.getId() + ".jpg";
-                String arquivo = sContext.getRealPath("/temp") + File.separator
-                        + nomeArquivo;
-                criaArquivo(imagem.getFoto(), arquivo);
-            
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-
-    }
-
+//    public void ImagemUsuario() {
+//        try {
+//            ServletContext sContext = (ServletContext) FacesContext
+//                    .getCurrentInstance().getExternalContext().getContext();
+//
+//            this.imagem = this.imagemDao.listarImagensIdUsuario(this.usuario);
+//            if(imagem.getFoto()==null){
+//                mensagemErro("Erro", "foto nula");
+//            }
+//            //criar pasta
+//            File folder = new File(sContext.getRealPath("/temp"));
+//            if (!folder.exists()) {
+//                folder.mkdirs();
+//            }
+//
+//                String nomeArquivo = this.imagem.getId() + ".jpg";
+//                String arquivo = sContext.getRealPath("/temp") + File.separator
+//                        + nomeArquivo;
+//                criaArquivo(imagem.getFoto(), arquivo);
+//            
+//        } catch (Exception ex) {
+//            ex.printStackTrace();
+//        }
+//
+//    }
 //    public void listaFotosProduto() {
 //        try {
 //            ServletContext sContext = (ServletContext) FacesContext
@@ -359,7 +367,6 @@ public class UsuarioMB implements Serializable {
 //        }
 //
 //    }
-
     private void criaArquivo(byte[] bytes, String arquivo) {
         FileOutputStream fos;
 

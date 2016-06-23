@@ -20,7 +20,7 @@
                 <ui:include src="/template-topo.xhtml"/>
             </div>
         </div>
-        <div id="principal" style="height: 1050px">
+        <div id="principal" style="height: 1080px">
             <h:form id="menulateral">
                 <h:commandLink action="#{indexMB.telaExibeTodosImoveis()}" value="Todos Imóveis" styleClass="link"/>
                 <h:commandLink action="#{indexMB.telaExibeImovelAlugar()}" value="Alugar Imóvel" styleClass="link"/>
@@ -32,8 +32,8 @@
             </h:form>
 
             <h:form style=" float: right;  margin-right: -100px; margin-top: 43px;" rendered="#{(indexMB.userSession !=null) &amp;&amp; (indexMB.exibeDetalhesApto || indexMB.exibeDetalhesCasa)}">
-                <p:commandButton style="float: left;" rendered="#{!indexMB.favoritoExiste}" ajax="false" alt="Adicionar a favoritos" icon="ui-icon-plusthick" action="#"  value="Favoritos"/><br/>
-                <p:commandButton style="float: left;" rendered="#{indexMB.favoritoExiste}" ajax="false" alt="Remover de favoritos" icon="ui-icon-minusthick" action="#" value="Favoritos"/><br/>
+                <p:commandButton style="float: left;" rendered="#{!indexMB.favoritoExiste}" ajax="false" alt="Adicionar a favoritos" icon="ui-icon-plusthick" action="#{indexMB.inserirImovelFavorito()}"  value="Favoritos"/><br/>
+                <p:commandButton style="float: left;" rendered="#{indexMB.favoritoExiste}" ajax="false" alt="Remover de favoritos" icon="ui-icon-minusthick" action="#{indexMB.removerImovelFavorito()}" value="Favoritos"/><br/>
             </h:form>
 
             <h:form rendered="#{!indexMB.exibePesquisaLocalizacao}">
@@ -51,7 +51,7 @@
                     <h:outputLabel value="Apartamento" rendered="#{imovel.class.simpleName == 'Apartamento'}"/>
                     para #{imovel.finalidade}<br/>
                     #{imovel.endereco.bairro}, #{imovel.endereco.cidade}, #{imovel.endereco.estado}<br/>
-                    Valor: <strong style="color:orange ">R$ #{imovel.valor}</strong><br/>
+                    Valor: <strong style="color:orange ">R$ #{imovel.mascaraValor}</strong><br/>
                     Área total m²: #{imovel.areaTotal}, Área construida m²: #{imovel.areaConstruida} <br/>
 
                     <h:form>
@@ -74,7 +74,7 @@
                     <h:outputLabel value="Apartamento" rendered="#{imovel.class.simpleName == 'Apartamento'}"/>
                     para #{imovel.finalidade}<br/>
                     #{imovel.endereco.bairro}, #{imovel.endereco.cidade}, #{imovel.endereco.estado}<br/>
-                    Valor: <strong style="color:orange ">R$ #{imovel.valor}</strong><br/>
+                    Valor: <strong style="color:orange ">R$ #{imovel.mascaraValor}</strong><br/>
                     Área total m²: #{imovel.areaTotal}, Área construida m²: #{imovel.areaConstruida} <br/>
 
                     <h:form>
@@ -97,7 +97,7 @@
                     <h:outputLabel value="Apartamento" rendered="#{imovel.class.simpleName == 'Apartamento'}"/>
                     para #{imovel.finalidade}<br/>
                     #{imovel.endereco.bairro}, #{imovel.endereco.cidade}, #{imovel.endereco.estado}<br/>
-                    Valor: <strong style="color:orange ">R$ #{imovel.valor}</strong><br/>
+                    Valor: <strong style="color:orange ">R$ #{imovel.mascaraValor}</strong><br/>
                     Área total m²: #{imovel.areaTotal}, Área construida m²: #{imovel.areaConstruida} <br/>
 
                     <h:form>
@@ -118,7 +118,7 @@
                 <p:column>
                     Casa para #{casa.finalidade}<br/>
                     #{casa.endereco.bairro}, #{casa.endereco.cidade}, #{casa.endereco.estado}<br/>
-                    Valor: <strong style="color:orange ">R$ #{casa.valor}</strong><br/>
+                    Valor: <strong style="color:orange ">R$ #{casa.mascaraValor}</strong><br/>
                     Área total m²: #{casa.areaTotal}, Área construida m²: #{casa.areaConstruida} <br/>
                     <h:form>
                         <p:growl id="messages" showDetail="true" />  
@@ -138,7 +138,7 @@
                 <p:column >
                     Apartamento para #{apto.finalidade}<br/>
                     #{apto.endereco.bairro}, #{apto.endereco.cidade}, #{apto.endereco.estado}<br/>
-                    Valor: <strong style="color:orange ">R$#{apto.valor}</strong><br/>
+                    Valor: <strong style="color:orange ">R$#{apto.mascaraValor}</strong><br/>
                     Área total m²: #{apto.areaTotal}, Área construida m²: #{apto.areaConstruida} <br/>
 
                     <h:form>
@@ -273,7 +273,7 @@
                     <h:outputLabel value="Apartamento" rendered="#{endereco.imovel.class.simpleName == 'Apartamento'}"/>
                     para #{endereco.imovel.finalidade}<br/>
                     #{endereco.bairro}, #{endereco.cidade}, #{endereco.estado}<br/>
-                    Valor: <strong style="color: orange">R$#{endereco.imovel.valor}</strong><br/>
+                    Valor: <strong style="color: orange">R$#{endereco.imovel.mascaraValor}</strong><br/>
                     Área total m²: #{endereco.imovel.areaTotal}<br/> 
                     Área construida m²: #{endereco.imovel.areaConstruida} <br/>
                     Distância:

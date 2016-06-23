@@ -215,32 +215,45 @@ public class IndexMB implements Serializable {
 
     public boolean isFavoritoExiste() {
         boolean status = false;
-        System.out.println("Entrou!!!!");
 
         if (userSession != null) {
-            System.out.println("Existe usuario na sessão!!!!");
-
             this.favoritos = imovelDao.listarImoveisFavoritos(this.userSession);
+            System.out.println("tamanho do array favoritos "+this.favoritos.size());
             for (int i = 0; i < this.favoritos.size(); i++) {
-                if (this.favoritos.get(i).getId() == this.imovel.getId()) {
+                if (this.favoritos.get(i).getId()== this.imovel.getId()) {
                     status = true;
-                    System.out.println("imovel ja existe em favoritos");
+//                    System.out.println("id imovel "+this.favoritos.get(i).getId());
+//                    System.out.println("id usuario "+this.userSession.getId());
                 }
             }
         }
         return status;
     }
 
-    public void inserirFavoritos() {
+    public void inserirImovelFavorito() {
         if (this.exibeDetalhesApto) {
             this.favoritos.add(this.apto);
         } else if (this.exibeDetalhesCasa) {
             this.favoritos.add(this.casa);
         } else {
-            mensagemErro("Erro!", "erro ao tentar inserir favoritos");
+            mensagemErro("Erro!", "erro ao tentar inserir imóvel a favoritos");
         }
         this.userSession.setFavoritos(this.favoritos);
         userDao.atualizarUsuario(this.userSession);
+    }
+    
+     public void removerImovelFavorito() {
+        Imovel imv = null;
+         if (this.exibeDetalhesApto) {
+             imv = this.apto;
+        } else if (this.exibeDetalhesCasa) {
+            imv = this.casa;
+        } else {
+            mensagemErro("Erro!", "erro ao tentar remover imóvel de favoritos");
+        }
+         userDao.removerElemetoDaAssociacaoImoveisFavoritos(this.userSession,imv );
+//        this.userSession.setFavoritos(this.favoritos);
+//        userDao.atualizarUsuario(this.userSession);
     }
 
     public List<Imovel> buscaSimplesPorPalavraChave() {

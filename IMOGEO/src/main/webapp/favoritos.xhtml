@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Favoritos</title>
+        <link href="css/estilo.css" type="text/css" rel="stylesheet"/>
+         <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyDp7RiKkRTRQhkJNXz6i9vht4S-9eOcuGc"></script>
+        <script type="text/javascript" src="js/maps_detalhes_imovel_marker.js"></script>
+    </h:head>
+    <h:body>
+        <div id="topo">
+            <div id ="topoconteudo">
+                <ui:include src="/template-topo.xhtml"/>
+            </div>
+        </div>
+        <div id="principal" style="height: 1000px">
+            <h:form id="menulateral" style="height: 500px;">
+                <h:commandLink action="#{usuarioMB.telaPerfilUsuario()}" value="Perfil" styleClass="link"/>
+                <h:commandLink action="#{usuarioMB.telaEditarPerfilUsuario()}" value="Editar Perfil" styleClass="link"/>
+                <h:commandLink action="#{usuarioMB.telaEditarSenhaUsuario()}" value="Editar Senha" styleClass="link"/>
+                <h:commandLink action="meus-imoveis.jsf" value="Meus imoveis" styleClass="link"/>
+                <h:commandLink action="#" value="Receber Notificações" styleClass="link"/>
+                <h:commandLink action="#{imoveisFavoritosMB.telaExibeFavoritos()}" value="Favoritos" styleClass="link"/>
+                <h:commandLink action="#{usuarioMB.telaExcluirPerfilUsuario()}" value="Excluir Conta" styleClass="link"/>
+
+            </h:form>
+
+            <h:form style=" float: right;  margin-right: -100px; margin-top: 43px;" rendered="#{imoveisFavoritosMB.exibeDetalhesApto || imoveisFavoritosMB.exibeDetalhesCasa}">
+                <p:commandButton style="float: left;" ajax="false" alt="Remover de favoritos" icon="ui-icon-minusthick" action="#{imoveisFavoritosMB.removerImovelFavoritos()}" value="Favoritos"/><br/>
+            </h:form>
+            
+            <h3>#{imoveisFavoritosMB.titulo}</h3>
+            <!--Favoritos-->
+            <p:dataTable styleClass="tabela" paginator="true" rendered="#{imoveisFavoritosMB.exibeFavoritos}" rows="3" value="#{imoveisFavoritosMB.buscaFavoritos()}" var="imovel">
+                <p:column width="150">
+                    <img width="150" height="150" src="img/semimagem.png"></img>
+                </p:column>
+
+                <p:column >
+                    <h:outputLabel value="Casa" rendered="#imovel.class.simpleName == 'Casa'}"/>
+                    <h:outputLabel value="Apartamento" rendered="#imovel.class.simpleName == 'Apartamento'}"/>
+                    para #{imovel.finalidade}<br/>
+                    #{imovel.endereco.bairro}, #{imovel.endereco.cidade}, #{imovel.endereco.estado}<br/>
+                    Valor: <strong style="color:orange ">R$ #{imovel.mascaraValor}</strong><br/>
+                    Área total m²: #{imovel.areaTotal}, Área construida m²: #{imovel.areaConstruida} <br/>
+
+                    <h:form>
+                        <p:growl id="messages" showDetail="true" />  
+                        <p:commandButton ajax="false" icon="ui-icon-newwin" action="#{imoveisFavoritosMB.detalhesImovel()}" value="Mais Detalhes" >
+                            <f:setPropertyActionListener value="#{imovel}" target="#{imoveisFavoritosMB.imovel}"/>
+                        </p:commandButton>
+                    </h:form>
+                </p:column>
+            </p:dataTable>
+            
+            <!--Detalhes casa-->
+            <h:form id="formdetalhescasa" rendered="#{imoveisFavoritosMB.exibeDetalhesCasa}">
+                <ui:include src="/template-detalhes-casa-favoritos.xhtml"/>
+            </h:form>
+
+            <!--Detalhes apto-->
+            <h:form id="formdetalhesapto" rendered="#{imoveisFavoritosMB.exibeDetalhesApto}">
+                <ui:include src="/template-detalhes-apto-favoritos.xhtml"/>
+            </h:form>
+            
+            <p:panel header="Localização" rendered="#{imoveisFavoritosMB.exibeDetalhesApto || imoveisFavoritosMB.exibeDetalhesCasa}" style="float:right; width: 745px;">
+                <h:form prependId="false">
+                    <h:inputText disabled="true" id="lat" value="#{imoveisFavoritosMB.lat}"/>
+                    <h:inputText disabled="true" id="log" value="#{imoveisFavoritosMB.log}"/>
+                </h:form>
+                <div id="map-canvas-loc" style="width: 710px; height: 270px"></div>
+            </p:panel>
+        </div>
+        <div id="rodape">
+            <ui:include src="template-rodape.xhtml"/>
+        </div>
+    </h:body>
+</html>
+

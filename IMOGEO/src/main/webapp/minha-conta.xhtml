@@ -22,6 +22,7 @@
                 <h:commandLink action="#{usuarioMB.telaEditarSenhaUsuario()}" value="Editar Senha" styleClass="link"/>
                 <h:commandLink action="meus-imoveis.jsf" value="Meus imoveis" styleClass="link"/>
                 <h:commandLink action="#" value="Receber Notificações" styleClass="link"/>
+                <h:commandLink action="favoritos.jsf" value="Favoritos" styleClass="link"/>
                 <h:commandLink action="#{usuarioMB.telaExcluirPerfilUsuario()}" value="Excluir Conta" styleClass="link"/>
 
             </h:form>
@@ -36,9 +37,6 @@
                         <h:graphicImage value="img/foto_user.png" width="150"
                                         height="150" alt="#{usuarioMB.imagem.descricao}" />
                     </p:panel>
-                    <!--                url="/temp/#{usuarioMB.imagem.id}.jpg"    <h:panelGrid>
-                                            <img width="150" height="150" src="img/loading.gif"></img>
-                                        </h:panelGrid>            -->
 
                     <h:panelGrid columns="2">
                         <p:outputLabel value="Nome:" for="nome"/>

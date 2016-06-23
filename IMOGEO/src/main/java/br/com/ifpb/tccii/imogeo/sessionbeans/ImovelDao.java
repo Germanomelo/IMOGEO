@@ -30,7 +30,6 @@ public class ImovelDao {
     public List<Imovel> listarImoveisAnunciados() {
         Query query = manager.createQuery("Select i from Imovel i");
         List<Imovel> imoveis = query.getResultList();
-//        query.setParameter("anunciado", true);
         List<Imovel> result = new ArrayList<Imovel>();
         for (int i = 0; i < imoveis.size(); i++) {
             if (imoveis.get(i).getAnuncio().getAnunciado() == true) {

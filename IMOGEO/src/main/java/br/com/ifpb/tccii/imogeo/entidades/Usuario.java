@@ -36,16 +36,13 @@ public class Usuario implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
-//    @OneToMany(/*fetch= FetchType.EAGER,*/ cascade= CascadeType.REMOVE)
-//    private List<Qualificacao> qualificacoes = new ArrayList<Qualificacao>();
-//    
+    
     @ManyToMany(cascade = CascadeType.ALL)
-    @JoinTable(name = " Imoveis_Favoritos",
-            joinColumns = @JoinColumn(name = " User_ID "),
-            inverseJoinColumns = @JoinColumn(name = " Imovel_ID "))
+    @JoinTable(name = "imoveis_Favoritos",
+            joinColumns ={@JoinColumn(name = "user_id")},
+            inverseJoinColumns = {@JoinColumn(name = "imovel_id")})
     private List<Imovel> favoritos;
-//    
+    
     @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Imovel> imoveis;
 
@@ -87,14 +84,6 @@ public class Usuario implements Serializable {
         this.imagem = imagem;
     }
 
-//    public List<Qualificacao> getQualificacoes() {
-//        return qualificacoes;
-//    }
-//
-//    public void setQualificacoes(List<Qualificacao> qualificacoes) {
-//        this.qualificacoes = qualificacoes;
-//    }
-//
     public List<Imovel> getFavoritos() {
         return favoritos;
     }

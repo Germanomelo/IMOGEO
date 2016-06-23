@@ -33,9 +33,7 @@ public class Autenticacao implements PhaseListener {
         String page = event.getFacesContext().getViewRoot().getViewId();
         //verificar as paginas de acesso
         if (usuario == null && !page.equals("/index.xhtml")
-                && !page.equals("/cadastro-login.xhtml")
-                && !page.equals("/imagem.xhtml")
-                && !page.equals("/newjsf.xhtml")) {
+                && !page.equals("/cadastro-login.xhtml")) {
             try {
                 FacesContext.getCurrentInstance().getExternalContext().redirect("cadastro-login.jsf");
             } catch (IOException ex) {

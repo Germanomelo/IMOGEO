@@ -17,15 +17,14 @@ import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 
-
-
 /**
  *
  * @author germano
  */
 @Entity
-@Inheritance(strategy= InheritanceType.JOINED)
+@Inheritance(strategy = InheritanceType.JOINED)
 public class Imovel implements Serializable {
+
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -34,31 +33,29 @@ public class Imovel implements Serializable {
 
 //    @OneToMany(fetch= FetchType.LAZY, cascade= CascadeType.REMOVE)
 //    private List<Comentario> comentarios = new ArrayList<Comentario>();
-    
     @OneToOne(cascade = CascadeType.ALL)
     private Endereco endereco;
-    
+
 //    @OneToMany(mappedBy="imovel", cascade= CascadeType.ALL)
 //    private List<Imagem> imagens = new ArrayList<Imagem>();
-    
     @Embedded
     private Anuncio anuncio;
-    
+
     @ManyToOne
     private Usuario usuario;
-  
-    @Column(nullable = false, precision=2)
+
+    @Column(nullable = false, precision = 2)
     private Double valor;
-    
-    @Column( columnDefinition="text")
+
+    @Column(columnDefinition = "text")
     private String observacao;
-    
-    @Column( nullable = false, length=5)
+
+    @Column(nullable = false, length = 5)
     private int areaTotal;
-    
-    @Column(nullable = false, length=5)
+
+    @Column(nullable = false, length = 5)
     private int areaConstruida;
-    
+
     @Column(length = 10)
     private String finalidade;
 
@@ -69,7 +66,7 @@ public class Imovel implements Serializable {
     public void setFinalidade(String finalidade) {
         this.finalidade = finalidade;
     }
-    
+
     public Usuario getUsuario() {
         return usuario;
     }
@@ -90,6 +87,24 @@ public class Imovel implements Serializable {
         return valor;
     }
 
+    public String getMascaraValor(){
+        StringBuilder masc = new StringBuilder();
+        masc.append(String.valueOf(valor));
+        int tam = masc.indexOf(".");
+        masc.delete(tam, tam+1);
+	masc.insert(tam, ",");
+        if (tam >= 4) {
+            int repet = tam / 3;
+            for (int i = 0; i < repet; i++) {
+                tam = tam - 3;
+
+                if (tam >= 1) {
+                    masc.insert(tam, ".");
+                }
+            }
+        }
+        return masc.toString();
+    }
     public void setValor(Double valor) {
         this.valor = valor;
     }
@@ -121,11 +136,9 @@ public class Imovel implements Serializable {
 //    public List<Comentario> getComentarios() {
 //        return comentarios;
 //    }
-
 //    public void setComentarios(List<Comentario> comentarios) {
 //        this.comentarios = comentarios;
 //    }
-
 //    public List<Imagem> getImagens() {
 //        return imagens;
 //    }
@@ -133,7 +146,6 @@ public class Imovel implements Serializable {
 //    public void setImagens(List<Imagem> imagens) {
 //        this.imagens = imagens;
 //    }
-
     public Anuncio getAnuncio() {
         return anuncio;
     }
@@ -172,7 +184,7 @@ public class Imovel implements Serializable {
 
     @Override
     public String toString() {
-        return "Entide.Imovel[ id=" + imovelId + " descrição: "+observacao+ " finalidade: "+finalidade+"]";
+        return "Entide.Imovel[ id=" + imovelId + " descrição: " + observacao + " finalidade: " + finalidade + "]";
     }
-    
+
 }

@@ -19,7 +19,7 @@
             <h:outputLabel value="Apartamento" rendered="#{imovel.class.simpleName == 'Apartamento'}"/>
             para #{imovel.finalidade}<br/>
             #{imovel.endereco.bairro}, #{imovel.endereco.cidade}, #{imovel.endereco.estado}<br/>
-            Valor: <strong style="color:orange ">R$ #{imovel.valor}</strong><br/>
+            Valor: <strong style="color:orange ">R$ #{imovel.mascaraValor}</strong><br/>
             Área total m²: #{imovel.areaTotal}, Área construida m²: #{imovel.areaConstruida} <br/>
             <h:outputLabel value="Imovél Anunciado" rendered="#{imovel.anuncio.anunciado}"/>
             <h:outputLabel value="Imovél Não Anunciado" rendered="#{!imovel.anuncio.anunciado}"/><br/>

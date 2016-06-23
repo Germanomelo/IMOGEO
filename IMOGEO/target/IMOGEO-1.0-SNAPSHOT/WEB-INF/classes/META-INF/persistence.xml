@@ -4,13 +4,12 @@
     <provider>org.hibernate.ejb.HibernatePersistence</provider>
     <jta-data-source>DataSourceIMOGEO</jta-data-source>
     <properties>
-        <property name="hibernate.hbm2ddl.auto" value="update"/>
+      <property name="hibernate.hbm2ddl.auto" value="update"/>
       <property name="hibernate.transaction.jta.platform" value="org.hibernate.service.jta.platform.internal.SunOneJtaPlatform"/>
       <property name="hibernate.archive.autodetection" value="class"/>
       <property name="hibernate.show_sql" value="false"/>
-      <property name="hibernate.format_sql" value="flase"/>
+      <property name="hibernate.format_sql" value="false"/>
       <property name="hibernate.dialect" value="org.hibernate.spatial.dialect.postgis.PostgisDialect"/>
-      <!--<property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQLDialect"/>-->
   </properties>
   </persistence-unit>
   <!--  <persistence-unit name="IMOGEOPU-RESOURCE_LOCAL" transaction-type="RESOURCE_LOCAL">

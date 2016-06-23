@@ -1,0 +1,56 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition
+    xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:ui="http://java.sun.com/jsf/facelets" 
+    xmlns:p="http://primefaces.org/ui"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:c="http://java.sun.com/jsp/jstl/core">
+
+    <p:panel header="Contato" style="float:right; width: 300px; height: 245px;">      
+        Nome: #{imoveisFavoritosMB.casa.usuario.nome} <br/>
+        Email: #{imoveisFavoritosMB.casa.usuario.email} <br/>
+        Telefone Comercial: #{imoveisFavoritosMB.casa.usuario.telefoneComercial} <br/>
+        Telefone Residencial: #{imoveisFavoritosMB.casa.usuario.telefoneResidencial} <br/>
+        Telefone Celular: #{imoveisFavoritosMB.casa.usuario.telefoneCelular} <br/>  
+    </p:panel>
+    
+    <p:panel header="Imagens" style="float:right; width: 439px; height: 245px;">
+        <p:lightBox styleClass="imagebox">  
+            <h:outputLink value="../img/semimagem.png" title="imagem">  
+                <h:graphicImage value="/img/semimagem.png"/>  
+            </h:outputLink>  
+        </p:lightBox>
+    </p:panel>
+    
+    <p:panel header="Endereço" style="float:right; width: 300px; ">
+            Rua: #{imoveisFavoritosMB.casa.endereco.rua} <br/>
+            Número: #{imoveisFavoritosMB.casa.endereco.numero} <br/>
+            Bairro: #{imoveisFavoritosMB.casa.endereco.bairro} <br/>
+            Cidade: #{imoveisFavoritosMB.casa.endereco.cidade} <br/>
+            Estado: #{imoveisFavoritosMB.casa.endereco.estado} <br/>
+            CEP: #{imoveisFavoritosMB.casa.endereco.cep} <br/>
+            Complemento: #{imoveisFavoritosMB.casa.endereco.complemento} <br/>
+    </p:panel>
+    
+    <p:panel header="Informações" style="float:right; width: 439px; "> 
+            Finalidade: #{imoveisFavoritosMB.casa.finalidade}<br/>
+            Valor: <strong style="color: orange">R$#{imoveisFavoritosMB.casa.mascaraValor}</strong><br/>
+            Área Total m²: #{imoveisFavoritosMB.casa.areaTotal}<br/>
+            Área Construida m²: #{imoveisFavoritosMB.casa.areaConstruida} <br/>
+            Quartos: #{imoveisFavoritosMB.casa.quarto} <br/>
+            Suites: #{imoveisFavoritosMB.casa.suite} <br/>
+            Vagas Garagem: #{imoveisFavoritosMB.casa.vagaGaragem} <br/>
+            Banheiros Sociais: #{imoveisFavoritosMB.casa.banheiroSocial} <br/>
+            Passui:
+            <h:outputLabel value=" Piscina," rendered="#{imoveisFavoritosMB.casa.piscina}"/>
+            <h:outputLabel value=" Despenda," rendered="#{imoveisFavoritosMB.casa.despensa}"/>
+            <h:outputLabel value=" Área de Serviço," rendered="#{imoveisFavoritosMB.casa.areaServico}"/>
+            <h:outputLabel value=" Churrasqueira," rendered="#{imoveisFavoritosMB.casa.churrasqueira}"/>
+            <h:outputLabel value=" Jardim" rendered="#{imoveisFavoritosMB.casa.jardim}"/><br/>
+            Observação: #{imoveisFavoritosMB.casa.observacao}<br/>
+    </p:panel>
+    
+</ui:composition>
+
