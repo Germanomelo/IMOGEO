@@ -97,6 +97,19 @@ public class ImoveisFavoritosMB implements Serializable {
     }
     
     public void removerImovelFavoritos(){
+        if(this.exibeDetalhesCasa){
+            for(Imovel n: this.favoritos){
+                if(n.getId() == this.casa.getId())
+                this.favoritos.remove(n); 
+            }
+        }else if(this.exibeDetalhesApto){
+            for(Imovel n: this.favoritos){
+                if(n.getId() == this.apto.getId())
+                this.favoritos.remove(n); 
+            }
+        }
+        this.userSession.setFavoritos(this.favoritos);
+        userDao.atualizarUsuario(userSession);
         this.telaExibeFavoritos();
     }
     

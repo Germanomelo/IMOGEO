@@ -104,28 +104,28 @@ public class IndexMB implements Serializable {
         } catch (ParseException ex) {
             this.mensagemErro("Erro!", ex.getMessage());
         }
-        float distacina = (float) (g1.distance(localizacaoImovel)*111111.32);
-        if(distacina >= 1000){
+        float distacina = (float) (g1.distance(localizacaoImovel) * 111111.32);
+        if (distacina >= 1000) {
             this.exibeMedidaDeDistanciaKm = true;
-            return distacina/1000;
-        }else{
+            return distacina / 1000;
+        } else {
             this.exibeMedidaDeDistanciaKm = false;
             return Math.round(distacina);
         }
-        
+
     }
-    
-    public List<Endereco> enderecoPorLocalizacao(){
-        if(this.exibeBuscaLocalizacaoAvancada){
+
+    public List<Endereco> enderecoPorLocalizacao() {
+        if (this.exibeBuscaLocalizacaoAvancada) {
             try {
                 return this.buscaAvancadaEnderecoPorLocalizacao();
             } catch (ParseException ex) {
                 Logger.getLogger(IndexMB.class.getName()).log(Level.SEVERE, null, ex);
             }
-        }else{
+        } else {
             return this.buscaSimplesEnderecoPorLocalizacao();
         }
-        
+
         return null;
     }
 
@@ -164,7 +164,7 @@ public class IndexMB implements Serializable {
                                                 }
                                             }
                                         }
-                                        if (("APTO".equals(this.getPesqTipo()) || "TODOS".equals(this.getPesqTipo())) && (imovelPesq instanceof  Apartamento)) {
+                                        if (("APTO".equals(this.getPesqTipo()) || "TODOS".equals(this.getPesqTipo())) && (imovelPesq instanceof Apartamento)) {
                                             aptoPesq = (Apartamento) imovelPesq;
                                             if ((this.getPesqQtdeQuarto() == 0) || (aptoPesq.getQuarto() == this.getPesqQtdeQuarto())) {
                                                 if ((this.getPesqQtdeSuite() == 0) || (aptoPesq.getSuite() == this.getPesqQtdeSuite())) {
@@ -190,11 +190,6 @@ public class IndexMB implements Serializable {
 
         return result;
     }
-//
-//    public void buscarUsuario() {
-//        
-//        this.user = userDao.usuarioPorImovel(this.imovel);
-//    }
 
     public List<Endereco> buscaSimplesEnderecoPorLocalizacao() {
         List<Endereco> result = new ArrayList<>();
@@ -218,12 +213,9 @@ public class IndexMB implements Serializable {
 
         if (userSession != null) {
             this.favoritos = imovelDao.listarImoveisFavoritos(this.userSession);
-            System.out.println("tamanho do array favoritos "+this.favoritos.size());
             for (int i = 0; i < this.favoritos.size(); i++) {
-                if (this.favoritos.get(i).getId()== this.imovel.getId()) {
+                if (this.favoritos.get(i).getId() == this.imovel.getId()) {
                     status = true;
-//                    System.out.println("id imovel "+this.favoritos.get(i).getId());
-//                    System.out.println("id usuario "+this.userSession.getId());
                 }
             }
         }
@@ -241,19 +233,32 @@ public class IndexMB implements Serializable {
         this.userSession.setFavoritos(this.favoritos);
         userDao.atualizarUsuario(this.userSession);
     }
-    
-     public void removerImovelFavorito() {
-        Imovel imv = null;
-         if (this.exibeDetalhesApto) {
-             imv = this.apto;
-        } else if (this.exibeDetalhesCasa) {
-            imv = this.casa;
+
+    public void removerImovelFavorito() {
+        System.out.println("tamanho do array favoritos " + this.favoritos.size());
+        if (this.exibeDetalhesCasa) {
+            for (int i = 0; i < this.favoritos.size(); i++) {
+                if (this.favoritos.get(i).getId() == this.casa.getId()) 
+                    this.favoritos.remove(i);
+                
+            }
+        } else if (this.exibeDetalhesApto) {
+            for (int i = 0; i < this.favoritos.size(); i++) {
+                if (this.favoritos.get(i).getId() == this.casa.getId()) 
+                    this.favoritos.remove(i);
+                
+            }
         } else {
             mensagemErro("Erro!", "erro ao tentar remover imóvel de favoritos");
         }
-         userDao.removerElemetoDaAssociacaoImoveisFavoritos(this.userSession,imv );
-//        this.userSession.setFavoritos(this.favoritos);
-//        userDao.atualizarUsuario(this.userSession);
+        this.userSession.setFavoritos(this.favoritos);
+        userDao.atualizarUsuario(userSession);
+        
+        if (this.exibeDetalhesApto) {
+            this.telaDetalhesApto();
+        } else {
+            this.telaDetalhesCasa();
+        }
     }
 
     public List<Imovel> buscaSimplesPorPalavraChave() {
@@ -498,11 +503,11 @@ public class IndexMB implements Serializable {
     public void telaBuscaLocalizacaoSimples() {
         this.exibeBuscaLocalizacaoAvancada = false;
     }
-    
-    public void telaMapMinhaLocalizacao(boolean status){
+
+    public void telaMapMinhaLocalizacao(boolean status) {
         this.exibeMapMinhaLocalizacao = status;
     }
-    
+
     public String getLoc() {
         return loc;
     }
@@ -788,8 +793,8 @@ public class IndexMB implements Serializable {
     public void setPesqTipo(String pesqTipo) {
         this.pesqTipo = pesqTipo;
     }
-    
-     public boolean isExibeMedidaDeDistanciaKm() {
+
+    public boolean isExibeMedidaDeDistanciaKm() {
         return exibeMedidaDeDistanciaKm;
     }
 
