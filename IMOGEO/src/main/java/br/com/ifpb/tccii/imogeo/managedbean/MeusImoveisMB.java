@@ -4,6 +4,7 @@
  */
 package br.com.ifpb.tccii.imogeo.managedbean;
 
+import br.com.ifpb.tccii.imogeo.entidades.Comentario;
 import br.com.ifpb.tccii.imogeo.entidades.Endereco;
 import br.com.ifpb.tccii.imogeo.entidades.Imagem;
 import br.com.ifpb.tccii.imogeo.entidades.Imovel;
@@ -12,6 +13,7 @@ import br.com.ifpb.tccii.imogeo.entidades.especializacao.Apartamento;
 import br.com.ifpb.tccii.imogeo.entidades.especializacao.Casa;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ApartamentoDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.CasaDao;
+import br.com.ifpb.tccii.imogeo.sessionbeans.ComentarioDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ImagemDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ImovelDao;
 import com.vividsolutions.jts.geom.Geometry;
@@ -19,6 +21,7 @@ import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
@@ -36,12 +39,12 @@ import javax.servlet.http.HttpSession;
  *
  * @author Germano
  */
-//@Named(value = "meusImoveisMB")
 @ManagedBean(name = "meusImoveisMB")
 @ViewScoped
 public class MeusImoveisMB implements Serializable {
 
     private String loc;
+    private String comentarioTxt;
     private double lat;
     private double log;
     private boolean excluirImovelPermission = false;
@@ -56,6 +59,8 @@ public class MeusImoveisMB implements Serializable {
     private boolean editarEnderecoCasa = false;
     private boolean editarEnderecoApto = false;
 
+    private Usuario userSession = new Usuario();
+    private Comentario comentario = new Comentario();
     private Casa casa = new Casa();
     private Apartamento apto = new Apartamento();
     private Imovel imovel = new Imovel();
@@ -69,9 +74,12 @@ public class MeusImoveisMB implements Serializable {
     @EJB
     private ApartamentoDao aptoDao;
     @EJB
-    private ImagemDao imagemDao;
+    private ComentarioDao comentarioDao;
+//    @EJB
+//    private ImagemDao imagemDao;
 
     public MeusImoveisMB() {
+        this.CapturaUsuarioSession();
     }
 
     public void telaListarImoveis() {
@@ -206,8 +214,7 @@ public class MeusImoveisMB implements Serializable {
     }
 
     public List<Imovel> getImoveisIdUser() {
-        Usuario user = getUsuarioSession();
-        return imovelDao.listarImoveisIdUser(user);
+        return imovelDao.listarImoveisIdUser(userSession);
     }
 
     public void removerImovel() {
@@ -229,19 +236,7 @@ public class MeusImoveisMB implements Serializable {
             this.mensagemErro("Erro!", "Erro ao editar Imóvel");
         }
     }
-//    public void editarImovel() {
-//        if (this.imovel instanceof Casa) {
-//            this.casa.setId(this.imovel.getId());
-//            this.casa = this.buscarCasaId();
-//            this.telaEditarCasa();
-//        } else if (this.imovel instanceof Apartamento) {
-//            this.apto.setId(this.imovel.getId());
-//            this.apto = this.buscarAptoId();
-//            this.telaEditarApartamento();
-//        } else {
-//            this.mensagemErro("Erro!", "Erro ao editar Imóvel, tente novamente");
-//        }
-//    }
+
     public void maisInformacoes() {
         if (this.imovel instanceof Casa) {
             this.casa = casaDao.retornarCasa(this.imovel.getId());
@@ -255,37 +250,33 @@ public class MeusImoveisMB implements Serializable {
 
     }
 
-//    public void desanunciarImovel() {
-//        if (this.imovel instanceof Casa) {
-//            Casa c = (Casa) this.imovel;
-//            this.casa = c;
-//            this.desanunciarCasa();
-//        } else if (this.imovel instanceof Apartamento) {
-//            Apartamento ap = (Apartamento) this.imovel;
-//            this.apto = ap;
-//            this.apto.getAnuncio().setAnunciado(false);
-//            this.atualizarApto();
-//        } else {
-//            this.mensagemErro("Erro!", "Erro ao desanunciar Imovél, tente novamente");
-//        }
-//        this.telaListarImoveis();
-//    }
-//    public void anunciarImovel() {
-//        if (this.imovel instanceof Casa) {
-//            Casa c = (Casa) this.imovel;
-//            this.casa = c;
-//            this.anunciarCasa();
-//        } else if (this.imovel instanceof Apartamento) {
-//            Apartamento ap = (Apartamento) this.imovel;
-//            this.apto = ap;
-//            this.apto.getAnuncio().setAnunciado(true);
-//            this.apto.getAnuncio().setDataPublicacao(new Date());
-//            this.atualizarApto();
-//        } else {
-//            this.mensagemErro("Erro!", "Erro ao anunciar Imovél, tente novamente");
-//        }
-//        this.telaListarImoveis();
-//    }
+    public void inserirComentario() {
+        Comentario c = new Comentario();
+        c.setComentario(this.comentarioTxt);
+        c.setDataComentario(new Date());
+        c.setUsuario(this.userSession);
+        if (this.informacoesCasa) {
+            c.setImovel(this.casa);
+        } else if (this.informacoesApto) {
+            c.setImovel(this.apto);
+        }
+        this.comentarioDao.inserirComentario(c);
+        this.comentarioTxt = "";
+    }
+
+    public List<Comentario> listarComentarios() {
+        List<Comentario> comentarios = new ArrayList<Comentario>();
+        if (informacoesCasa) {
+            comentarios = comentarioDao.listarComentariosIdImovel(this.casa);
+        } else if (informacoesApto) {
+            comentarios = comentarioDao.listarComentariosIdImovel(this.apto);
+        }
+        return comentarios;
+    }
+
+    public void removerComentario() {
+        comentarioDao.removerComentario(this.comentario);
+    }
 //    ----------------------------------------Casa--------------------------    
     public Casa buscarCasaId() {
         return casaDao.retornarCasa(casa.getId());
@@ -550,11 +541,34 @@ public class MeusImoveisMB implements Serializable {
         this.excluirImovelPermission = excluirImovelPermission;
     }
 
-    public Usuario getUsuarioSession() {
+    public Usuario getUserSession() {
+        return userSession;
+    }
+
+    public void setUserSession(Usuario userSession) {
+        this.userSession = userSession;
+    }
+
+    public void CapturaUsuarioSession() {
         HttpServletRequest request = (HttpServletRequest) FacesContext.getCurrentInstance().getExternalContext().getRequest();
         HttpSession session = request.getSession();
-        Usuario user = (Usuario) session.getAttribute("usuario");
-        return user;
+        this.userSession = (Usuario) session.getAttribute("usuario");
+    }
+
+    public String getComentarioTxt() {
+        return comentarioTxt;
+    }
+
+    public void setComentarioTxt(String comentarioTxt) {
+        this.comentarioTxt = comentarioTxt;
+    }
+
+    public Comentario getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(Comentario comentario) {
+        this.comentario = comentario;
     }
 
     //    Mensagens

@@ -18,7 +18,7 @@
                 <ui:include src="/template-topo.xhtml"/>
             </div>
         </div>
-        <div id="principal" style="height: 1180px;">
+        <div id="principal" style="height: 1200px;">
             <h:form id="menulateral" style="height: 1180px;">
                 <h:commandLink action="meus-imoveis.jsf" value="Meus imoveis" styleClass="link"/>
                 <h:commandLink action="add-casa.jsf" value="Cadastrar Casa" styleClass="link"/>
@@ -96,12 +96,12 @@
 
             <!--Informações Casa-->
             <h:form id="forminfocasa"  prependId="false" rendered="#{meusImoveisMB.informacoesCasa}"> 
-                <ui:include src="/template-informacoes-casa.xhtml"/>
+                <ui:include src="/template-detalhes-casa-meusimoveis.xhtml"/>
             </h:form>
 
             <!--Informações Apto-->
             <h:form id="forminfoapto"  rendered="#{meusImoveisMB.informacoesApto}"> 
-                <ui:include src="/template-informacoes-apto.xhtml"/>
+                <ui:include src="/template-detalhes-apto-meusimoveis.xhtml"/>
             </h:form>
 
             <!--Informações Localização-->
@@ -113,6 +113,34 @@
                 <div id="map-canvas-loc" style="width: 710px; height: 270px"></div>
             </p:panel>
 
+            <!--Comentários-->
+            <p:panel style="float:right; width: 745px;" header="Comentários" rendered="#{meusImoveisMB.informacoesCasa || meusImoveisMB.informacoesApto}">
+                <p:scrollPanel style="width:725px;height:185px">
+                <h:form >
+                    <h:panelGrid columns="3">
+                    <p:outputLabel value="Comentário:" for="comentario" />
+                    <p:inputTextarea id="comentario" value="#{meusImoveisMB.comentarioTxt}" maxlength="200" rows="2" cols="50"/>
+                    <p:commandButton ajax="false" value="Enviar" action="#{meusImoveisMB.inserirComentario()}" />
+                    </h:panelGrid>
+                </h:form>
+                
+                    <p:dataTable styleClass="tabela" style="width: 710px" value="#{meusImoveisMB.listarComentarios()}" var="comentario">
+                        <p:column style="width: 90px">
+                        #{comentario.usuario.nome} <br/>
+                        #{comentario.dataComentario}
+                    </p:column>
+                    <p:column>
+                        #{comentario.comentario} 
+                        <h:form style="float: right;" rendered="#{meusImoveisMB.userSession.id == comentario.usuario.id}">
+                        <p:growl id="messages" showDetail="true" />  
+                        <p:commandButton ajax="false" icon="ui-icon-trash"  action="#{meusImoveisMB.removerComentario()}" value="excluir" >
+                            <f:setPropertyActionListener value="#{comentario}" target="#{meusImoveisMB.comentario}"/>
+                        </p:commandButton>
+                    </h:form>
+                    </p:column>
+                </p:dataTable>
+                </p:scrollPanel>
+            </p:panel>
         </div><!--fim principal-->
 
         <div id="rodape">

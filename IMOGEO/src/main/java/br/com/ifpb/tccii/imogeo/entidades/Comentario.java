@@ -63,6 +63,23 @@ public class Comentario implements Serializable {
         this.dataComentario = dataComentario;
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    public Imovel getImovel() {
+        return imovel;
+    }
+
+    public void setImovel(Imovel imovel) {
+        this.imovel = imovel;
+    }
+
+    
     @Override
     public int hashCode() {
         int hash = 0;

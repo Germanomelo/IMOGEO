@@ -1,5 +1,6 @@
 package br.com.ifpb.tccii.imogeo.managedbean;
 
+import br.com.ifpb.tccii.imogeo.entidades.Comentario;
 import br.com.ifpb.tccii.imogeo.entidades.Endereco;
 import br.com.ifpb.tccii.imogeo.entidades.Imovel;
 import br.com.ifpb.tccii.imogeo.entidades.Usuario;
@@ -7,6 +8,7 @@ import br.com.ifpb.tccii.imogeo.entidades.especializacao.Apartamento;
 import br.com.ifpb.tccii.imogeo.entidades.especializacao.Casa;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ApartamentoDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.CasaDao;
+import br.com.ifpb.tccii.imogeo.sessionbeans.ComentarioDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.EnderecoDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ImovelDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.UsuarioDao;
@@ -16,6 +18,7 @@ import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKTReader;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -38,6 +41,7 @@ import javax.servlet.http.HttpSession;
 @ViewScoped
 public class IndexMB implements Serializable {
 
+    private String comentarioTxt;
     private String loc;
     private double lat;
     private double log;
@@ -51,7 +55,6 @@ public class IndexMB implements Serializable {
     private int pesqAreaAte = 0;
     private String pesqFinalidade = "TODOS";
     private String pesqTipo = "TODOS";
-
     private String tituloH3 = "Imóveis";
     private String finalidade = null;
     private boolean exibeTodosImoveis = true;
@@ -71,6 +74,7 @@ public class IndexMB implements Serializable {
 
     private String busca = null;
 
+    private Comentario comentario = new Comentario();
     private Casa casa = new Casa();
     private Imovel imovel = new Imovel();
     private Apartamento apto = new Apartamento();
@@ -93,6 +97,9 @@ public class IndexMB implements Serializable {
 
     @EJB
     private ApartamentoDao aptoDao;
+
+    @EJB
+    private ComentarioDao comentarioDao;
 
     public IndexMB() {
     }
@@ -235,25 +242,27 @@ public class IndexMB implements Serializable {
     }
 
     public void removerImovelFavorito() {
-        System.out.println("tamanho do array favoritos " + this.favoritos.size());
+//        System.out.println("tamanho do array favoritos " + this.favoritos.size());
         if (this.exibeDetalhesCasa) {
             for (int i = 0; i < this.favoritos.size(); i++) {
-                if (this.favoritos.get(i).getId() == this.casa.getId()) 
+                if (this.favoritos.get(i).getId() == this.casa.getId()) {
                     this.favoritos.remove(i);
-                
+                }
+
             }
         } else if (this.exibeDetalhesApto) {
             for (int i = 0; i < this.favoritos.size(); i++) {
-                if (this.favoritos.get(i).getId() == this.casa.getId()) 
+                if (this.favoritos.get(i).getId() == this.casa.getId()) {
                     this.favoritos.remove(i);
-                
+                }
+
             }
         } else {
             mensagemErro("Erro!", "erro ao tentar remover imóvel de favoritos");
         }
         this.userSession.setFavoritos(this.favoritos);
         userDao.atualizarUsuario(userSession);
-        
+
         if (this.exibeDetalhesApto) {
             this.telaDetalhesApto();
         } else {
@@ -342,6 +351,41 @@ public class IndexMB implements Serializable {
         this.telaDetalhesApto();
     }
 
+    public void inserirComentario() {
+        Comentario c = new Comentario();
+        c.setComentario(this.comentarioTxt);
+        c.setDataComentario(new Date());
+        c.setUsuario(userSession);
+        if (exibeDetalhesCasa) {
+            c.setImovel(this.casa);
+        } else if (exibeDetalhesApto) {
+            c.setImovel(this.apto);
+        }
+        this.comentarioDao.inserirComentario(c);
+        this.comentarioTxt = "";
+    }
+
+    public List<Comentario> listarComentarios() {
+        List<Comentario> comentarios = new ArrayList<Comentario>();
+        if (exibeDetalhesCasa) {
+            comentarios = comentarioDao.listarComentariosIdImovel(this.casa);
+        } else if (exibeDetalhesApto) {
+            comentarios = comentarioDao.listarComentariosIdImovel(this.apto);
+        }
+        return comentarios;
+    }
+
+    public void removerComentario() {
+        comentarioDao.removerComentario(this.comentario);
+    }
+
+    public void capturarUserSession() {
+        HttpSession session;
+        session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
+        this.userSession = (Usuario) session.getAttribute("usuario");
+    }
+    
+//    Telas de exibição
     public void telaDetalhesApto() {
         this.exibePesquisaLocalizacao = false;
         this.exibeResultadoPesquisaLocalizacao = false;
@@ -700,12 +744,6 @@ public class IndexMB implements Serializable {
         this.favoritos = favoritos;
     }
 
-    public void capturarUserSession() {
-        HttpSession session;
-        session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
-        this.userSession = (Usuario) session.getAttribute("usuario");
-    }
-
     public Usuario getUserSession() {
         return userSession;
     }
@@ -808,6 +846,22 @@ public class IndexMB implements Serializable {
 
     public void setExibeMapMinhaLocalizacao(boolean exibeMapMinhaLocalizacao) {
         this.exibeMapMinhaLocalizacao = exibeMapMinhaLocalizacao;
+    }
+
+    public String getComentarioTxt() {
+        return comentarioTxt;
+    }
+
+    public void setComentarioTxt(String comentarioTxt) {
+        this.comentarioTxt = comentarioTxt;
+    }
+
+    public Comentario getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(Comentario comentario) {
+        this.comentario = comentario;
     }
 
 //    Mensagens

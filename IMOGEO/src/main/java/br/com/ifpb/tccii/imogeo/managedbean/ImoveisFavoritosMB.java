@@ -5,15 +5,19 @@
  */
 package br.com.ifpb.tccii.imogeo.managedbean;
 
+import br.com.ifpb.tccii.imogeo.entidades.Comentario;
 import br.com.ifpb.tccii.imogeo.entidades.Imovel;
 import br.com.ifpb.tccii.imogeo.entidades.Usuario;
 import br.com.ifpb.tccii.imogeo.entidades.especializacao.Apartamento;
 import br.com.ifpb.tccii.imogeo.entidades.especializacao.Casa;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ApartamentoDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.CasaDao;
+import br.com.ifpb.tccii.imogeo.sessionbeans.ComentarioDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ImovelDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.UsuarioDao;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
@@ -34,6 +38,7 @@ public class ImoveisFavoritosMB implements Serializable {
     private boolean exibeDetalhesCasa = false;
     private boolean exibeDetalhesApto = false;
     private String titulo = "Favoritos";
+    private String comentarioTxt;
     private double lat;
     private double log;
     
@@ -45,12 +50,15 @@ public class ImoveisFavoritosMB implements Serializable {
     ApartamentoDao aptoDao;        
     @EJB
     CasaDao casaDao;
+    @EJB
+    ComentarioDao comentarioDao;
 
-    Usuario userSession;
-    List<Imovel> favoritos;
-    Casa casa;
-    Apartamento apto;
-    Imovel imovel;
+    private Usuario userSession = new Usuario();
+    private List<Imovel> favoritos;
+    private Casa casa = new Casa();
+    private Apartamento apto = new Apartamento();
+    private Imovel imovel = new Imovel();
+    private Comentario comentario = new Comentario();
 
     public ImoveisFavoritosMB() {
         this.capturarUserSession();
@@ -113,6 +121,34 @@ public class ImoveisFavoritosMB implements Serializable {
         this.telaExibeFavoritos();
     }
     
+    public void inserirComentario() {
+        Comentario c = new Comentario();
+        c.setComentario(this.comentarioTxt);
+        c.setDataComentario(new Date());
+        c.setUsuario(userSession);
+        if (exibeDetalhesCasa) {
+            c.setImovel(this.casa);
+        } else if (exibeDetalhesApto) {
+            c.setImovel(this.apto);
+        }
+        this.comentarioDao.inserirComentario(c);
+        this.comentarioTxt = "";
+    }
+
+    public List<Comentario> listarComentarios() {
+        List<Comentario> comentarios = new ArrayList<Comentario>();
+        if (exibeDetalhesCasa) {
+            comentarios = comentarioDao.listarComentariosIdImovel(this.casa);
+        } else if (exibeDetalhesApto) {
+            comentarios = comentarioDao.listarComentariosIdImovel(this.apto);
+        }
+        return comentarios;
+    }
+
+    public void removerComentario() {
+        comentarioDao.removerComentario(this.comentario);
+    }
+
 // telas de exibição
     public void telaExibeFavoritos(){     
         this.exibeFavoritos = true;
@@ -225,6 +261,22 @@ public class ImoveisFavoritosMB implements Serializable {
 
     public void setLog(double log) {
         this.log = log;
+    }
+
+    public String getComentarioTxt() {
+        return comentarioTxt;
+    }
+
+    public void setComentarioTxt(String comentarioTxt) {
+        this.comentarioTxt = comentarioTxt;
+    }
+
+    public Comentario getComentario() {
+        return comentario;
+    }
+
+    public void setComentario(Comentario comentario) {
+        this.comentario = comentario;
     }
     
     

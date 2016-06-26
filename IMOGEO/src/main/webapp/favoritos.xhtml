@@ -17,7 +17,7 @@
                 <ui:include src="/template-topo.xhtml"/>
             </div>
         </div>
-        <div id="principal" style="height: 1000px">
+        <div id="principal" style="height: 1050px">
             <h:form id="menulateral" style="height: 500px;">
                 <h:commandLink action="meus-imoveis.jsf" value="Meus imoveis" styleClass="link"/>
                 <h:commandLink action="add-casa.jsf" value="Cadastrar Casa" styleClass="link"/>
@@ -67,12 +67,42 @@
                 <ui:include src="/template-detalhes-apto-favoritos.xhtml"/>
             </h:form>
             
+            <!--Localização imovel-->
             <p:panel header="Localização" rendered="#{imoveisFavoritosMB.exibeDetalhesApto || imoveisFavoritosMB.exibeDetalhesCasa}" style="float:right; width: 745px;">
                 <h:form prependId="false">
                     <h:inputText disabled="true" id="lat" value="#{imoveisFavoritosMB.lat}"/>
                     <h:inputText disabled="true" id="log" value="#{imoveisFavoritosMB.log}"/>
                 </h:form>
                 <div id="map-canvas-loc" style="width: 710px; height: 270px"></div>
+            </p:panel>
+            
+            <!--Comentários-->
+            <p:panel style="float:right; width: 745px;" header="Comentários" rendered="#{imoveisFavoritosMB.exibeDetalhesCasa || imoveisFavoritosMB.exibeDetalhesApto}">
+                <p:scrollPanel style="width:725px;height:185px">
+                <h:form >
+                    <h:panelGrid columns="3">
+                    <p:outputLabel value="Comentário:" for="comentario" />
+                    <p:inputTextarea id="comentario" value="#{imoveisFavoritosMB.comentarioTxt}" maxlength="200" rows="2" cols="50"/>
+                    <p:commandButton ajax="false" value="Enviar" action="#{imoveisFavoritosMB.inserirComentario()}" />
+                    </h:panelGrid>
+                </h:form>
+                
+                    <p:dataTable styleClass="tabela" style="width: 710px" value="#{imoveisFavoritosMB.listarComentarios()}" var="comentario">
+                        <p:column style="width: 90px">
+                        #{comentario.usuario.nome} <br/>
+                        #{comentario.dataComentario}
+                    </p:column>
+                    <p:column>
+                        #{comentario.comentario} 
+                        <h:form style="float: right;" rendered="#{imoveisFavoritosMB.userSession.id == comentario.usuario.id}">
+                        <p:growl id="messages" showDetail="true" />  
+                        <p:commandButton ajax="false" icon="ui-icon-trash"  action="#{imoveisFavoritosMB.removerComentario()}" value="excluir" >
+                            <f:setPropertyActionListener value="#{comentario}" target="#{imoveisFavoritosMB.comentario}"/>
+                        </p:commandButton>
+                    </h:form>
+                    </p:column>
+                </p:dataTable>
+                </p:scrollPanel>
             </p:panel>
         </div>
         <div id="rodape">

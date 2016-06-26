@@ -291,6 +291,34 @@
                 </p:column>
             </p:dataTable>          
 
+            <!--Comentários-->
+            <p:panel style="float:right; width: 745px;" header="Comentários" rendered="#{indexMB.exibeDetalhesApto || indexMB.exibeDetalhesCasa}">
+                <p:scrollPanel style="width:725px;height:185px">
+                <h:form rendered="#{indexMB.userSession !=null}">
+                    <h:panelGrid columns="3">
+                    <p:outputLabel value="Comentário:" for="comentario" />
+                    <p:inputTextarea id="comentario" value="#{indexMB.comentarioTxt}" maxlength="200" rows="2" cols="50"/>
+                    <p:commandButton ajax="false" value="Enviar" action="#{indexMB.inserirComentario()}" />
+                    </h:panelGrid>
+                </h:form>
+                
+                    <p:dataTable styleClass="tabela" style="width: 710px" value="#{indexMB.listarComentarios()}" var="comentario">
+                        <p:column style="width: 90px">
+                        #{comentario.usuario.nome} <br/>
+                        #{comentario.dataComentario}
+                    </p:column>
+                    <p:column>
+                        #{comentario.comentario} 
+                        <h:form style="float: right;" rendered="#{indexMB.userSession.id == comentario.usuario.id}">
+                        <p:growl id="messages" showDetail="true" />  
+                        <p:commandButton ajax="false" icon="ui-icon-trash"  action="#{indexMB.removerComentario()}" value="excluir" >
+                            <f:setPropertyActionListener value="#{comentario}" target="#{indexMB.comentario}"/>
+                        </p:commandButton>
+                    </h:form>
+                    </p:column>
+                </p:dataTable>
+                </p:scrollPanel>
+            </p:panel>
 
         </div><!--fim principal-->    
 
