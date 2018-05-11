@@ -5,6 +5,8 @@
 package br.com.ifpb.tccii.imogeo.entidades;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
@@ -15,6 +17,7 @@ import javax.persistence.Id;
 import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 import javax.persistence.OneToOne;
 
 /**
@@ -33,11 +36,13 @@ public class Imovel implements Serializable {
 
 //    @OneToMany(fetch= FetchType.LAZY, cascade= CascadeType.REMOVE)
 //    private List<Comentario> comentarios = new ArrayList<Comentario>();
+    
     @OneToOne(cascade = CascadeType.ALL)
     private Endereco endereco;
 
 //    @OneToMany(mappedBy="imovel", cascade= CascadeType.ALL)
 //    private List<Imagem> imagens = new ArrayList<Imagem>();
+    
     @Embedded
     private Anuncio anuncio;
 

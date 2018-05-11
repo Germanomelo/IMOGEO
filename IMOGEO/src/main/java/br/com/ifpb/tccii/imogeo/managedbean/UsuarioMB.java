@@ -6,25 +6,22 @@ package br.com.ifpb.tccii.imogeo.managedbean;
 
 import br.com.ifpb.tccii.imogeo.criptografia.Criptografia;
 import br.com.ifpb.tccii.imogeo.entidades.Imagem;
-import br.com.ifpb.tccii.imogeo.entidades.Imovel;
 import br.com.ifpb.tccii.imogeo.entidades.Usuario;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ImagemDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.UsuarioDao;
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
-import javax.servlet.ServletContext;
 import javax.servlet.http.HttpSession;
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.DefaultStreamedContent;
+import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 
 /**
  *
@@ -39,25 +36,24 @@ public class UsuarioMB implements Serializable {
     private boolean exibeEditarPerfilUsuario = false;
     private boolean exibeEditarSenhaUsuario = false;
     private boolean exibeExcluirPerfilUsuario = false;
+    private boolean exibeFotoNula = true;
     private boolean ativo = false;
     //senhas
     private String senhaAtual = null;
     private String novaSenha = null;
     private String confirmeSenha = null;
-
     private Usuario usuario = new Usuario();
-    Criptografia crip = new Criptografia();
+    private Criptografia crip = new Criptografia();
     private Imagem imagem = new Imagem();
-    List<Imagem> imagens;
-
+    private byte[] fotoExibir;
     @EJB
     UsuarioDao usuarioDao;
-
     @EJB
     ImagemDao imagemDao;
 
     public UsuarioMB() {
         this.telaPerfilUsuario();
+
     }
 
     public String cadastarUsuario() {
@@ -91,6 +87,14 @@ public class UsuarioMB implements Serializable {
             paginaRetorno = "/minha-conta.jsf";
             usuario = usuarioNovo;
             this.setAtivo(true);
+
+            if (usuario.getImagem() == null || usuario.getImagem().getFoto() == null) {
+                this.exibeFotoNula = true;
+                System.out.println("foto nula");
+            } else {
+                this.exibeFotoNula = false;
+                System.out.println("foto existe");
+            }
         }
         return paginaRetorno;
     }
@@ -160,7 +164,12 @@ public class UsuarioMB implements Serializable {
         this.exibeEditarPerfilUsuario = false;
         this.exibeEditarSenhaUsuario = false;
         this.exibeExcluirPerfilUsuario = false;
-//        this.ImagemUsuario();
+
+        if (usuario.getImagem() == null || usuario.getImagem().getFoto() == null) {
+            this.exibeFotoNula = true;
+        } else {
+            this.exibeFotoNula = false;
+        }
     }
 
     public void telaEditarPerfilUsuario() {
@@ -201,14 +210,6 @@ public class UsuarioMB implements Serializable {
         this.exibeExcluirPerfilUsuario = ExibeExcluirPerfilUsuario;
     }
 
-    public List<Imagem> getImagens() {
-        return imagens;
-    }
-
-    public void setImagens(List<Imagem> imagens) {
-        this.imagens = imagens;
-    }
-
     public boolean isExibePerfilUsuario() {
         return exibePerfilUsuario;
     }
@@ -231,6 +232,14 @@ public class UsuarioMB implements Serializable {
 
     public void setExibeEditarSenhaUsuario(boolean exibeEditarSenhaUsuario) {
         this.exibeEditarSenhaUsuario = exibeEditarSenhaUsuario;
+    }
+
+    public boolean isExibeFotoNula() {
+        return exibeFotoNula;
+    }
+
+    public void setExibeFotoNula(boolean exibeFotoNula) {
+        this.exibeFotoNula = exibeFotoNula;
     }
 
     public String getSenhaAtual() {
@@ -265,14 +274,6 @@ public class UsuarioMB implements Serializable {
         this.usuario = usuario;
     }
 
-    public Imagem getImagem() {
-        return imagem;
-    }
-
-    public void setImagem(Imagem imagem) {
-        this.imagem = imagem;
-    }
-
     public boolean isExcluirPerfilUsuario() {
         return exibeExcluirPerfilUsuario;
     }
@@ -296,91 +297,62 @@ public class UsuarioMB implements Serializable {
         }
     }
 
-//    imagens
-//    public void salvaFoto() {
-//        try {
-//            this.imagemDao.inserirImagem(this.imagem);
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        } finally {
-//            imagem = new Imagem();
-//            mensagemInformativa("Sucesso!","Imagem adicionada com sucesso.");
-//        }
-// 
-//    }
-    public void processFileUpload(FileUploadEvent uploadEvent) {
-        try {
-            this.imagem.setFoto(uploadEvent.getFile().getContents());
-            this.imagem.setUsuario(this.usuario);
-            this.usuario.setImagem(this.imagem);
-        } catch (Exception ex) {
-            ex.printStackTrace();
+    //Tratando imagem-----------------------------------------
+    public StreamedContent getFotoExibir() throws IOException {
+        //sua regra para carregar os bytes   
+        if (usuario.getImagem() == null || usuario.getImagem().getFoto() == null) {
+            return null;
+        } else {
+            return new DefaultStreamedContent(new ByteArrayInputStream(usuario.getImagem().getFoto()));
         }
     }
 
-//    public void ImagemUsuario() {
-//        try {
-//            ServletContext sContext = (ServletContext) FacesContext
-//                    .getCurrentInstance().getExternalContext().getContext();
-//
-//            this.imagem = this.imagemDao.listarImagensIdUsuario(this.usuario);
-//            if(imagem.getFoto()==null){
-//                mensagemErro("Erro", "foto nula");
-//            }
-//            //criar pasta
-//            File folder = new File(sContext.getRealPath("/temp"));
-//            if (!folder.exists()) {
-//                folder.mkdirs();
-//            }
-//
-//                String nomeArquivo = this.imagem.getId() + ".jpg";
-//                String arquivo = sContext.getRealPath("/temp") + File.separator
-//                        + nomeArquivo;
-//                criaArquivo(imagem.getFoto(), arquivo);
-//            
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//
-//    }
-//    public void listaFotosProduto() {
-//        try {
-//            ServletContext sContext = (ServletContext) FacesContext
-//                    .getCurrentInstance().getExternalContext().getContext();
-//
-//            imagens = imagemDao.listarImagensIdUsuario(usuario);
-//
-//            File folder = new File(sContext.getRealPath("/temp"));
-//            if (!folder.exists()) {
-//                folder.mkdirs();
-//            }
-//
-//            for (Imagem i : imagens) {
-//                String nomeArquivo = i.getId() + ".jpg";
-//                String arquivo = sContext.getRealPath("/temp") + File.separator
-//                        + nomeArquivo;
-//
-//                criaArquivo(i.getFoto(), arquivo);
-//            }
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//
-//    }
-    private void criaArquivo(byte[] bytes, String arquivo) {
-        FileOutputStream fos;
+    public void setFotoExibir(byte[] fotoExibir) {
+        this.fotoExibir = fotoExibir;
+    }
 
-        try {
-            fos = new FileOutputStream(arquivo);
-            fos.write(bytes);
+    public void fileUpload(FileUploadEvent event) {
 
-            fos.flush();
-            fos.close();
-        } catch (FileNotFoundException ex) {
-            ex.printStackTrace();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        UploadedFile arq = event.getFile();
+        byte[] bimagem = event.getFile().getContents();
+
+        imagem = new Imagem();
+        imagem.setFoto(bimagem);
+        imagem.setDescricao(arq.getFileName());
+
+        if (usuario.getImagem() == null) {
+            System.out.println("criar imagem");
+            usuario.setImagem(imagem);
+            try {
+                imagemDao.inserirImagem(imagem);
+                usuarioDao.atualizarUsuario(usuario);
+            } catch (Exception e) {
+                this.mensagemErro("Erro!", e.getMessage());
+            }
+            mensagemInformativa("Sucesso!", "Imagem enviada com sucesso!");
+        } else {
+            System.out.println("atualizar imagem");
+            imagem.setId(usuario.getImagem().getId());
+            usuario.setImagem(imagem);
+            try {
+                imagemDao.atualizarImagem(imagem);
+            } catch (Exception e) {
+                this.mensagemErro("Erro!", e.getMessage());
+            }
+            this.mensagemInformativa("Sucesso!", "Imagem atualizada com sucesso!");
         }
+
+        telaPerfilUsuario();
+
+//            salvar em pasta
+//            InputStream in = new BufferedInputStream(arq.getInputstream());
+//
+//            File file = new File("D://IMOGEO TCC//img_user//" + usuario.getId());
+//            FileOutputStream fout = new FileOutputStream(file);
+//            while (in.available() != 0) {
+//                fout.write(in.read());
+//            }
+//            fout.close();
     }
 
     //Mensagens------------------------------>>>>>>>>>>>>>>>

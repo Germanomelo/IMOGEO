@@ -46,9 +46,15 @@ public class Usuario implements Serializable {
     @OneToMany(mappedBy = "usuario", fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     private List<Imovel> imoveis;
 
-    @OneToOne(cascade = CascadeType.ALL)
-    private Imagem imagem;
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
+    private List<PesquisaAvancada> pesquisasAvancadas;
+    
+    @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
+    private List<Notificacao> notificacoes;
 
+    @OneToOne
+    private Imagem imagem;
+    
     @Column(nullable = false, length = 50)
     private String nome;
 
@@ -76,14 +82,9 @@ public class Usuario implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date dataCriacao = new Date();
 
-    public Imagem getImagem() {
-        return imagem;
-    }
-
-    public void setImagem(Imagem imagem) {
-        this.imagem = imagem;
-    }
-
+    @Column
+    private Boolean receberNotificacaoEmail;
+    
     public List<Imovel> getFavoritos() {
         return favoritos;
     }
@@ -131,14 +132,7 @@ public class Usuario implements Serializable {
     public void setSenha(String senha) {
         this.senha = senha;
     }
-
-//    public List<Imovel> getProcuras() {
-//        return procuras;
-//    }
-//
-//    public void setProcuras(List<Imovel> procuras) {
-//        this.procuras = procuras;
-//    }
+    
     public String getCpf() {
         return cpf;
     }
@@ -185,6 +179,38 @@ public class Usuario implements Serializable {
 
     public void setDataNascimento(Date dataNascimento) {
         this.dataNascimento = dataNascimento;
+    }
+
+    public List<PesquisaAvancada> getPesquisasAvancadas() {
+        return pesquisasAvancadas;
+    }
+
+    public void setPesquisasAvancadas(List<PesquisaAvancada> pesquisasAvancadas) {
+        this.pesquisasAvancadas = pesquisasAvancadas;
+    }
+
+    public List<Notificacao> getNotificacoes() {
+        return notificacoes;
+    }
+
+    public void setNotificacoes(List<Notificacao> notificacoes) {
+        this.notificacoes = notificacoes;
+    }
+
+    public Boolean getReceberNotificacaoEmail() {
+        return receberNotificacaoEmail;
+    }
+
+    public void setReceberNotificacaoEmail(Boolean receberNotificacaoEmail) {
+        this.receberNotificacaoEmail = receberNotificacaoEmail;
+    }
+
+    public Imagem getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(Imagem imagem) {
+        this.imagem = imagem;
     }
 
     @Override

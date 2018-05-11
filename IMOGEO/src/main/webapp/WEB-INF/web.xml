@@ -2,18 +2,33 @@
 <web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
     <context-param>
         <param-name>primefaces.THEME</param-name>
-        <param-value>start</param-value>
+        <param-value>excite-bike</param-value>
     </context-param>   
+    <context-param>
+        <param-name>primefaces.UPLOADER</param-name>
+        <param-value>commons</param-value>
+    </context-param>
 
     <!--Crud de imagem-->
+<!--    <filter>
+        <filter-name>FileUploadFilter</filter-name>
+        <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
+    </filter>
+    
+    <filter-mapping>
+        <filter-name>FileUploadFilter</filter-name>
+        <servlet-name>FacesServlet</servlet-name>
+    </filter-mapping>-->
     <filter>
         <filter-name>PrimeFaces FileUpload Filter</filter-name>
         <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
     </filter>
+
     <filter-mapping>
         <filter-name>PrimeFaces FileUpload Filter</filter-name>
         <servlet-name>Faces Servlet</servlet-name>
     </filter-mapping>
+    
     <!--Crud de imagem-->
     
     <context-param>

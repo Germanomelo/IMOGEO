@@ -26,18 +26,19 @@ public class Imagem implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Lob
-    @Column(columnDefinition = "LOMGBLOB")
+//    @Column( name="foto", columnDefinition = "BLOB")
+//    @Lob
+    @Column
     private byte[] foto;
     
     @Column(length=50)
     private String descricao;
 
-    @ManyToOne
-    private Imovel imovel;
+//    @ManyToOne
+//    private Imovel imovel;
     
-    @OneToOne
-    private Usuario usuario;
+//    @OneToOne
+//    private Usuario usuario;
 
     public Long getId() {
         return id;
@@ -63,21 +64,21 @@ public class Imagem implements Serializable {
         this.descricao = descricao;
     }
 
-    public Imovel getImovel() {
-        return imovel;
-    }
-
-    public void setImovel(Imovel imovel) {
-        this.imovel = imovel;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
+//    public Imovel getImovel() {
+//        return imovel;
+//    }
+//
+//    public void setImovel(Imovel imovel) {
+//        this.imovel = imovel;
+//    }
+//
+//    public Usuario getUsuario() {
+//        return usuario;
+//    }
+//
+//    public void setUsuario(Usuario usuario) {
+//        this.usuario = usuario;
+//    }
     
     @Override
     public int hashCode() {

@@ -32,6 +32,10 @@
             <id>JBOSS</id>
             <url>https://repository.jboss.org/nexus/content/repositories/releases/</url>
         </repository>
+        <repository>
+            <id>Primefaces</id>
+            <url>https://mvnrepository.com/artifact/org.primefaces.themes/excite-bike</url>
+        </repository>
     </repositories>
     <dependencies>
         <dependency> 
@@ -72,7 +76,7 @@
         <dependency>
             <groupId>org.primefaces</groupId>
             <artifactId>primefaces</artifactId>
-            <version>4.0</version>
+            <version>5.3</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate.common</groupId>
@@ -92,9 +96,14 @@
             <version>7.0</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
+<!--        <dependency>
             <groupId>org.primefaces.themes</groupId>
             <artifactId>start</artifactId>
+            <version>1.0.10</version>
+        </dependency>-->
+        <dependency>
+            <groupId>org.primefaces.themes</groupId>
+            <artifactId>excite-bike</artifactId>
             <version>1.0.10</version>
         </dependency>
     </dependencies>

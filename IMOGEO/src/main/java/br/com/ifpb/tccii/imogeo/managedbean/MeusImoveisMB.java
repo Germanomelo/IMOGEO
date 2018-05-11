@@ -6,7 +6,7 @@ package br.com.ifpb.tccii.imogeo.managedbean;
 
 import br.com.ifpb.tccii.imogeo.entidades.Comentario;
 import br.com.ifpb.tccii.imogeo.entidades.Endereco;
-import br.com.ifpb.tccii.imogeo.entidades.Imagem;
+//import br.com.ifpb.tccii.imogeo.entidades.Imagem;
 import br.com.ifpb.tccii.imogeo.entidades.Imovel;
 import br.com.ifpb.tccii.imogeo.entidades.Usuario;
 import br.com.ifpb.tccii.imogeo.entidades.especializacao.Apartamento;
@@ -14,7 +14,7 @@ import br.com.ifpb.tccii.imogeo.entidades.especializacao.Casa;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ApartamentoDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.CasaDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ComentarioDao;
-import br.com.ifpb.tccii.imogeo.sessionbeans.ImagemDao;
+//import br.com.ifpb.tccii.imogeo.sessionbeans.ImagemDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ImovelDao;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
@@ -64,7 +64,7 @@ public class MeusImoveisMB implements Serializable {
     private Casa casa = new Casa();
     private Apartamento apto = new Apartamento();
     private Imovel imovel = new Imovel();
-    private Imagem imagem = new Imagem();
+//    private Imagem imagem = new Imagem();
     private Endereco endereco = new Endereco();
 
     @EJB
@@ -453,13 +453,13 @@ public class MeusImoveisMB implements Serializable {
         this.imagemCasa = imagemCasa;
     }
 
-    public Imagem getImagem() {
-        return imagem;
-    }
-
-    public void setImagem(Imagem imagem) {
-        this.imagem = imagem;
-    }
+//    public Imagem getImagem() {
+//        return imagem;
+//    }
+//
+//    public void setImagem(Imagem imagem) {
+//        this.imagem = imagem;
+//    }
 
     public boolean isInformacoesCasa() {
         return informacoesCasa;
