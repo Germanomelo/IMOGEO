@@ -1,4 +1,4 @@
-# IMOGEO
+# IMOGEO - HIBERNATE + JPA2 + JSF
 O IMOGEO é uma aplicação Web para anúncios de imóveis que tem base em um SIG (Sistema de Informações Geográficas), tal sistema utiliza geoprocessamento para processar as localizações de imóveis cadastrados com auxílio do Google Maps.
 
 ### Objetivos:
