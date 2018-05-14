@@ -6,7 +6,7 @@ package br.com.ifpb.tccii.imogeo.managedbean;
 
 import br.com.ifpb.tccii.imogeo.entidades.Comentario;
 import br.com.ifpb.tccii.imogeo.entidades.Endereco;
-//import br.com.ifpb.tccii.imogeo.entidades.Imagem;
+import br.com.ifpb.tccii.imogeo.entidades.Imagem;
 import br.com.ifpb.tccii.imogeo.entidades.Imovel;
 import br.com.ifpb.tccii.imogeo.entidades.Usuario;
 import br.com.ifpb.tccii.imogeo.entidades.especializacao.Apartamento;
@@ -14,8 +14,9 @@ import br.com.ifpb.tccii.imogeo.entidades.especializacao.Casa;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ApartamentoDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.CasaDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ComentarioDao;
-//import br.com.ifpb.tccii.imogeo.sessionbeans.ImagemDao;
+import br.com.ifpb.tccii.imogeo.sessionbeans.ImagemDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ImovelDao;
+import br.com.ifpb.tccii.imogeo.utils.ImagemManager;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.io.ParseException;
@@ -24,8 +25,6 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
@@ -34,6 +33,7 @@ import javax.faces.context.FacesContext;
 import javax.faces.event.ActionEvent;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.primefaces.model.StreamedContent;
 
 /**
  *
@@ -58,15 +58,14 @@ public class MeusImoveisMB implements Serializable {
     private boolean editarEndereco = false;
     private boolean editarEnderecoCasa = false;
     private boolean editarEnderecoApto = false;
-
+    
     private Usuario userSession = new Usuario();
     private Comentario comentario = new Comentario();
     private Casa casa = new Casa();
     private Apartamento apto = new Apartamento();
     private Imovel imovel = new Imovel();
-//    private Imagem imagem = new Imagem();
     private Endereco endereco = new Endereco();
-
+    
     @EJB
     private CasaDao casaDao;
     @EJB
@@ -75,8 +74,8 @@ public class MeusImoveisMB implements Serializable {
     private ApartamentoDao aptoDao;
     @EJB
     private ComentarioDao comentarioDao;
-//    @EJB
-//    private ImagemDao imagemDao;
+    @EJB
+    private ImagemDao imagemDao;
 
     public MeusImoveisMB() {
         this.CapturaUsuarioSession();
@@ -214,7 +213,20 @@ public class MeusImoveisMB implements Serializable {
     }
 
     public List<Imovel> getImoveisIdUser() {
-        return imovelDao.listarImoveisIdUser(userSession);
+        List<Imovel> imoveis = imovelDao.listarImoveisIdUser(userSession);
+        for (Imovel i : imoveis) {
+            Imagem img = imagemDao.retornarPrimeriaImagemPorImovel(i);
+            if (img == null) {
+                img = new Imagem();
+                img.setNome("/img/semimagem.png");
+            }else{
+                ImagemManager im = new ImagemManager();
+                im.criarImagens(null, img);
+                img.setNome("/temp/"+img.getNome());
+            }
+            i.setImagem(img);
+        }
+        return imoveis;
     }
 
     public void removerImovel() {
@@ -227,6 +239,7 @@ public class MeusImoveisMB implements Serializable {
         }
 
     }
+
     public void atualizarEndereco() throws ParseException {
         if (editarEnderecoCasa) {
             this.atualizarCasaEndereco();
@@ -278,6 +291,7 @@ public class MeusImoveisMB implements Serializable {
         comentarioDao.removerComentario(this.comentario);
     }
 //    ----------------------------------------Casa--------------------------    
+
     public Casa buscarCasaId() {
         return casaDao.retornarCasa(casa.getId());
     }
@@ -453,14 +467,6 @@ public class MeusImoveisMB implements Serializable {
         this.imagemCasa = imagemCasa;
     }
 
-//    public Imagem getImagem() {
-//        return imagem;
-//    }
-//
-//    public void setImagem(Imagem imagem) {
-//        this.imagem = imagem;
-//    }
-
     public boolean isInformacoesCasa() {
         return informacoesCasa;
     }
@@ -571,6 +577,13 @@ public class MeusImoveisMB implements Serializable {
         this.comentario = comentario;
     }
 
+    public List<Imagem> listImagens() {
+        ImagemManager imagemManager = new ImagemManager();
+        List<Imagem> imagens = imagemDao.listarImagensPorImovel(imovel);
+        imagemManager.criarImagens(imagens, null);
+        return imagens;
+    }
+
     //    Mensagens
     public void mensagemInformativa(String titulo, String msg) {
         FacesContext fc = FacesContext.getCurrentInstance();
@@ -593,35 +606,6 @@ public class MeusImoveisMB implements Serializable {
         fc.addMessage(null, fm);
     }
 
-//    public void processFileUploadCasa(FileUploadEvent uploadEvent) {
-//
-//        try {
-////            imagem.setImovel(casa);
-//            imagem.setFoto(uploadEvent.getFile().getContents());
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//
-//    }
-//    public void processFileUploadApartamento(FileUploadEvent uploadEvent) {
-//
-//        try {
-////            imagem.setImovel(apto);
-//            imagem.setFoto(uploadEvent.getFile().getContents());
-//        } catch (Exception ex) {
-//            ex.printStackTrace();
-//        }
-//
-//    }
-//    public void inserirImagem() {
-//        imagemDao.inserirImagem(imagem);
-//        imagem = new Imagem();
-//        mensagemInformativa(null, "Imagem adicionada com sucesso");
-//    }
-    //    public void addImagem(FileUploadEvent event) {
-    //        FacesMessage msg = new FacesMessage("Succesful", event.getFile().getFileName() + " is uploaded.");
-    //        FacesContext.getCurrentInstance().addMessage(null, msg);
-    //    }
     public void destroyWorld(ActionEvent actionEvent) {
         FacesMessage message = new FacesMessage(FacesMessage.SEVERITY_INFO, "System Error", "Please try again later.");
 

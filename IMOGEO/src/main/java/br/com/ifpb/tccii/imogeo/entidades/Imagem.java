@@ -26,19 +26,17 @@ public class Imagem implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-//    @Column( name="foto", columnDefinition = "BLOB")
-//    @Lob
     @Column
     private byte[] foto;
     
     @Column(length=50)
-    private String descricao;
-
-//    @ManyToOne
-//    private Imovel imovel;
+    private String nome;
     
-//    @OneToOne
-//    private Usuario usuario;
+    @Column(length=100)
+    private String descricao;
+    
+    @ManyToOne
+    private Imovel imovel;
 
     public Long getId() {
         return id;
@@ -46,6 +44,14 @@ public class Imagem implements Serializable {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public byte[] getFoto() {
@@ -64,21 +70,13 @@ public class Imagem implements Serializable {
         this.descricao = descricao;
     }
 
-//    public Imovel getImovel() {
-//        return imovel;
-//    }
-//
-//    public void setImovel(Imovel imovel) {
-//        this.imovel = imovel;
-//    }
-//
-//    public Usuario getUsuario() {
-//        return usuario;
-//    }
-//
-//    public void setUsuario(Usuario usuario) {
-//        this.usuario = usuario;
-//    }
+    public Imovel getImovel() {
+        return imovel;
+    }
+
+    public void setImovel(Imovel imovel) {
+        this.imovel = imovel;
+    }
     
     @Override
     public int hashCode() {
@@ -102,7 +100,7 @@ public class Imagem implements Serializable {
 
     @Override
     public String toString() {
-        return "entidades.Imagem[ id=" + id + " ]";
+        return "entidades.Imagem[ id=" + id + ", nome="+nome+", descricao="+descricao+"]";
     }
     
 }

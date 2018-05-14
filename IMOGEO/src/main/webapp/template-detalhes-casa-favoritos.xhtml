@@ -8,7 +8,7 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-    <p:panel header="Contato" style="float:right; width: 300px; height: 245px;">      
+    <p:panel header="Contato" style="float:right; width: 200px; height: 500px;">      
         Nome: #{imoveisFavoritosMB.casa.usuario.nome} <br/>
         Email: #{imoveisFavoritosMB.casa.usuario.email} <br/>
         Telefone Comercial: #{imoveisFavoritosMB.casa.usuario.telefoneComercial} <br/>
@@ -16,15 +16,13 @@
         Telefone Celular: #{imoveisFavoritosMB.casa.usuario.telefoneCelular} <br/>  
     </p:panel>
     
-    <p:panel header="Imagens" style="float:right; width: 439px; height: 245px;">
-        <p:lightBox styleClass="imagebox">  
-            <h:outputLink value="../img/semimagem.png" title="imagem">  
-                <h:graphicImage value="/img/semimagem.png"/>  
-            </h:outputLink>  
-        </p:lightBox>
+    <p:panel header="Imagens" style="float:right; width: 539px; height: 500px;">
+        <p:galleria value="#{imoveisFavoritosMB.listImagens()}" var="img" panelWidth="509" panelHeight="400"  >
+            <p:graphicImage value="/temp/#{img.nome}" alt="#{img.descricao}" height="400"/>
+        </p:galleria>
     </p:panel>
     
-    <p:panel header="Endereço" style="float:right; width: 300px; ">
+    <p:panel header="Endereço" style="float:right; width: 300px; height:250px; ">
             Rua: #{imoveisFavoritosMB.casa.endereco.rua} <br/>
             Número: #{imoveisFavoritosMB.casa.endereco.numero} <br/>
             Bairro: #{imoveisFavoritosMB.casa.endereco.bairro} <br/>
@@ -34,7 +32,7 @@
             Complemento: #{imoveisFavoritosMB.casa.endereco.complemento} <br/>
     </p:panel>
     
-    <p:panel header="Informações" style="float:right; width: 439px; "> 
+    <p:panel header="Informações" style="float:right; width: 439px; height:250px; "> 
             Finalidade: #{imoveisFavoritosMB.casa.finalidade}<br/>
             Valor: <strong style="color: orange">R$#{imoveisFavoritosMB.casa.mascaraValor}</strong><br/>
             Área Total m²: #{imoveisFavoritosMB.casa.areaTotal}<br/>

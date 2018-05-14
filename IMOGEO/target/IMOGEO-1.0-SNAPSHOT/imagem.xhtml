@@ -1,171 +1,47 @@
-<!--<?xml version='1.0' encoding='UTF-8' ?>
+<?xml version='1.0' encoding='UTF-8' ?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:p="http://primefaces.org/ui"
       xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
       xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
-        <title>Imagem</title>
+        <title>IMOGEO</title>
+        <!--<link rel="stylesheet" type="text/css" href="/IMOGEO/jsfcrud.jsf" />-->
+        <link rel="stylesheet" type="text/css" href="css/estilo.css"  />
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyDp7RiKkRTRQhkJNXz6i9vht4S-9eOcuGc"></script>
+        <script type="text/javascript" src="js/maps_minha_localizacao.js"></script>
+        <script type="text/javascript" src="js/maps_detalhes_imovel_marker.js"></script>
+        <script type="text/javascript" src="js/maps_busca_localizacao_endereco.js"></script>
     </h:head>
     <h:body>
-        <h:form id="form" enctype="multipart/form-data">
-        <p:growl id="msgs" showDetail="false" showSummary="true" />
- 
-        <p:panel>
-            <h:panelGrid columns="2">
-                <h:outputText value="Nome:" />
-                <p:inputText value="#mbProduto.produto.nome}" />
- 
-                <h:outputText value="Preço:" />
-                <p:inputText value="#mbProduto.produto.preco}" />
- 
-                <p:commandButton value="Salvar" action="#mbProduto.salvaProduto()}"
-                    update=":form:msgs, :form:dtProdutos, :form" />
-                <p:commandButton value="Limpar" onclick="form.reset()" />
-            </h:panelGrid>
-        </p:panel>
- 
-        <p:dataTable id="dtProdutos" value="#mbProduto.produtos}" var="p"
-            style="text-align: center;" emptyMessage="Nenhum produto cadastrado.">
-            <p:column headerText="ID" style="width:2%; font-weight: bold;">
-                <h:outputText value="#p.id}" />
-            </p:column>
- 
-            <p:column headerText="Nome" style="width:24%">
-                <h:outputText value="#p.nome}" />
-            </p:column>
- 
-            <p:column headerText="Preço" style="width:24%">
-                <h:outputText value="#p.preco}" />
-            </p:column>
- 
-            <p:column style="width:4%">
-                <p:commandButton id="addButton" update=":form:infoFoto"
-                    oncomplete="fotoDialog.show()" icon="ui-icon-plus"
-                    title="Adicionar imagens">
-                    <f:setPropertyActionListener value="#p}"
-                        target="#mbProduto.produtoSelecionado}" />
-                </p:commandButton>
- 
-                <p:spacer width="10" />
- 
-                <p:commandButton id="showButton" update=":form:infoProduto"
-                    oncomplete="produtoDialog.show()" icon="ui-icon-search"
-                    title="Visualizar imagens" action="#mbProduto.listaFotosProduto}">
-                    <f:setPropertyActionListener value="#p}"
-                        target="#mbProduto.produtoSelecionado}" />
-                </p:commandButton>
-            </p:column>
-        </p:dataTable>
- 
-        <p:dialog header="Detalhes do produto" widgetVar="produtoDialog"
-            resizable="false" id="produtoDlg" showEffect="fade"
-            hideEffect="explode" modal="true" draggable="true" maximizable="true"
-            minimizable="true">
- 
-            <h:panelGrid id="infoProduto" columns="2" style="margin:0 auto;">
- 
-                <h:outputText value="Nenhnuma imagem encontrada"
-                    rendered="#mbProduto.fotos.size() == 0}" />
- 
-                <p:galleria var="f" value="#bProduto.fotos}" effect="slide"
-                    effectSpeed="100" panelHeight="250" panelWidth="500"
-                    frameHeight="70" frameWidth="160" filmstripPosition="bottom"
-                    showOverlays="true">
- 
-                    <p:graphicImage value="/temp/#f.id}.jpg" cache="false" width="500"
-                        height="250" />
-                    <p:galleriaOverlay title="Descrição:">
-                        <h:outputText value="#f.descricao}" />
-                    </p:galleriaOverlay>
- 
-                </p:galleria>
-            </h:panelGrid>
-        </p:dialog>
- 
-            <p:dialog header="Adicionar imagens" widgetVar="fotoDialog"
-                      position="center" resizable="false" id="fotoDlg" showEffect="fade"
-                      hideEffect="explode" modal="true" width="800">
+        <div id="topo">
+            <div id ="topoconteudo">
+                <ui:include src="/template-topo.xhtml"/>
+            </div>
+        </div>
+        <div id="principal" style="height: 1080px">
+            <p:panel header="fotos">
+<!--                                <p:galleria value="{imagemMB.imagens}" var="img" panelWidth="720" panelHeight="350">
+                                    <p:graphicImage value="/temp/{img.nome}" alt="{img.descricao}"/>
+                                </p:galleria>-->
 
-                <h:panelGrid id="infoFoto" columns="2">
+                <p:contentFlow value="#{imagemMB.imagens}" var="img" panelWidth="720" panelHeight="350">
+                    <p:graphicImage value="/temp/#{img.nome}"  styleClass="content" panelHeight="350" />
+                    <div class="caption">#{img.descricao}</div>
+                </p:contentFlow>
 
-                    <h:outputText value="Foto: " />
-                    <p:fileUpload fileUploadListener="#{imagemMB.processFileUpload}"
-                                  label="Escolher" cancelLabel="Cancelar" sizeLimit="400000"
-                                  invalidSizeMessage="Imagem muito grande" auto="true"
-                                  invalidFileMessage="Tipo de imagem não suportado"
-                                  allowTypes="/(\.|\/)(jpe?g|png)$/" />
-
-                    <h:outputText value="Descrição: " />
-                    <p:inputText value="#{imagemMB.imagem.descricao}" />
-
-                    <p:commandButton value="Adicionar" icon="ui-icon-plus"
-                                     action="#{imagemMB.inserirImagem()}" update="infoFoto, form" />
-
-                </h:panelGrid>
-            </p:dialog>
-        </h:form>
+                <h:form prependId="false" enctype="multipart/form-data">
+                    <p:growl id="messages" showDetail="true" sticky="true" />  
+                    <p:fileUpload fileUploadListener="#{imagemMB.fileUpload}"  
+                                  mode="advanced"  
+                                  update="messages"   
+                                  multiple="true"
+                                  fileLimit="10"
+                                  sizeLimit="100000000"   
+                                  allowTypes="/(\.|\/)(jpe?g|png)$/"/>
+                </h:form>
+            </p:panel>
+        </div>
     </h:body>
 </html>
-
- <p:panel header="Buscar Imovel por localização" rendered="#{indexMB.exibePesquisaLocalizacao}" style="width: 745px; float: right">
-                <h:form prependId="false"  >
-                    <p:tabView prependId="false">
-                        <p:tab title="Busca Simples" prependId="false">
-                            <h:panelGrid columns="2">
-
-                                <h:outputLabel value="Raio (Km):"/>
-                                <p:inputText value="#{indexMB.distancia}" maxlength="3" required="true" requiredMessage="Campo Obrigatorio!"/>
-                                
-                                <h:outputLabel value="Ponto:"/>
-                                <p:inputText  id="loc" value="#{indexMB.loc}" required="true" requiredMessage="Campo Obrigatorio buscar localização"/>
-                                <p:commandButton ajax="false" icon="ui-icon-search" value="Buscar" action="#{indexMB.telaResultadoPesquisaLocalizacao()}"/>
-                                <h:message id="mloc" for="loc"/>
-
-                            </h:panelGrid>
-                        </p:tab> 
-                        <p:tab title="Busca avançada" prependId="false">
-                            <h:panelGrid columns="2">
-                                <h:outputLabel value="Raio (Km):"/>
-                                <p:inputText value="#{indexMB.distancia}" maxlength="3" required="true" requiredMessage="Campo Obrigatorio!"/>
-
-                                <p:outputLabel value="Finalidade :" for="finalidade" />
-                                <p:selectOneMenu id="finalidade" value="#{indexMB.pesqFinalidade}">
-                                    <f:selectItem itemValue="TODOS" itemLabel="TODOS" />
-                                    <f:selectItem itemValue="ALUGAR" itemLabel="ALUGAR" />
-                                    <f:selectItem itemValue="VENDER" itemLabel="COMPRAR" />
-                                    <f:selectItem itemValue="TEMPORADA" itemLabel="TEMPORADA" />
-                                </p:selectOneMenu>
-
-                                <h:outputLabel value="Valor de R$:"/>
-                                <p:inputText value="#{indexMB.pesqValorDe}" type="number" maxlength="9"/>
-
-                                <h:outputLabel value="Valor até R$:"/>
-                                <p:inputText value="#{indexMB.pesqValorAte}" type="number" maxlength="9"/>
-
-                                <h:outputLabel value="Quartos:"/>
-                                <p:inputText value="#{indexMB.pesqQtdeQuarto}"   maxlength="2"/>
-
-                                <h:outputLabel value="Suites:"/>
-                                <p:inputText value="#{indexMB.pesqQtdeSuite}" type="number" maxlength="2"/>
-
-                                <h:outputLabel value="Área de m²:"/>
-                                <p:inputText value="#{indexMB.pesqAreaDe}" type="number" maxlength="9"/>
-
-                                <h:outputLabel value="Área até m²:"/>
-                                <p:inputText value="#{indexMB.pesqAreaAte}" type="number" maxlength="9"/>
-
-                                <h:outputLabel value="Vagas Garagem :"/>
-                                <p:inputText value="#{indexMB.pesqQtdeVagaGaragem}" type="number" maxlength="2"/>
-
-                                <h:outputLabel value="Ponto:"/>
-                                <p:inputText  id="loc2" value="#{indexMB.loc}" required="true" requiredMessage="Campo Obrigatorio buscar localização"/>
-                                <p:commandButton ajax="false" icon="ui-icon-search" value="Buscar" action="#{indexMB.telaResultadoPesquisaLocalizacao()}"/>
-                                <h:message id="mloc2" for="loc"/>
-                            </h:panelGrid>
-                        </p:tab>
-                    </p:tabView>
-                </h:form>
-                <div id="map-canvas" style="width: 700px; height: 350px;"></div>
-            </p:panel>-->

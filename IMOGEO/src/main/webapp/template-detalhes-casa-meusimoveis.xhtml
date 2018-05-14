@@ -21,45 +21,45 @@
             <f:setPropertyActionListener value="#{imovel}" target="#{meusImoveisMB.imovel}"/>
         </p:commandButton>
         <p:commandButton ajax="false" icon="ui-icon-trash" action="#{meusImoveisMB.telaExcluirImovelPemissaoTrue()}" value="Excluir" /><br/>
-        </h:form>
-        <p:panel header="Imagens" style="float:right; width: 745px;">
-            <p:lightBox styleClass="imagebox">  
-                <h:outputLink value="../img/semimagem.png" title="imagem">  
-                    <h:graphicImage value="/img/semimagem.png"/>  
-                </h:outputLink>  
-            </p:lightBox>
-        </p:panel>
-        <p:panel header="Endereço" style="float:right; width: 368px; height: 350px">
-            <div>
-                Rua: #{meusImoveisMB.casa.endereco.rua} <br/>
-                Número: #{meusImoveisMB.casa.endereco.numero} <br/>
-                Bairro: #{meusImoveisMB.casa.endereco.bairro} <br/>
-                Cidade: #{meusImoveisMB.casa.endereco.cidade} <br/>
-                Estado: #{meusImoveisMB.casa.endereco.estado} <br/>
-                CEP: #{meusImoveisMB.casa.endereco.cep} <br/>
-                Complemento: #{meusImoveisMB.casa.endereco.complemento} <br/>
-            </div>
-        </p:panel>
-        <p:panel header="Casa" style="float:right; width: 368px; height: 350px"> 
-            <div>
-                Finalidade: <i>#{meusImoveisMB.casa.finalidade}</i><br/>
-                Valor: <i>R$#{meusImoveisMB.casa.mascaraValor}</i><br/>
-                Área Total m²: <i>#{meusImoveisMB.casa.areaTotal}</i><br/>
-                Área Construida m²: <i>#{meusImoveisMB.casa.areaConstruida}</i><br/>
-                Quartos: <i>#{meusImoveisMB.casa.quarto}</i><br/>
-                Suites: <i>#{meusImoveisMB.casa.suite}</i><br/>
-                Vagas Garagem: <i>#{meusImoveisMB.casa.vagaGaragem}</i><br/>
-                Banheiros Sociais: <i>#{meusImoveisMB.casa.banheiroSocial}</i><br/>
-                Possui:
-                <i>
+    </h:form>
+    <p:panel header="Imagens" style="float:right; width: 745px;">
+        <p:galleria value="#{meusImoveisMB.listImagens()}" var="img" panelWidth="720" panelHeight="400"  >
+            <p:graphicImage value="/temp/#{img.nome}" alt="#{img.descricao}" height="400"/>
+        </p:galleria>       
+    </p:panel>
+
+    <p:panel header="Endereço" style="float:right; width: 368px; height:250px;">
+        <div>
+            Rua: #{meusImoveisMB.casa.endereco.rua} <br/>
+            Número: #{meusImoveisMB.casa.endereco.numero} <br/>
+            Bairro: #{meusImoveisMB.casa.endereco.bairro} <br/>
+            Cidade: #{meusImoveisMB.casa.endereco.cidade} <br/>
+            Estado: #{meusImoveisMB.casa.endereco.estado} <br/>
+            CEP: #{meusImoveisMB.casa.endereco.cep} <br/>
+            Complemento: #{meusImoveisMB.casa.endereco.complemento} <br/>
+        </div>
+    </p:panel>
+    
+    <p:panel header="Informações" style="float:right; width: 370px; height:250px;"> 
+        <div>
+            Finalidade: <i>#{meusImoveisMB.casa.finalidade}</i><br/>
+            Valor: <i>R$#{meusImoveisMB.casa.mascaraValor}</i><br/>
+            Área Total m²: <i>#{meusImoveisMB.casa.areaTotal}</i><br/>
+            Área Construida m²: <i>#{meusImoveisMB.casa.areaConstruida}</i><br/>
+            Quartos: <i>#{meusImoveisMB.casa.quarto}</i><br/>
+            Suites: <i>#{meusImoveisMB.casa.suite}</i><br/>
+            Vagas Garagem: <i>#{meusImoveisMB.casa.vagaGaragem}</i><br/>
+            Banheiros Sociais: <i>#{meusImoveisMB.casa.banheiroSocial}</i><br/>
+            Possui:
+            <i>
                 <h:outputLabel value=" Piscina," rendered="#{meusImoveisMB.casa.piscina}"/>
                 <h:outputLabel value=" Despenda," rendered="#{meusImoveisMB.casa.despensa}"/>
                 <h:outputLabel value=" Área de Serviço," rendered="#{meusImoveisMB.casa.areaServico}"/>
                 <h:outputLabel value=" Churrasqueira," rendered="#{meusImoveisMB.casa.churrasqueira}"/>
                 <h:outputLabel value=" Jardim" rendered="#{meusImoveisMB.casa.jardim}"/></i><br/>
-                Observação: <i>#{meusImoveisMB.casa.observacao}</i><br/>
-            </div>
-        </p:panel>
-        
+            Observação: <i>#{meusImoveisMB.casa.observacao}</i><br/>
+        </div>
+    </p:panel>
+
 </ui:composition>
 

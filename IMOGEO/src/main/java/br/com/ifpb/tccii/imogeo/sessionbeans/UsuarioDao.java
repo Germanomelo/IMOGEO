@@ -6,7 +6,6 @@ package br.com.ifpb.tccii.imogeo.sessionbeans;
 
 import br.com.ifpb.tccii.imogeo.entidades.Imovel;
 import br.com.ifpb.tccii.imogeo.entidades.Usuario;
-import java.util.List;
 import javax.ejb.Stateless;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;

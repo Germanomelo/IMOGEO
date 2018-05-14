@@ -7,30 +7,26 @@
     xmlns:p="http://primefaces.org/ui"
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:c="http://java.sun.com/jsp/jstl/core">
-
-    <!--    <p:panel header="Apartamento" style="float:right; width: 745px;">
-        </p:panel>-->
     
-    <p:panel header="Contato" style="float:right; width: 300px; height: 245px;">    
-        Nome: #{indexMB.apto.usuario.nome} <br/>
-        Email: #{indexMB.apto.usuario.email} <br/>
-        Telefone Comercial: #{indexMB.apto.usuario.telefoneComercial} <br/>
-        Telefone Residencial: #{indexMB.apto.usuario.telefoneResidencial} <br/>
-        Telefone Celular: #{indexMB.apto.usuario.telefoneCelular} <br/>  
+    <p:panel header="Contato" style="float:right; width: 200px; height: 500px;">    
+        Nome:<br/> 
+        #{indexMB.apto.usuario.nome} <br/>
+        <br/>
+        Email:<br/> 
+        #{indexMB.apto.usuario.email} <br/>
+        <br/>
+        Tel Comercial:<br/> #{indexMB.apto.usuario.telefoneComercial} <br/>
+        Tel Residencial:<br/> #{indexMB.apto.usuario.telefoneResidencial} <br/>
+        Tel Celular:<br/> #{indexMB.apto.usuario.telefoneCelular} <br/>  
     </p:panel>
 
-    <p:panel header="Imagens" style="float:right; width: 439px; height: 245px;">
-        <p:lightBox styleClass="imagebox">  
-            <h:outputLink value="../img/semimagem.png" title="imagem">  
-                <h:graphicImage value="/img/semimagem.png"/>  
-            </h:outputLink>  
-        </p:lightBox>
+    <p:panel header="Imagens" style="float:right; width: 539px; height: 500px;">
+        <p:galleria value="#{indexMB.listImagens()}" var="img" panelWidth="509" panelHeight="400"  >
+            <p:graphicImage value="/temp/#{img.nome}" alt="#{img.descricao}" height="400"/>
+        </p:galleria>
     </p:panel>
-    <!--    <p:galleria value="#imagesView.images}" var="image" panelWidth="500" panelHeight="313" showCaption="true">
-            <p:graphicImage name="/img/semimagem.png" alt="Image Description for #image}" title="#image}"/>
-        </p:galleria>-->
 
-    <p:panel header="Endereço" style="float:right; width: 300px;">
+    <p:panel header="Endereço" style="float:right; width: 300px; height:250px;">
         Rua: #{indexMB.apto.endereco.rua} <br/>
         Número: #{indexMB.apto.endereco.numero} <br/>
         Bairro: #{indexMB.apto.endereco.bairro} <br/>
@@ -40,7 +36,7 @@
         Complemento: #{indexMB.apto.endereco.complemento} <br/>   
     </p:panel>
 
-    <p:panel header="Informações" style="float:right; width: 439px; "> 
+    <p:panel header="Informações" style="float:right; width: 439px; height:250px; "> 
         Finalidade: #{indexMB.apto.finalidade}<br/>
         Valor Imovél: <strong style="color: orange">R$#{indexMB.apto.mascaraValor}</strong><br/>
         Valor Condominio: R$#{indexMB.apto.condominio}<br/>

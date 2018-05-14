@@ -9,7 +9,7 @@ import br.com.ifpb.tccii.imogeo.entidades.Imagem;
 import br.com.ifpb.tccii.imogeo.entidades.Usuario;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ImagemDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.UsuarioDao;
-import java.io.ByteArrayInputStream;
+import br.com.ifpb.tccii.imogeo.utils.ImagemManager;
 import java.io.IOException;
 import java.io.Serializable;
 import javax.ejb.EJB;
@@ -19,8 +19,6 @@ import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import org.primefaces.event.FileUploadEvent;
-import org.primefaces.model.DefaultStreamedContent;
-import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 
 /**
@@ -36,7 +34,6 @@ public class UsuarioMB implements Serializable {
     private boolean exibeEditarPerfilUsuario = false;
     private boolean exibeEditarSenhaUsuario = false;
     private boolean exibeExcluirPerfilUsuario = false;
-    private boolean exibeFotoNula = true;
     private boolean ativo = false;
     //senhas
     private String senhaAtual = null;
@@ -44,8 +41,7 @@ public class UsuarioMB implements Serializable {
     private String confirmeSenha = null;
     private Usuario usuario = new Usuario();
     private Criptografia crip = new Criptografia();
-    private Imagem imagem = new Imagem();
-    private byte[] fotoExibir;
+    private Imagem imagem;
     @EJB
     UsuarioDao usuarioDao;
     @EJB
@@ -87,14 +83,6 @@ public class UsuarioMB implements Serializable {
             paginaRetorno = "/minha-conta.jsf";
             usuario = usuarioNovo;
             this.setAtivo(true);
-
-            if (usuario.getImagem() == null || usuario.getImagem().getFoto() == null) {
-                this.exibeFotoNula = true;
-                System.out.println("foto nula");
-            } else {
-                this.exibeFotoNula = false;
-                System.out.println("foto existe");
-            }
         }
         return paginaRetorno;
     }
@@ -165,11 +153,6 @@ public class UsuarioMB implements Serializable {
         this.exibeEditarSenhaUsuario = false;
         this.exibeExcluirPerfilUsuario = false;
 
-        if (usuario.getImagem() == null || usuario.getImagem().getFoto() == null) {
-            this.exibeFotoNula = true;
-        } else {
-            this.exibeFotoNula = false;
-        }
     }
 
     public void telaEditarPerfilUsuario() {
@@ -234,14 +217,6 @@ public class UsuarioMB implements Serializable {
         this.exibeEditarSenhaUsuario = exibeEditarSenhaUsuario;
     }
 
-    public boolean isExibeFotoNula() {
-        return exibeFotoNula;
-    }
-
-    public void setExibeFotoNula(boolean exibeFotoNula) {
-        this.exibeFotoNula = exibeFotoNula;
-    }
-
     public String getSenhaAtual() {
         return senhaAtual;
     }
@@ -298,17 +273,19 @@ public class UsuarioMB implements Serializable {
     }
 
     //Tratando imagem-----------------------------------------
-    public StreamedContent getFotoExibir() throws IOException {
-        //sua regra para carregar os bytes   
-        if (usuario.getImagem() == null || usuario.getImagem().getFoto() == null) {
-            return null;
-        } else {
-            return new DefaultStreamedContent(new ByteArrayInputStream(usuario.getImagem().getFoto()));
-        }
-    }
+    public String getFotoExibir() throws IOException {
+        ImagemManager imagemManager = new ImagemManager();
+        if (imagem != null && imagem.getNome() != null) {
+            imagemManager.criarImagens(null, imagem);
+            return "/temp/" + imagem.getNome();
 
-    public void setFotoExibir(byte[] fotoExibir) {
-        this.fotoExibir = fotoExibir;
+        } else if (usuario.getImagem() != null && usuario.getImagem().getNome() != null) {
+            imagem = usuario.getImagem();
+            imagemManager.criarImagens(null, imagem);
+            return "/temp/" + imagem.getNome();
+        }
+
+        return "/img/foto_user.png";
     }
 
     public void fileUpload(FileUploadEvent event) {
@@ -316,43 +293,34 @@ public class UsuarioMB implements Serializable {
         UploadedFile arq = event.getFile();
         byte[] bimagem = event.getFile().getContents();
 
-        imagem = new Imagem();
-        imagem.setFoto(bimagem);
-        imagem.setDescricao(arq.getFileName());
+        ImagemManager imagemManager = new ImagemManager();
 
-        if (usuario.getImagem() == null) {
-            System.out.println("criar imagem");
-            usuario.setImagem(imagem);
-            try {
-                imagemDao.inserirImagem(imagem);
-                usuarioDao.atualizarUsuario(usuario);
-            } catch (Exception e) {
-                this.mensagemErro("Erro!", e.getMessage());
-            }
-            mensagemInformativa("Sucesso!", "Imagem enviada com sucesso!");
-        } else {
-            System.out.println("atualizar imagem");
-            imagem.setId(usuario.getImagem().getId());
-            usuario.setImagem(imagem);
-            try {
-                imagemDao.atualizarImagem(imagem);
-            } catch (Exception e) {
-                this.mensagemErro("Erro!", e.getMessage());
-            }
-            this.mensagemInformativa("Sucesso!", "Imagem atualizada com sucesso!");
+        if (imagem == null) {
+            imagem = new Imagem();
         }
 
-        telaPerfilUsuario();
+        imagem.setFoto(bimagem);
+        imagem.setNome(imagemManager.nomeImagem(usuario, arq));
 
-//            salvar em pasta
-//            InputStream in = new BufferedInputStream(arq.getInputstream());
-//
-//            File file = new File("D://IMOGEO TCC//img_user//" + usuario.getId());
-//            FileOutputStream fout = new FileOutputStream(file);
-//            while (in.available() != 0) {
-//                fout.write(in.read());
-//            }
-//            fout.close();
+        try {
+            if (usuario.getImagem() == null || usuario.getImagem().getFoto() == null) {
+                usuario.setImagem(imagem);
+                imagemDao.inserirImagem(imagem);
+                usuarioDao.atualizarUsuario(usuario);
+                mensagemInformativa("Sucesso!", "Imagem enviada com sucesso!");
+            } else {
+                imagem.setId(usuario.getImagem().getId());
+                usuario.setImagem(imagem);
+                imagemDao.atualizarImagem(imagem);
+                mensagemInformativa("Sucesso!", "Imagem enviada com sucesso!");
+            }
+            telaPerfilUsuario();
+        } catch (Exception e) {
+            this.mensagemErro("Erro!", e.getMessage());
+        }
+
+
+
     }
 
     //Mensagens------------------------------>>>>>>>>>>>>>>>

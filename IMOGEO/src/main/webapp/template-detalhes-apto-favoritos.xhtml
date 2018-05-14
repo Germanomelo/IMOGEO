@@ -11,23 +11,28 @@
     <!--    <p:panel header="Apartamento" style="float:right; width: 745px;">
         </p:panel>-->
     
-    <p:panel header="Contato" style="float:right; width: 300px; height: 245px;">    
-        Nome: #{imoveisFavoritosMB.apto.usuario.nome} <br/>
-        Email: #{imoveisFavoritosMB.apto.usuario.email} <br/>
-        Telefone Comercial: #{imoveisFavoritosMB.apto.usuario.telefoneComercial} <br/>
-        Telefone Residencial: #{imoveisFavoritosMB.apto.usuario.telefoneResidencial} <br/>
-        Telefone Celular: #{imoveisFavoritosMB.apto.usuario.telefoneCelular} <br/>  
+    <p:panel header="Contato" style="float:right; width: 200px; height: 500px;">    
+        Nome:<br/> 
+        #{imoveisFavoritosMB.apto.usuario.nome} <br/>
+        <br/>
+        Email:<br/> 
+        #{imoveisFavoritosMB.apto.usuario.email} <br/>
+        <br/>
+        Tel Comercial:<br/> 
+        #{imoveisFavoritosMB.apto.usuario.telefoneComercial} <br/>
+        Tel Residencial:<br/>
+        #{imoveisFavoritosMB.apto.usuario.telefoneResidencial} <br/>
+        Tel Celular:<br/> 
+        #{imoveisFavoritosMB.apto.usuario.telefoneCelular} <br/>  
     </p:panel>
 
-    <p:panel header="Imagens" style="float:right; width: 439px; height: 245px;">
-        <p:lightBox styleClass="imagebox">  
-            <h:outputLink value="../img/semimagem.png" title="imagem">  
-                <h:graphicImage value="/img/semimagem.png"/>  
-            </h:outputLink>  
-        </p:lightBox>
+    <p:panel header="Imagens" style="float:right; width: 539px; height: 500px;">
+        <p:galleria value="#{imoveisFavoritosMB.listImagens()}" var="img" panelWidth="509" panelHeight="400"  >
+            <p:graphicImage value="/temp/#{img.nome}" alt="#{img.descricao}" height="400"/>
+        </p:galleria>
     </p:panel>
 
-    <p:panel header="Endereço" style="float:right; width: 300px;">
+    <p:panel header="Endereço" style="float:right; width: 300px; height:250px; ">
         Rua: #{indexMB.apto.endereco.rua} <br/>
         Número: #{imoveisFavoritosMB.apto.endereco.numero} <br/>
         Bairro: #{imoveisFavoritosMB.apto.endereco.bairro} <br/>
@@ -37,7 +42,7 @@
         Complemento: #{imoveisFavoritosMB.apto.endereco.complemento} <br/>   
     </p:panel>
 
-    <p:panel header="Informações" style="float:right; width: 439px; "> 
+    <p:panel header="Informações" style="float:right; width: 439px; height:250px; "> 
         Finalidade: #{imoveisFavoritosMB.apto.finalidade}<br/>
         Valor Imovél: <strong style="color: orange">R$#{indexMB.apto.mascaraValor}</strong><br/>
         Valor Condominio: R$#{imoveisFavoritosMB.apto.condominio}<br/>

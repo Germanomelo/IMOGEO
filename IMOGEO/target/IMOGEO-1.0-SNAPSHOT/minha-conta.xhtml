@@ -18,12 +18,12 @@
         <div id="principal" style="height: 650px">
             <h:form id="menulateral" style="height: 500px;">
                 <h:commandLink action="#{usuarioMB.telaPerfilUsuario()}" value="Perfil" styleClass="link"/>
-                <h:commandLink action="#{usuarioMB.telaEditarPerfilUsuario()}" value="Editar Perfil" styleClass="link"/>
-                <h:commandLink action="#{usuarioMB.telaEditarSenhaUsuario()}" value="Editar Senha" styleClass="link"/>
                 <h:commandLink action="meus-imoveis.jsf" value="Meus imoveis" styleClass="link"/>
-                <h:commandLink action="#" value="Receber Notificações" styleClass="link"/>
+                <h:commandLink action="#" value="Notificações" styleClass="link"/>
                 <h:commandLink action="favoritos.jsf" value="Favoritos" styleClass="link"/>
-                <h:commandLink action="#{usuarioMB.telaExcluirPerfilUsuario()}" value="Excluir Conta" styleClass="link"/>
+                <h:commandLink action="add-casa.jsf" value="Cadastrar Casa" styleClass="link"/>
+                <h:commandLink action="add-apto.jsf" value="Cadastrar Apartamento" styleClass="link"/>
+                <!--<h:commandLink action="{usuarioMB.telaExcluirPerfilUsuario()}" value="Excluir Conta" styleClass="link"/>-->
 
             </h:form>
 
@@ -34,52 +34,65 @@
                     <p:growl showDetail="true" sticky="true" />
 
                     <p:panel style="width:175px; height:165px;">
-                        <h:graphicImage value="img/foto_user.png" width="150"
-                                        height="150" alt="#{usuarioMB.imagem.descricao}" />
+                        <p:graphicImage value="#{usuarioMB.fotoExibir}" width="150" height="150"/>
                     </p:panel>
-
-                    <h:panelGrid columns="2">
+                    <h:panelGrid columns="3">
                         <p:outputLabel value="Nome:" for="nome"/>
                         <p:outputLabel id="nome" value="#{usuarioMB.usuario.nome}" />
+                        <p:outputLabel/>
 
                         <p:outputLabel value="Email:" for="email"/>
                         <p:outputLabel id="email" value="#{usuarioMB.usuario.email}" />
+                        <p:outputLabel/>
 
                         <p:outputLabel value="Data Nascimento:" for="datanasc"/>
                         <p:outputLabel id="datanasc" value="#{usuarioMB.usuario.dataNascimento}" /> 
+                        <p:outputLabel/>
 
                         <p:outputLabel value="CPF:" for="cpf"/>
                         <p:outputLabel id="cpf" value="#{usuarioMB.usuario.cpf}" />
+                        <p:outputLabel/>
 
                         <p:outputLabel value="Tel Residencial:" for="telresid"/>
                         <p:outputLabel id="telresid" value="#{usuarioMB.usuario.telefoneResidencial}" />
+                        <p:outputLabel/>
 
                         <p:outputLabel value="Tel Comercial:" for="telcom"/>
                         <p:outputLabel id="telcom" value="#{usuarioMB.usuario.telefoneComercial}" />
+                        <p:outputLabel/>
 
                         <p:outputLabel value="Tel Celular:" for="telcel"/>
                         <p:outputLabel id="telcel" value="#{usuarioMB.usuario.telefoneCelular}" />
+                        <p:outputLabel/>
 
                         <p:outputLabel value="Data Criação" for="dtc"/>
                         <p:outputLabel id="dtc" value="#{usuarioMB.usuario.dataCriacao}" />
+                        <p:outputLabel/>
 
+                        <p:outputLabel id="notificacao" value="Receber Notificações no Email:"/>
+                        <p:outputLabel id="notificacaosim" rendered="#{usuarioMB.usuario.receberNotificacaoEmail}" value="Sim"/>
+                        <p:outputLabel id="notificacaonao" rendered="#{!usuarioMB.usuario.receberNotificacaoEmail}" value="Não"/>
+<p:outputLabel/>
+                        
                         <p:commandButton ajax="false" icon="ui-icon-pencil" action="#{usuarioMB.telaEditarPerfilUsuario()}" value="Editar Perfil"/>
+                        <p:commandButton ajax="false" icon="ui-icon-pencil" action="#{usuarioMB.telaEditarSenhaUsuario()}" value="Editar Senha"/>
+                        <p:commandButton ajax="false"  icon="ui-icon-trash" action="#{usuarioMB.telaExcluirPerfilUsuario()}" value="Excluir Perfil"/>
                     </h:panelGrid>
                 </h:form>
             </p:panel>
 
             <!--Editar Perfil-->
             <p:panel header="Editar Perfil" rendered="#{usuarioMB.editarPerfilUsuario}" style="width: 745px; float: right">
-                <h:form >
+                <h:form enctype="multipart/form-data" >
                     <p:growl id="messages" showDetail="true" sticky="true" />  
-                    <h:panelGrid id="infoFoto" columns="2">
-                        <h:outputText value="Foto: " />
-                        <p:fileUpload fileUploadListener="#{usuarioMB.processFileUpload}" mode="advanced" dragDropSupport="false"
-                                      update="messages" sizeLimit="100000" fileLimit="3" allowTypes="/(\.|\/)(gif|jpe?g|png)$/" />         
-                        <h:outputText value="Descrição: " />
-                        <p:inputText value="#{usuarioMB.imagem.descricao}" />
-                        <!--<p:commandButton ajax="false" icon="ui-icon-plus" action="#usuarioMB.salvaFoto()}" value="Adicionar foto"/>-->
-                    </h:panelGrid>
+                    <p:fileUpload fileUploadListener="#{usuarioMB.fileUpload}"  
+                                  mode="advanced"  
+                                  update="messages"   
+                                  multiple="false"
+                                  fileLimit="1"
+                                  sizeLimit="10000000"   
+                                  allowTypes="/(\.|\/)(gif|jpe?g|png)$/"/>  
+
                     <p:separator/>
                     <h:panelGrid columns="3">
                         <p:outputLabel value="Nome:" for="nome"/>
@@ -113,6 +126,10 @@
                         <p:outputLabel value="Data Criação" for="dtc"/>
                         <p:outputLabel id="dtc" value="#{usuarioMB.usuario.dataCriacao}" />
                         <p:message for="dtc"/>
+
+                        <p:outputLabel value="Receber notificações no email:" for="notificacaoemail" />
+                        <p:selectBooleanCheckbox id="notificacaoemail" value="#{usuarioMB.usuario.receberNotificacaoEmail}" />
+                        <p:message for="notificacaoemail"/>
 
                         <p:commandButton ajax="false" icon="ui-icon-refresh" action="#{usuarioMB.atualizarUsuario()}" value="Atualizar"/>
 

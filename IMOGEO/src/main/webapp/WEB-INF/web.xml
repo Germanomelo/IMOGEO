@@ -9,16 +9,6 @@
         <param-value>commons</param-value>
     </context-param>
 
-    <!--Crud de imagem-->
-<!--    <filter>
-        <filter-name>FileUploadFilter</filter-name>
-        <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
-    </filter>
-    
-    <filter-mapping>
-        <filter-name>FileUploadFilter</filter-name>
-        <servlet-name>FacesServlet</servlet-name>
-    </filter-mapping>-->
     <filter>
         <filter-name>PrimeFaces FileUpload Filter</filter-name>
         <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>

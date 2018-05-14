@@ -17,32 +17,32 @@
                 <ui:include src="/template-topo.xhtml"/>
             </div>
         </div>
-        <div id="principal" style="height: 1050px">
+        <div id="principal" style="height: 1400px">
             <h:form id="menulateral" style="height: 500px;">
-                <h:commandLink action="meus-imoveis.jsf" value="Meus imoveis" styleClass="link"/>
-                <h:commandLink action="add-casa.jsf" value="Cadastrar Casa" styleClass="link"/>
-                <h:commandLink action="add-apto.jsf" value="Cadastrar Apartamento" styleClass="link"/>
                 <h:commandLink action="minha-conta.jsf" value="Perfil" styleClass="link"/>
                 <h:commandLink action="meus-imoveis.jsf" value="Meus imoveis" styleClass="link"/>
-                <h:commandLink action="#" value="Receber Notificações" styleClass="link"/>
+                <h:commandLink action="#" value="Notificações" styleClass="link"/>
                 <h:commandLink action="#{imoveisFavoritosMB.telaExibeFavoritos()}" value="Favoritos" styleClass="link"/>
+                <h:commandLink action="add-casa.jsf" value="Cadastrar Casa" styleClass="link"/>
+                <h:commandLink action="add-apto.jsf" value="Cadastrar Apartamento" styleClass="link"/>
 
             </h:form>
 
-            <h:form style=" float: right;  margin-right: -100px; margin-top: 43px;" rendered="#{imoveisFavoritosMB.exibeDetalhesApto || imoveisFavoritosMB.exibeDetalhesCasa}">
+            <h:form style=" float: right;  margin-right: -107px; margin-top: 43px;" rendered="#{imoveisFavoritosMB.exibeDetalhesApto || imoveisFavoritosMB.exibeDetalhesCasa}">
                 <p:commandButton style="float: left;" ajax="false" alt="Remover de favoritos" icon="ui-icon-minusthick" action="#{imoveisFavoritosMB.removerImovelFavoritos()}" value="Favoritos"/><br/>
             </h:form>
             
             <h3>#{imoveisFavoritosMB.titulo}</h3>
+            
             <!--Favoritos-->
-            <p:dataTable styleClass="tabela" paginator="true" rendered="#{imoveisFavoritosMB.exibeFavoritos}" rows="3" value="#{imoveisFavoritosMB.buscaFavoritos()}" var="imovel">
-                <p:column width="150">
-                    <img width="150" height="150" src="img/semimagem.png"></img>
+            <p:dataTable styleClass="tabela" paginator="true" rendered="#{imoveisFavoritosMB.exibeFavoritos}" rows="8" value="#{imoveisFavoritosMB.buscaFavoritos()}" var="imovel">
+                <p:column width="160">
+                    <p:graphicImage value="#{imovel.imagem.nome}" width="150" height="150"/>
                 </p:column>
 
                 <p:column >
-                    <h:outputLabel value="Casa" rendered="#imovel.class.simpleName == 'Casa'}"/>
-                    <h:outputLabel value="Apartamento" rendered="#imovel.class.simpleName == 'Apartamento'}"/>
+                    <h:outputLabel value="Casa" rendered="#{imovel.class.simpleName == 'Casa'}"/>
+                    <h:outputLabel value="Apartamento" rendered="#{imovel.class.simpleName == 'Apartamento'}"/>
                     para #{imovel.finalidade}<br/>
                     #{imovel.endereco.bairro}, #{imovel.endereco.cidade}, #{imovel.endereco.estado}<br/>
                     Valor: <strong style="color:orange ">R$ #{imovel.mascaraValor}</strong><br/>

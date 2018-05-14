@@ -8,7 +8,7 @@
     xmlns:f="http://java.sun.com/jsf/core">
 
     <h:form >
-         <p:commandButton ajax="false" icon="ui-icon-pencil" action="#{meusImoveisMB.telaEditarApartamento()}" value="Editar" />
+        <p:commandButton ajax="false" icon="ui-icon-pencil" action="#{meusImoveisMB.telaEditarApartamento()}" value="Editar" />
         <p:commandButton ajax="false" icon="ui-icon-cancel" action="#{meusImoveisMB.desanunciarApto()}" rendered="#{meusImoveisMB.imovel.anuncio.anunciado}"
                          value="Desanunciar" styleClass="bt2">
             <f:setPropertyActionListener value="#{imovel}" target="#{meusImoveisMB.imovel}"/>
@@ -20,15 +20,14 @@
         </p:commandButton>
         <p:commandButton ajax="false" icon="ui-icon-trash" action="#{meusImoveisMB.telaExcluirImovelPemissaoTrue()}" value="Excluir" /><br/>
     </h:form>
-    
+
     <p:panel header="Imagens" style="float:right; width: 745px;">
-        <p:lightBox styleClass="imagebox">  
-            <h:outputLink value="../img/semimagem.png" title="imagem">  
-                <h:graphicImage value="/img/semimagem.png"/>  
-            </h:outputLink>  
-        </p:lightBox>
+        <p:galleria value="#{meusImoveisMB.listImagens()}" var="img" panelWidth="720" panelHeight="400"  >
+            <p:graphicImage value="/temp/#{img.nome}" alt="#{img.descricao}" height="400"/>
+        </p:galleria>  
     </p:panel>
-    <p:panel header="Endereço" style="float:right; width: 368px; height: 350px">
+    
+    <p:panel header="Endereço" style="float:right; width: 368px; height:250px;">
         <div>
             Rua: #{meusImoveisMB.apto.endereco.rua} <br/>
             Número: #{meusImoveisMB.apto.endereco.numero} <br/>
@@ -39,7 +38,8 @@
             Complemento: #{meusImoveisMB.apto.endereco.complemento} <br/>
         </div>
     </p:panel>
-    <p:panel header="Apartamento" style="float:right; width: 368px; height: 350px"> 
+    
+    <p:panel header="Informações" style="float:right; width: 370px; height:250px;"> 
         <div>
             Finalidade: <i>#{meusImoveisMB.apto.finalidade}</i><br/>
             Valor: <i>R$#{meusImoveisMB.apto.mascaraValor}</i><br/>
@@ -53,13 +53,13 @@
             Banheiros Sociais: <i>#{meusImoveisMB.apto.banheiroSocial}</i><br/>
             Possui:
             <i>
-            <h:outputLabel value=" Piscina," rendered="#{meusImoveisMB.apto.piscina}"/>
-            <h:outputLabel value=" Despenda," rendered="#{meusImoveisMB.apto.despensa}"/>
-            <h:outputLabel value=" Área de Serviço," rendered="#{meusImoveisMB.apto.areaServico}"/>
-            <h:outputLabel value=" Churrasqueira," rendered="#{meusImoveisMB.apto.churrasqueira}"/>
-            <h:outputLabel value=" e Porteiro" rendered="#{meusImoveisMB.apto.porteiro}"/></i><br/>
+                <h:outputLabel value=" Piscina," rendered="#{meusImoveisMB.apto.piscina}"/>
+                <h:outputLabel value=" Despenda," rendered="#{meusImoveisMB.apto.despensa}"/>
+                <h:outputLabel value=" Área de Serviço," rendered="#{meusImoveisMB.apto.areaServico}"/>
+                <h:outputLabel value=" Churrasqueira," rendered="#{meusImoveisMB.apto.churrasqueira}"/>
+                <h:outputLabel value=" e Porteiro" rendered="#{meusImoveisMB.apto.porteiro}"/></i><br/>
             Observação: <i>#{meusImoveisMB.apto.observacao}</i><br/>
         </div>
     </p:panel>
-    
+
 </ui:composition>

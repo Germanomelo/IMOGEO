@@ -9,9 +9,9 @@
 
     <h3>Imóveis</h3>
     <p:growl id="growl" showDetail="true" sticky="true" />  
-    <p:dataTable  styleClass="tabela" paginator="true"  rows="6" value="#{meusImoveisMB.imoveisIdUser}" var="imovel">
-        <p:column width="150">
-            <img width="150" height="150" src="img/semimagem.png"></img>
+    <p:dataTable  styleClass="tabela" paginator="true"  rows="8" value="#{meusImoveisMB.imoveisIdUser}" var="imovel">
+        <p:column width="160">
+            <p:graphicImage value="#{imovel.imagem.nome}" width="150" height="150"/>
         </p:column>
 
         <p:column >

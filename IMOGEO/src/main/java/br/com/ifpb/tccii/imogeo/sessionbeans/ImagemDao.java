@@ -37,6 +37,23 @@ public class ImagemDao {
         return query.getResultList();
     }
     
+    public List<Imagem> listarImagensPorImovel(Imovel imovel) {
+        Query query = manager.createQuery("SELECT img FROM Imovel i join i.imagens img where i.id = :id");
+        query.setParameter("id", imovel.getId());
+        List<Imagem> imagens = query.getResultList();
+        return imagens;
+    }
+    
+    public Imagem retornarPrimeriaImagemPorImovel(Imovel imovel) {
+        Query query = manager.createQuery("SELECT img FROM Imovel i join i.imagens img where i.id = :id");
+        query.setParameter("id", imovel.getId());
+        List<Imagem> imagens = query.getResultList();
+        if(imagens.size()>0){
+            return imagens.get(0);
+        }
+        return null;
+    }
+    
     public void inserirImagem(Imagem img) {
         manager.persist(img);
     }

@@ -2,6 +2,7 @@ package br.com.ifpb.tccii.imogeo.managedbean;
 
 import br.com.ifpb.tccii.imogeo.entidades.Comentario;
 import br.com.ifpb.tccii.imogeo.entidades.Endereco;
+import br.com.ifpb.tccii.imogeo.entidades.Imagem;
 import br.com.ifpb.tccii.imogeo.entidades.Imovel;
 import br.com.ifpb.tccii.imogeo.entidades.Usuario;
 import br.com.ifpb.tccii.imogeo.entidades.especializacao.Apartamento;
@@ -10,8 +11,10 @@ import br.com.ifpb.tccii.imogeo.sessionbeans.ApartamentoDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.CasaDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ComentarioDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.EnderecoDao;
+import br.com.ifpb.tccii.imogeo.sessionbeans.ImagemDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ImovelDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.UsuarioDao;
+import br.com.ifpb.tccii.imogeo.utils.ImagemManager;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.io.ParseException;
@@ -71,9 +74,7 @@ public class IndexMB implements Serializable {
     private boolean exibeBuscaLocalizacaoAvancada = false;
     private boolean exibeMedidaDeDistanciaKm = false;
     private boolean exibeMapMinhaLocalizacao = true;
-
     private String busca = null;
-
     private Comentario comentario = new Comentario();
     private Casa casa = new Casa();
     private Imovel imovel = new Imovel();
@@ -82,24 +83,20 @@ public class IndexMB implements Serializable {
     private Usuario userSession = new Usuario();
     private Endereco endereco = new Endereco();
     List<Imovel> favoritos;
-
     @EJB
     private UsuarioDao userDao;
-
     @EJB
     private EnderecoDao enderecoDao;
-
     @EJB
     private CasaDao casaDao;
-
     @EJB
     private ImovelDao imovelDao;
-
     @EJB
     private ApartamentoDao aptoDao;
-
     @EJB
     private ComentarioDao comentarioDao;
+    @EJB
+    private ImagemDao imagemDao;
 
     public IndexMB() {
     }
@@ -165,7 +162,7 @@ public class IndexMB implements Serializable {
                                             if ((this.getPesqQtdeQuarto() == 0) || (casaPesq.getQuarto() == this.getPesqQtdeQuarto())) {
                                                 if ((this.getPesqQtdeSuite() == 0) || (casaPesq.getSuite() == this.getPesqQtdeSuite())) {
                                                     if ((this.getPesqQtdeVagaGaragem() == 0) || (casaPesq.getVagaGaragem() == this.getPesqQtdeVagaGaragem())) {
-
+                                                        enderecos.get(i).getImovel().setImagem(buscarCriarImagemTemp(enderecos.get(i).getImovel()));
                                                         result.add(enderecos.get(i));
                                                     }
                                                 }
@@ -176,7 +173,7 @@ public class IndexMB implements Serializable {
                                             if ((this.getPesqQtdeQuarto() == 0) || (aptoPesq.getQuarto() == this.getPesqQtdeQuarto())) {
                                                 if ((this.getPesqQtdeSuite() == 0) || (aptoPesq.getSuite() == this.getPesqQtdeSuite())) {
                                                     if ((this.getPesqQtdeVagaGaragem() == 0) || (aptoPesq.getVagaGaragem() == this.getPesqQtdeVagaGaragem())) {
-
+                                                        enderecos.get(i).getImovel().setImagem(buscarCriarImagemTemp(enderecos.get(i).getImovel()));
                                                         result.add(enderecos.get(i));
                                                     }
                                                 }
@@ -198,6 +195,19 @@ public class IndexMB implements Serializable {
         return result;
     }
 
+    private Imagem buscarCriarImagemTemp(Imovel i) {
+        Imagem img = imagemDao.retornarPrimeriaImagemPorImovel(i);
+        if (img == null) {
+            img = new Imagem();
+            img.setNome("/img/semimagem.png");
+        } else {
+            ImagemManager im = new ImagemManager();
+            im.criarImagens(null, img);
+            img.setNome("/temp/" + img.getNome());
+        }
+        return img;
+    }
+
     public List<Endereco> buscaSimplesEnderecoPorLocalizacao() {
         List<Endereco> result = new ArrayList<>();
         List<Endereco> enderecos;
@@ -205,6 +215,7 @@ public class IndexMB implements Serializable {
             enderecos = enderecoDao.listarEnderecosPorDistancia(this.loc, this.distancia);
             for (int i = 0; i < enderecos.size(); i++) {
                 if (enderecos.get(i).getImovel().getAnuncio().getAnunciado() == true) {
+                    enderecos.get(i).getImovel().setImagem(buscarCriarImagemTemp(enderecos.get(i).getImovel()));
                     result.add(enderecos.get(i));
                 }
             }
@@ -277,6 +288,7 @@ public class IndexMB implements Serializable {
             imoveis = this.imovelDao.listarImoveisPorPalavraChaveAnunciados(busca);
             for (int i = 0; i < imoveis.size(); i++) {
                 if (imoveis.get(i).getAnuncio().getAnunciado() == true) {
+                    imoveis.get(i).setImagem(buscarCriarImagemTemp(imoveis.get(i)));
                     result.add(imoveis.get(i));
                 }
             }
@@ -288,7 +300,11 @@ public class IndexMB implements Serializable {
 
     public List<Apartamento> listarApartamentosAnunciados() {
         try {
-            return aptoDao.listarApartamentosAnunciados();
+            List<Apartamento> imoveis = aptoDao.listarApartamentosAnunciados();
+            for (Imovel i : imoveis) {
+                i.setImagem(buscarCriarImagemTemp(i));
+            }
+            return imoveis;
         } catch (Exception e) {
             this.mensagemErro("Erro!", e.getMessage());
         }
@@ -297,7 +313,11 @@ public class IndexMB implements Serializable {
 
     public List<Casa> listarCasasAnunciadas() {
         try {
-            return casaDao.listarCasasAnunciadas();
+            List<Casa> imoveis = casaDao.listarCasasAnunciadas();
+            for (Imovel i : imoveis) {
+                i.setImagem(buscarCriarImagemTemp(i));
+            }
+            return imoveis;
         } catch (Exception e) {
             this.mensagemErro("Erro!", e.getMessage());
         }
@@ -306,16 +326,25 @@ public class IndexMB implements Serializable {
 
     public List<Imovel> listarImoveisAnunciados() {
         try {
-            return imovelDao.listarImoveisAnunciados();
+            List<Imovel> imoveis = imovelDao.listarImoveisAnunciados();
+            for (Imovel i : imoveis) {
+                i.setImagem(buscarCriarImagemTemp(i));
+            }
+            return imoveis;
         } catch (Exception e) {
             this.mensagemErro("Erro!", e.getMessage());
         }
         return null;
     }
 
-    public List listarImoveisFinalidadeAnunciados() {
+    public List<Imovel> listarImoveisFinalidadeAnunciados() {
         try {
-            return imovelDao.listarImoveisFinalidadeAnunciados(finalidade);
+            List<Imovel> imoveis = imovelDao.listarImoveisFinalidadeAnunciados(finalidade);
+            for (Imovel i : imoveis) {
+                i.setImagem(buscarCriarImagemTemp(i));
+            }
+
+            return imoveis;
         } catch (Exception e) {
             this.mensagemErro("Erro!", e.getMessage());
         }
@@ -384,7 +413,7 @@ public class IndexMB implements Serializable {
         session = (HttpSession) FacesContext.getCurrentInstance().getExternalContext().getSession(true);
         this.userSession = (Usuario) session.getAttribute("usuario");
     }
-    
+
 //    Telas de exibição
     public void telaDetalhesApto() {
         this.exibePesquisaLocalizacao = false;
@@ -864,6 +893,13 @@ public class IndexMB implements Serializable {
         this.comentario = comentario;
     }
 
+    public List<Imagem> listImagens() {
+        ImagemManager imagemManager = new ImagemManager();
+        List<Imagem> imagens = imagemDao.listarImagensPorImovel(imovel);
+        imagemManager.criarImagens(imagens, null);
+        return imagens;
+    }
+    
 //    Mensagens
     public void mensagemInformativa(String titulo, String msg) {
         FacesContext fc = FacesContext.getCurrentInstance();

@@ -6,6 +6,7 @@
 package br.com.ifpb.tccii.imogeo.managedbean;
 
 import br.com.ifpb.tccii.imogeo.entidades.Comentario;
+import br.com.ifpb.tccii.imogeo.entidades.Imagem;
 import br.com.ifpb.tccii.imogeo.entidades.Imovel;
 import br.com.ifpb.tccii.imogeo.entidades.Usuario;
 import br.com.ifpb.tccii.imogeo.entidades.especializacao.Apartamento;
@@ -13,8 +14,10 @@ import br.com.ifpb.tccii.imogeo.entidades.especializacao.Casa;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ApartamentoDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.CasaDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ComentarioDao;
+import br.com.ifpb.tccii.imogeo.sessionbeans.ImagemDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.ImovelDao;
 import br.com.ifpb.tccii.imogeo.sessionbeans.UsuarioDao;
+import br.com.ifpb.tccii.imogeo.utils.ImagemManager;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -52,6 +55,8 @@ public class ImoveisFavoritosMB implements Serializable {
     CasaDao casaDao;
     @EJB
     ComentarioDao comentarioDao;
+    @EJB
+    ImagemDao imagemDao;
 
     private Usuario userSession = new Usuario();
     private List<Imovel> favoritos;
@@ -66,6 +71,18 @@ public class ImoveisFavoritosMB implements Serializable {
 
     public List<Imovel> buscaFavoritos() {
         this.favoritos = imovelDao.listarImoveisFavoritos(userSession);
+        for (Imovel i : favoritos) {
+            Imagem img = imagemDao.retornarPrimeriaImagemPorImovel(i);
+            if (img == null) {
+                img = new Imagem();
+                img.setNome("/img/semimagem.png");
+            }else{
+                ImagemManager im = new ImagemManager();
+                im.criarImagens(null, img);
+                img.setNome("/temp/"+img.getNome());
+            }
+            i.setImagem(img);
+        }
         return this.favoritos;
     }
 
@@ -279,6 +296,12 @@ public class ImoveisFavoritosMB implements Serializable {
         this.comentario = comentario;
     }
     
+    public List<Imagem> listImagens() {
+        ImagemManager imagemManager = new ImagemManager();
+        List<Imagem> imagens = imagemDao.listarImagensPorImovel(imovel);
+        imagemManager.criarImagens(imagens, null);
+        return imagens;
+    }
     
     //Mensagens------------------------------>>>>>>>>>>>>>>>
     public void mensagemInformativa(String titulo, String msg) {

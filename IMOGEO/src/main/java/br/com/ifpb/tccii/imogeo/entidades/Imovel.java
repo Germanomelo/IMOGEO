@@ -11,6 +11,7 @@ import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -33,15 +34,12 @@ public class Imovel implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long imovelId;
-
-//    @OneToMany(fetch= FetchType.LAZY, cascade= CascadeType.REMOVE)
-//    private List<Comentario> comentarios = new ArrayList<Comentario>();
     
     @OneToOne(cascade = CascadeType.ALL)
     private Endereco endereco;
-
-//    @OneToMany(mappedBy="imovel", cascade= CascadeType.ALL)
-//    private List<Imagem> imagens = new ArrayList<Imagem>();
+    
+    @OneToMany(mappedBy = "imovel", fetch = FetchType.LAZY,cascade=CascadeType.ALL)
+    private List<Imagem> imagens = new ArrayList<>();
     
     @Embedded
     private Anuncio anuncio;
@@ -64,6 +62,8 @@ public class Imovel implements Serializable {
     @Column(length = 10)
     private String finalidade;
 
+    Imagem imagem;
+    
     public String getFinalidade() {
         return finalidade;
     }
@@ -137,20 +137,15 @@ public class Imovel implements Serializable {
     public void setAreaConstruida(int areaConstruida) {
         this.areaConstruida = areaConstruida;
     }
+    
+    public List<Imagem> getImagens() {
+        return imagens;
+    }
 
-//    public List<Comentario> getComentarios() {
-//        return comentarios;
-//    }
-//    public void setComentarios(List<Comentario> comentarios) {
-//        this.comentarios = comentarios;
-//    }
-//    public List<Imagem> getImagens() {
-//        return imagens;
-//    }
-//
-//    public void setImagens(List<Imagem> imagens) {
-//        this.imagens = imagens;
-//    }
+    public void setImagens(List<Imagem> imagens) {
+        this.imagens = imagens;
+    }
+    
     public Anuncio getAnuncio() {
         return anuncio;
     }
@@ -165,6 +160,14 @@ public class Imovel implements Serializable {
 
     public void setEndereco(Endereco endereco) {
         this.endereco = endereco;
+    }
+
+    public Imagem getImagem() {
+        return imagem;
+    }
+
+    public void setImagem(Imagem imagem) {
+        this.imagem = imagem;
     }
 
     @Override

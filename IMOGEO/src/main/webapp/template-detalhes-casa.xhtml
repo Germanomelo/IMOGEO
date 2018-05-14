@@ -8,23 +8,25 @@
     xmlns:f="http://java.sun.com/jsf/core"
     xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-    <p:panel header="Contato" style="float:right; width: 300px; height: 245px;">      
-        Nome: #{indexMB.casa.usuario.nome} <br/>
-        Email: #{indexMB.casa.usuario.email} <br/>
-        Telefone Comercial: #{indexMB.casa.usuario.telefoneComercial} <br/>
-        Telefone Residencial: #{indexMB.casa.usuario.telefoneResidencial} <br/>
-        Telefone Celular: #{indexMB.casa.usuario.telefoneCelular} <br/>  
+    <p:panel header="Contato" style="float:right; width: 200px; height: 500px;">      
+        Nome:<br/> 
+        #{indexMB.casa.usuario.nome} <br/>
+        <br/>
+        Email:<br/> 
+        #{indexMB.casa.usuario.email} <br/>
+        <br/>
+        Tel Comercial:<br/> #{indexMB.casa.usuario.telefoneComercial} <br/>
+        Tel Residencial:<br/> #{indexMB.casa.usuario.telefoneResidencial} <br/>
+        Tel Celular:<br/> #{indexMB.casa.usuario.telefoneCelular} <br/>  
     </p:panel>
     
-    <p:panel header="Imagens" style="float:right; width: 439px; height: 245px;">
-        <p:lightBox styleClass="imagebox">  
-            <h:outputLink value="../img/semimagem.png" title="imagem">  
-                <h:graphicImage value="/img/semimagem.png"/>  
-            </h:outputLink>  
-        </p:lightBox>
+    <p:panel header="Imagens" style="float:right; width: 539px; height: 500px;">
+        <p:galleria value="#{indexMB.listImagens()}" var="img" panelWidth="509" panelHeight="400"  >
+            <p:graphicImage value="/temp/#{img.nome}" alt="#{img.descricao}" height="400" />
+        </p:galleria>
     </p:panel>
     
-    <p:panel header="Endereço" style="float:right; width: 300px; ">
+    <p:panel header="Endereço" style="float:right; width: 300px; height:250px;  ">
             Rua: #{indexMB.casa.endereco.rua} <br/>
             Número: #{indexMB.casa.endereco.numero} <br/>
             Bairro: #{indexMB.casa.endereco.bairro} <br/>
@@ -34,7 +36,7 @@
             Complemento: #{indexMB.casa.endereco.complemento} <br/>
     </p:panel>
     
-    <p:panel header="Informações" style="float:right; width: 439px; "> 
+    <p:panel header="Informações" style="float:right; width: 439px; height:250px; "> 
             Finalidade: #{indexMB.casa.finalidade}<br/>
             Valor: <strong style="color: orange">R$#{indexMB.casa.mascaraValor}</strong><br/>
             Área Total m²: #{indexMB.casa.areaTotal}<br/>

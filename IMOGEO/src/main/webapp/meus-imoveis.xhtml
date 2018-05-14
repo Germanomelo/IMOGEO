@@ -18,12 +18,14 @@
                 <ui:include src="/template-topo.xhtml"/>
             </div>
         </div>
-        <div id="principal" style="height: 1200px;">
+        <div id="principal" style="height: 1500px;">
             <h:form id="menulateral" style="height: 1180px;">
+                <h:commandLink action="minha-conta.jsf" value="Perfil" styleClass="link"/>
                 <h:commandLink action="meus-imoveis.jsf" value="Meus imoveis" styleClass="link"/>
+                <h:commandLink action="#" value="Notificações" styleClass="link"/>
+                <h:commandLink action="favoritos.jsf" value="Favoritos" styleClass="link"/>
                 <h:commandLink action="add-casa.jsf" value="Cadastrar Casa" styleClass="link"/>
                 <h:commandLink action="add-apto.jsf" value="Cadastrar Apartamento" styleClass="link"/>
-                <h:commandLink action="minha-conta.jsf" value="Perfil" styleClass="link"/>
             </h:form>
 
             <!--listar imoveis-->         
