@@ -109,25 +109,37 @@ body{
     background: white;    
 }
 
-#principal h3{
+
+
+/*#principaltopo{
     padding: 0px;
     line-height: 35px;
-    width: 750px;
-    /*height: 40px;*/
-    /*margin-top: 10px;*/
+    width: 748px;
     border: 1px solid gray;
-    /*    border-left: 1px solid gray;
-        border-top: 1px solid gray;*/
     float: right;
     margin: auto;
     text-align: center;
-    /*background-color: #dcdcdc;*/
     background-color: orange;
     border-radius: 5px 5px 5px 5px;
     filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcd7b0', endColorstr='orange'); 
     background: -webkit-gradient(linear, left top, left bottom, from(#fcd7b0), to(orange));   
     background: -moz-linear-gradient(top, #fcd7b0, orange);
-}
+}*/
+
+/*#principal h3{
+    padding: 0px;
+    line-height: 35px;
+    width: 748px;
+    border: 1px solid gray;
+    float: right;
+    margin: auto;
+    text-align: center;
+    background-color: orange;
+    border-radius: 5px 5px 5px 5px;
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcd7b0', endColorstr='orange'); 
+    background: -webkit-gradient(linear, left top, left bottom, from(#fcd7b0), to(orange));   
+    background: -moz-linear-gradient(top, #fcd7b0, orange);
+}*/
 
 #principal{
     padding: 1px;
@@ -135,12 +147,7 @@ body{
     width: 965px;
     border-left: 1px solid gray;
     border-right: 1px solid gray;
-    /*height: 300px; remover*/
     box-shadow: 0px 10px 25px #ccc;
-    /* implementação para o firefox */
-    /*-moz-box-shadow: 0px 10px 15px #ccc;*/
-    /* implementação para safari */
-    /*-webkit-box-shadow: 5px 5px 5px, #ccc;*/
 }
 #logar{
     float: left;

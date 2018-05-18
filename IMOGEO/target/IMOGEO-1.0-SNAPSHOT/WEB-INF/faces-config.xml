@@ -4,6 +4,6 @@
               xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_2_1.xsd">
     <lifecycle>
-        <phase-listener>br.com.ifpb.tccii.imogeo.validadores.Autenticacao</phase-listener>
+        <phase-listener>br.com.ifpb.tccii.imogeo.controller.validadores.Autenticacao</phase-listener>
     </lifecycle>
 </faces-config>

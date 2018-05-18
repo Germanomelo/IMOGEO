@@ -7,7 +7,8 @@
       xmlns:f="http://java.sun.com/jsf/core">
     <h:head>
         <title>IMOGEO</title>
-        <link rel="stylesheet" type="text/css" href="css/estilo.css"  />
+        <link rel="stylesheet" type="text/css" href="css/estilo.css"/>
+        <!--<h:outputStylesheet library="css" name = "css/estilo.css"/>-->
         <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyDp7RiKkRTRQhkJNXz6i9vht4S-9eOcuGc"></script>
         <script type="text/javascript" src="js/maps_minha_localizacao.js"></script>
         <script type="text/javascript" src="js/maps_detalhes_imovel_marker.js"></script>
@@ -35,17 +36,45 @@
                 <p:commandButton style="float: left;" rendered="#{indexMB.favoritoExiste}" ajax="false" alt="Remover de favoritos" icon="ui-icon-minusthick" action="#{indexMB.removerImovelFavorito()}" value="Favoritos"/><br/>
             </h:form>
 
-            <h:form rendered="#{!indexMB.exibePesquisaLocalizacao}">
-                <h3>#{indexMB.tituloH3}</h3>
-            </h:form>
+            <div style=" height: 35px; width: 748px; border: 1px solid gray; float: right;
+                 text-align: center;  background-color: orange; border-radius: 5px 5px 5px 5px;
+                 filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fcd7b0', endColorstr='orange'); 
+                 background: -webkit-gradient(linear, left top, left bottom, from(#fcd7b0), to(orange));   
+                 background: -moz-linear-gradient(top, #fcd7b0, orange);">
+
+                <div style=" float:left; margin-left: 100px; margin-top: 10px; width: 450px ">
+                    <strong>#{indexMB.tituloH3}</strong>
+                </div>
+
+                <h:form style=" float: right; margin-top: 5px; margin-right:10px;">
+                    <p:selectOneMenu rendered="#{indexMB.exibePesquisaLocalizacao || indexMB.exibeResultadoPesquisaLocalizacao}" id="ordenar" value="#{indexMB.pesqOrdenacao}">
+                        <f:selectItem itemValue="MenorPreco" itemLabel="Menor Preço" />
+                        <f:selectItem itemValue="MaiorPreco" itemLabel="Maior Preço" />
+                        <f:selectItem itemValue="MenorArea" itemLabel="Menor Área" />
+                        <f:selectItem itemValue="MaiorArea" itemLabel="Maior Área" />
+                        <f:selectItem itemValue="MenorDistancia" itemLabel="Menor Distância" />
+                        <f:selectItem itemValue="MaiorDistancia" itemLabel="Maior Distância" />
+                        <p:ajax event="itemSelect" listener="#{indexMB.ordenarEvent()}" />
+                    </p:selectOneMenu>
+                    
+                        <p:selectOneMenu rendered="#{!indexMB.exibePesquisaLocalizacao &amp;&amp; !indexMB.exibeResultadoPesquisaLocalizacao}" id="ordenar2" value="#{indexMB.pesqOrdenacao}">
+                        <f:selectItem itemValue="MenorPreco" itemLabel="Menor Preço" />
+                        <f:selectItem itemValue="MaiorPreco" itemLabel="Maior Preço" />
+                        <f:selectItem itemValue="MenorArea" itemLabel="Menor Área" />
+                        <f:selectItem itemValue="MaiorArea" itemLabel="Maior Área" />
+                        <p:ajax event="itemSelect" listener="#{indexMB.ordenarEvent()}" />	
+                    </p:selectOneMenu>
+                </h:form>
+
+            </div>
 
             <!--busca simples-->
-            <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibebuscaSimples}" rows="8" value="#{indexMB.buscaSimplesPorPalavraChave()}" var="imovel">
+            <p:dataTable id="tablebuscasimples" styleClass="tabela" paginator="true" rendered="#{indexMB.exibebuscaSimples}" rows="8" value="#{indexMB.buscaSimplesPorPalavraChave()}" var="imovel">
                 <p:column width="160">
                     <p:graphicImage value="#{imovel.imagem.nome}" width="150" height="150"/>
                 </p:column>
 
-                <p:column >
+                <p:column>
                     <h:outputLabel value="Casa" rendered="#{imovel.class.simpleName == 'Casa'}"/>
                     <h:outputLabel value="Apartamento" rendered="#{imovel.class.simpleName == 'Apartamento'}"/>
                     para #{imovel.finalidade}<br/>
@@ -63,7 +92,7 @@
             </p:dataTable>
 
             <!--todos imoveis-->
-            <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibeTodosImoveis}" rows="8" value="#{indexMB.listarImoveisAnunciados()}" var="imovel">
+            <p:dataTable id="tabletodosimoveis" styleClass="tabela" paginator="true" rendered="#{indexMB.exibeTodosImoveis}" rows="8" value="#{indexMB.listarImoveisAnunciados()}" var="imovel">
                 <p:column width="160">
                     <p:graphicImage value="#{imovel.imagem.nome}" width="150" height="150"/>
                 </p:column>
@@ -86,7 +115,7 @@
             </p:dataTable>
 
             <!--imoveis finalidade-->
-            <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibeImovelFinalidade}" rows="8" value="#{indexMB.listarImoveisFinalidadeAnunciados()}" var="imovel">
+            <p:dataTable id="tableimoveisfinalidade" styleClass="tabela" paginator="true" rendered="#{indexMB.exibeImovelFinalidade}" rows="8" value="#{indexMB.listarImoveisFinalidadeAnunciados()}" var="imovel">
                 <p:column width="160">
                     <p:graphicImage value="#{imovel.imagem.nome}" width="150" height="150"/>
                 </p:column>
@@ -109,7 +138,7 @@
             </p:dataTable>
 
             <!--casas-->
-            <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibeCasas}" rows="8" value="#{indexMB.listarCasasAnunciadas()}" var="casa">
+            <p:dataTable id="tablecasas" styleClass="tabela" paginator="true" rendered="#{indexMB.exibeCasas}" rows="8" value="#{indexMB.listarCasasAnunciadas()}" var="casa">
                 <p:column width="160">
                     <p:graphicImage value="#{casa.imagem.nome}" width="150" height="150"/>
                 </p:column>
@@ -129,7 +158,7 @@
             </p:dataTable>
 
             <!--aptos-->
-            <p:dataTable styleClass="tabela" paginator="true" rendered="#{indexMB.exibeAptos}" rows="8" value="#{indexMB.listarApartamentosAnunciados()}" var="apto">
+            <p:dataTable id="tableapto" styleClass="tabela" paginator="true" rendered="#{indexMB.exibeAptos}" rows="8" value="#{indexMB.listarApartamentosAnunciados()}" var="apto">
                 <p:column width="160">
                     <p:graphicImage value="#{apto.imagem.nome}" width="150" height="150"/>
                 </p:column>
@@ -263,7 +292,7 @@
 
 
             <!--Todos imoveis por localizacao-->
-            <p:dataTable id="vaitataruguinha" rendered="#{indexMB.exibeResultadoPesquisaLocalizacao}" paginator="true" rows="8" styleClass="tabela" value="#{indexMB.enderecoPorLocalizacao()}" var="endereco">
+            <p:dataTable id="tablebuscalocalizacao" rendered="#{indexMB.exibeResultadoPesquisaLocalizacao}" paginator="true" rows="8" styleClass="tabela" value="#{indexMB.enderecoPorLocalizacao()}" var="endereco">
                 <p:column width="160">
                     <p:graphicImage value="#{endereco.imovel.imagem.nome}" width="150" height="150"/>
                 </p:column>
@@ -277,7 +306,7 @@
                     Área total m²: #{endereco.imovel.areaTotal}<br/> 
                     Área construida m²: #{endereco.imovel.areaConstruida} <br/>
                     Distância:
-                    <h:outputText style="color: orange; font-weight: bold;" value="#{indexMB.geometriaLocalUser(endereco.localizacao)}" >
+                    <h:outputText style="color: orange; font-weight: bold;" value="#{indexMB.geometriaLocalUser(endereco.distancia)}" >
                         <f:convertNumber minFractionDigits="0" />
                     </h:outputText>
                     <h:outputLabel style="color: orange; font-weight: bold;" value="Km" rendered="#{indexMB.exibeMedidaDeDistanciaKm}"/>
