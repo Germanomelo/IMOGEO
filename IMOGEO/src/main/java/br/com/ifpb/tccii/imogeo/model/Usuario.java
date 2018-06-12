@@ -48,7 +48,7 @@ public class Usuario implements Serializable {
     
     @OneToMany(mappedBy = "usuario", cascade = CascadeType.REMOVE)
     private List<Notificacao> notificacoes;
-
+    
     @OneToOne
     private Imagem imagem;
     

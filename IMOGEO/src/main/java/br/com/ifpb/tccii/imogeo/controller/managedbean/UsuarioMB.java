@@ -7,8 +7,8 @@ package br.com.ifpb.tccii.imogeo.controller.managedbean;
 import br.com.ifpb.tccii.imogeo.controller.criptografia.Criptografia;
 import br.com.ifpb.tccii.imogeo.model.Imagem;
 import br.com.ifpb.tccii.imogeo.model.Usuario;
-import br.com.ifpb.tccii.imogeo.controller.dao.ImagemDao;
-import br.com.ifpb.tccii.imogeo.controller.dao.UsuarioDao;
+import br.com.ifpb.tccii.imogeo.controller.dao.ImagemDAO;
+import br.com.ifpb.tccii.imogeo.controller.dao.UsuarioDAO;
 import br.com.ifpb.tccii.imogeo.controller.utils.ImagemManager;
 import java.io.IOException;
 import java.io.Serializable;
@@ -43,9 +43,9 @@ public class UsuarioMB implements Serializable {
     private Criptografia crip = new Criptografia();
     private Imagem imagem;
     @EJB
-    UsuarioDao usuarioDao;
+    UsuarioDAO usuarioDao;
     @EJB
-    ImagemDao imagemDao;
+    ImagemDAO imagemDao;
 
     public UsuarioMB() {
         this.telaPerfilUsuario();

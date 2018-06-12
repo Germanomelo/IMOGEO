@@ -9,8 +9,8 @@ import br.com.ifpb.tccii.imogeo.model.Endereco;
 import br.com.ifpb.tccii.imogeo.model.Imagem;
 import br.com.ifpb.tccii.imogeo.model.Usuario;
 import br.com.ifpb.tccii.imogeo.model.especializacao.Apartamento;
-import br.com.ifpb.tccii.imogeo.controller.dao.ApartamentoDao;
-import br.com.ifpb.tccii.imogeo.controller.dao.ImagemDao;
+import br.com.ifpb.tccii.imogeo.controller.dao.ApartamentoDAO;
+import br.com.ifpb.tccii.imogeo.controller.dao.ImagemDAO;
 import br.com.ifpb.tccii.imogeo.controller.utils.ImagemManager;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
@@ -46,9 +46,9 @@ public class ApartamentoMB implements Serializable {
     private Apartamento apto = new Apartamento();
     private Endereco endereco = new Endereco();
     @EJB
-    private ApartamentoDao aptoDao;
+    private ApartamentoDAO aptoDao;
     @EJB
-    private ImagemDao imagemDao;
+    private ImagemDAO imagemDao;
 
     public boolean isCadastrarApto() {
         return cadastrarApto;

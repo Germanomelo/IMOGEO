@@ -9,8 +9,8 @@ import br.com.ifpb.tccii.imogeo.model.Endereco;
 import br.com.ifpb.tccii.imogeo.model.Imagem;
 import br.com.ifpb.tccii.imogeo.model.Usuario;
 import br.com.ifpb.tccii.imogeo.model.especializacao.Casa;
-import br.com.ifpb.tccii.imogeo.controller.dao.CasaDao;
-import br.com.ifpb.tccii.imogeo.controller.dao.ImagemDao;
+import br.com.ifpb.tccii.imogeo.controller.dao.CasaDAO;
+import br.com.ifpb.tccii.imogeo.controller.dao.ImagemDAO;
 import br.com.ifpb.tccii.imogeo.controller.utils.ImagemManager;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
@@ -46,9 +46,9 @@ public class CasaMB implements Serializable {
     private Casa casa = new Casa();
     private Endereco endereco = new Endereco();
     @EJB
-    private CasaDao casaDao;
+    private CasaDAO casaDao;
     @EJB
-    private ImagemDao imagemDao;
+    private ImagemDAO imagemDao;
 
     public void telaCadastrarCasa() {
         this.cadastrarCasa = true;

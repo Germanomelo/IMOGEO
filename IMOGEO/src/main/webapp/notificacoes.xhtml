@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+    <h:head>
+        <title>Meus Imoveis</title>
+        <link href="css/estilo.css" type="text/css" rel="stylesheet"/>
+        <script type="text/javascript" src="http://maps.google.com/maps/api/js?sensor=false"></script>
+        <script type="text/javascript" src="js/maps_busca_localizacao_endereco.js"></script>
+        <script type="text/javascript" src="js/maps_detalhes_imovel_marker.js"></script>
+    </h:head>
+    <h:body>
+        <div id="topo">
+            <div id ="topoconteudo">
+                <ui:include src="/template-topo.xhtml"/>
+            </div>
+        </div>
+        <div id="principal" style="height: 1500px;">
+            <h:form id="menulateral" style="height: 1180px;">
+                <h:commandLink action="minha-conta.jsf" value="Perfil" styleClass="link"/>
+                <h:commandLink action="meus-imoveis.jsf" value="Meus imoveis" styleClass="link"/>
+                <h:commandLink action="#" value="Notificações" styleClass="link"/>
+                <h:commandLink action="favoritos.jsf" value="Favoritos" styleClass="link"/>
+                <h:commandLink action="add-casa.jsf" value="Cadastrar Casa" styleClass="link"/>
+                <h:commandLink action="add-apto.jsf" value="Cadastrar Apartamento" styleClass="link"/>
+            </h:form>
+
+            
+        </div><!--fim principal-->
+        <div id="rodape">
+            <ui:include src="/template-rodape.xhtml"/>
+        </div>
+    </h:body>
+</html>
+

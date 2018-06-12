@@ -6,7 +6,7 @@
 package br.com.ifpb.tccii.imogeo.controller.managedbean;
 
 import br.com.ifpb.tccii.imogeo.model.Imagem;
-import br.com.ifpb.tccii.imogeo.controller.dao.ImagemDao;
+import br.com.ifpb.tccii.imogeo.controller.dao.ImagemDAO;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -39,7 +39,7 @@ public class ImagemMB implements Serializable {
     private List<StreamedContent> fotos;
     
     @EJB
-    ImagemDao imagemDao;
+    ImagemDAO imagemDao;
     
     private Imagem imagem = new Imagem();
 

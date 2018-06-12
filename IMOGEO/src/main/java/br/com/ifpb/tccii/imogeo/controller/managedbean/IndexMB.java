@@ -7,13 +7,13 @@ import br.com.ifpb.tccii.imogeo.model.Imovel;
 import br.com.ifpb.tccii.imogeo.model.Usuario;
 import br.com.ifpb.tccii.imogeo.model.especializacao.Apartamento;
 import br.com.ifpb.tccii.imogeo.model.especializacao.Casa;
-import br.com.ifpb.tccii.imogeo.controller.dao.ApartamentoDao;
-import br.com.ifpb.tccii.imogeo.controller.dao.CasaDao;
-import br.com.ifpb.tccii.imogeo.controller.dao.ComentarioDao;
-import br.com.ifpb.tccii.imogeo.controller.dao.EnderecoDao;
-import br.com.ifpb.tccii.imogeo.controller.dao.ImagemDao;
-import br.com.ifpb.tccii.imogeo.controller.dao.ImovelDao;
-import br.com.ifpb.tccii.imogeo.controller.dao.UsuarioDao;
+import br.com.ifpb.tccii.imogeo.controller.dao.ApartamentoDAO;
+import br.com.ifpb.tccii.imogeo.controller.dao.CasaDAO;
+import br.com.ifpb.tccii.imogeo.controller.dao.ComentarioDAO;
+import br.com.ifpb.tccii.imogeo.controller.dao.EnderecoDAO;
+import br.com.ifpb.tccii.imogeo.controller.dao.ImagemDAO;
+import br.com.ifpb.tccii.imogeo.controller.dao.ImovelDAO;
+import br.com.ifpb.tccii.imogeo.controller.dao.UsuarioDAO;
 import br.com.ifpb.tccii.imogeo.controller.utils.ImagemManager;
 import br.com.ifpb.tccii.imogeo.controller.utils.ImovelCompareFactory;
 import com.vividsolutions.jts.geom.Geometry;
@@ -88,19 +88,19 @@ public class IndexMB implements Serializable {
     private Endereco endereco = new Endereco();
     List<Imovel> favoritos;
     @EJB
-    private UsuarioDao userDao;
+    private UsuarioDAO userDao;
     @EJB
-    private EnderecoDao enderecoDao;
+    private EnderecoDAO enderecoDao;
     @EJB
-    private CasaDao casaDao;
+    private CasaDAO casaDao;
     @EJB
-    private ImovelDao imovelDao;
+    private ImovelDAO imovelDao;
     @EJB
-    private ApartamentoDao aptoDao;
+    private ApartamentoDAO aptoDao;
     @EJB
-    private ComentarioDao comentarioDao;
+    private ComentarioDAO comentarioDao;
     @EJB
-    private ImagemDao imagemDao;
+    private ImagemDAO imagemDao;
 
     public IndexMB() {
     }

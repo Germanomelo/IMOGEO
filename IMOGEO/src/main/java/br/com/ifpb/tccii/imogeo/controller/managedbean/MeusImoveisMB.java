@@ -11,11 +11,11 @@ import br.com.ifpb.tccii.imogeo.model.Imovel;
 import br.com.ifpb.tccii.imogeo.model.Usuario;
 import br.com.ifpb.tccii.imogeo.model.especializacao.Apartamento;
 import br.com.ifpb.tccii.imogeo.model.especializacao.Casa;
-import br.com.ifpb.tccii.imogeo.controller.dao.ApartamentoDao;
-import br.com.ifpb.tccii.imogeo.controller.dao.CasaDao;
-import br.com.ifpb.tccii.imogeo.controller.dao.ComentarioDao;
-import br.com.ifpb.tccii.imogeo.controller.dao.ImagemDao;
-import br.com.ifpb.tccii.imogeo.controller.dao.ImovelDao;
+import br.com.ifpb.tccii.imogeo.controller.dao.ApartamentoDAO;
+import br.com.ifpb.tccii.imogeo.controller.dao.CasaDAO;
+import br.com.ifpb.tccii.imogeo.controller.dao.ComentarioDAO;
+import br.com.ifpb.tccii.imogeo.controller.dao.ImagemDAO;
+import br.com.ifpb.tccii.imogeo.controller.dao.ImovelDAO;
 import br.com.ifpb.tccii.imogeo.controller.utils.ImagemManager;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
@@ -67,15 +67,15 @@ public class MeusImoveisMB implements Serializable {
     private Endereco endereco = new Endereco();
     
     @EJB
-    private CasaDao casaDao;
+    private CasaDAO casaDao;
     @EJB
-    private ImovelDao imovelDao;
+    private ImovelDAO imovelDao;
     @EJB
-    private ApartamentoDao aptoDao;
+    private ApartamentoDAO aptoDao;
     @EJB
-    private ComentarioDao comentarioDao;
+    private ComentarioDAO comentarioDao;
     @EJB
-    private ImagemDao imagemDao;
+    private ImagemDAO imagemDao;
 
     public MeusImoveisMB() {
         this.CapturaUsuarioSession();
